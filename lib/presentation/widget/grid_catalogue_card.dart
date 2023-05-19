@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surya_mart_v1/presentation/page/detail_page.dart';
 
-class CatalogueCard extends StatefulWidget {
+class GridCatalogueCard extends StatefulWidget {
   final String? id;
-  const CatalogueCard(this.id, {Key? key}) : super(key: key);
+  const GridCatalogueCard(this.id, {Key? key}) : super(key: key);
 
   @override
-  State<CatalogueCard> createState() => _CatalogueCardState();
+  State<GridCatalogueCard> createState() => _GridCatalogueCardState();
 }
 
-class _CatalogueCardState extends State<CatalogueCard> {
+class _GridCatalogueCardState extends State<GridCatalogueCard> {
   String? name, description, price, weight, image, category, id;
   int? stock;
 

@@ -1,18 +1,70 @@
+import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:expandable_text/expandable_text.dart';
+import 'package:surya_mart_v1/data/service/auth.dart';
+import 'package:surya_mart_v1/presentation/page/add_to_cart.dart';
+import 'package:surya_mart_v1/presentation/page/bottom_navbar.dart';
 import 'package:surya_mart_v1/presentation/page/cart_page.dart';
-import 'package:surya_mart_v1/presentation/page/description_page.dart';
-import 'package:surya_mart_v1/presentation/widget/first_card.dart';
+import 'package:surya_mart_v1/presentation/widget/horizontal_list_card.dart';
 
-class DetailPage extends StatelessWidget {
-  const DetailPage({Key? key}) : super(key: key);
+class DetailPage extends StatefulWidget {
+  final String? idProduct;
+  final String? category;
+  final int? stockProduct;
+
+  const DetailPage(
+      {required this.idProduct,
+      required this.stockProduct,
+      required this.category,
+      Key? key})
+      : super(key: key);
+
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  int qty = 1;
+
+  int stock = 0;
+  int price = 0;
+  int weight = 0;
+  int shoppingCart = 0;
+  String? name, description, image, idProduct;
+
+  Future<void> getShoppingCartUser() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: Auth().currentUser!.uid)
+        .get()
+        .then((value) {
+      var x = value.docs.first;
+      if (mounted) {
+        setState(() {
+          shoppingCart = x.data()['shoppingCart'];
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getShoppingCartUser();
+  }
 
   @override
   Widget build(BuildContext context) {
-    void CustomBottomSheet() {
+    //print('nilai id produk di halaman detail = ${widget.idProduct}');
+    void customBottomSheet(
+        String? id, String? name, String? image, int price, int weight) {
       showModalBottomSheet(
           isScrollControlled: true,
           //isDismissible: true,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15),
               topRight: Radius.circular(15),
@@ -20,241 +72,363 @@ class DetailPage extends StatelessWidget {
           ),
           context: context,
           builder: (builder) {
-            return AddToCart();
+            return AddToCart(
+              id: widget.idProduct!,
+              name: name!,
+              image: image,
+              price: price,
+              weight: weight,
+            );
           });
     }
 
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              child: Center(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 200,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text('PRODUCT NAME #01'),
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text('Rp 1.200.000'),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return DescriptionPage();
-                  }));
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      color: Colors.grey.shade300),
-                  height: 55,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('See Description'),
-                      Icon(Icons.arrow_forward_ios_rounded),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            ProductSection('RELATED PRODUCT')
-          ]),
-        ),
-        bottomNavigationBar: BottomAppBar(
+        extendBodyBehindAppBar: true,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(100),
           child: Container(
-            height: 70,
+            color: Colors.transparent,
             child: Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: Container(
-                      height: 50,
-                      //width: 160,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white),
-                      child: TextButton(
-                        onPressed: () {
-                          CustomBottomSheet();
-                        },
-                        child: Text('ADD TO CART',
-                            style: TextStyle(color: Colors.black)),
-                      ),
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: Colors.black.withOpacity(0.3),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.arrow_back),
+                      color: Colors.white,
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      height: 50,
-                      //width: 160,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.orangeAccent),
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Text('BUY NOW',
-                            style: TextStyle(color: Colors.black)),
-                      ),
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: Colors.black.withOpacity(0.3),
                     ),
-                  ),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const CartPage();
+                        }));
+                      },
+                      icon: Badge(
+                        badgeContent: StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('users')
+                              .where('uid', isEqualTo: Auth().currentUser!.uid)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                          if (snapshot.connectionState==ConnectionState.waiting) {
+                            return const Center(child:CircularProgressIndicator());
+                          }else if(snapshot.connectionState==ConnectionState.active){
+                            var x = snapshot.data!.docs.first;
+                            return Text(x['shoppingCart'].toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ));
+                          }else{
+                            return const Text('eror');
+                          }
+                        },),
+
+                        child: const Icon(Icons.shopping_cart_outlined),
+                      ),
+                      color: Colors.white,
+                    ),
+                  )
                 ],
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
+        body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('products')
+              .doc(widget.idProduct)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.connectionState == ConnectionState.active) {
+              if (snapshot.hasData) {
+                var x = snapshot.data!.data();
 
-  Widget ProductSection(String subHeader) {
-    return Padding(
-      padding: EdgeInsets.only(top: 15),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(subHeader),
-                TextButton(
-                  onPressed: () {},
-                  child: Text('SEE ALL'),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: SizedBox(
-              height: 90,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 6,
-                /*separatorBuilder: (context, _) => SizedBox(
-                  width: 10,
-                ),*/
-                itemBuilder: (context, index) {
-                  return Row(
-                    children: [
-                      //SizedBox(width: 20),
-                      FirstCard(),
-                      SizedBox(width: 20),
-                    ],
-                  );
-                },
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
+                name = x?['name'];
+                image = x?['image'];
+                price = x?['price'];
+                weight = x?['weight'];
+                stock = x?['stock'];
 
-class AddToCart extends StatelessWidget {
-  const AddToCart({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                        width: 60, height: 60, color: Colors.grey.shade300),
-                    SizedBox(width: 10),
-                    Text('Product Name'),
-                  ],
-                ),
-                IconButton(onPressed: () {}, icon: Icon(Icons.close))
-              ],
-            ),
-          ),
-          Divider(),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-            child: Row(
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.add),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        '2',
+                return SingleChildScrollView(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.width,
+                            color: Colors.white,
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.width,
+                              child: x?['image'] == null
+                                  ? null
+                                  : ClipRRect(
+                                      child: Image.network(x?['image'] ?? '',
+                                          fit: BoxFit.fill),
+                                    ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Container(
+                          color: Colors.white,
+                          width: MediaQuery.of(context).size.width,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${x?['name']}",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16),
+                                ),
+                                const SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                  'Rp ${x?['price']}',
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.redAccent,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Pengiriman',
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w500,
+                                    )),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.local_shipping_outlined),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(
+                                      'Gratis Ongkos Kirim',
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Container(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Deskripsi',
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                ExpandableText(
+                                  x?['description'],
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                  expandText: 'show more',
+                                  collapseText: 'show less',
+                                  maxLines: 5,
+                                  linkColor: Colors.blue,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Container(
+                          color: Colors.white,
+                          child: productSection('You may also like'),
+                        ),
+                      ]),
+                );
+              } else {
+                return const Text('Product doesnt exist');
+              }
+            } else {
+              return const Text('eror');
+            }
+          },
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: SizedBox(
+            height: 70,
+            child: widget.stockProduct == 0
+                ? Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.orangeAccent.withOpacity(0.7),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Produk Tidak Tersedia',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.remove),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.orangeAccent,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.orangeAccent),
+                      child: TextButton(
+                        onPressed: () {
+                          customBottomSheet(
+                              widget.idProduct, name, image, price, weight);
+                        },
+                        child: Text(
+                          'Masukkan Keranjang',
+                          style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w700, color: Colors.black),
+                        ),
                       ),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return CartPage();
-                        }));
-                      },
-                      child: Text('ADD TO CART', style: TextStyle(color: Colors.black),),
                     ),
                   ),
-                )
-              ],
-            ),
-          )
-        ],
+          ),
+        ),
       ),
+    );
+  }
+
+  Widget productSection(String subHeader) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                subHeader,
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const BottomNavbar(
+                          currentIndex: 1,
+                        )),
+                  );
+                },
+                child: const Text(
+                  'SEE ALL',
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        SizedBox(
+          height: 215,
+          child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('products')
+                .where('category', isEqualTo: widget.category)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.connectionState == ConnectionState.active) {
+                return ListView.separated(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 6,
+                  separatorBuilder: (context, _) => const SizedBox(
+                    width: 4,
+                  ),
+                  itemBuilder: (context, index) {
+                    var x = snapshot.data!.docs[index];
+
+                    return ListCard(x.id);
+                  },
+                );
+              } else {
+                return const Text('eror');
+              }
+            },
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+      ],
     );
   }
 }

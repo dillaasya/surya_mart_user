@@ -12,28 +12,34 @@ class IntroductionPage extends StatelessWidget {
       child: IntroductionScreen(
         pages: [
           PageViewModel(
-            title: 'EASY SHOPPING',
-            body:
-                'Original with 1000 product from a lot of  different brand accros the world. buy so easy with just simple step then your item will send it.',
+            titleWidget: Text('EASY SHOPPING',style: GoogleFonts.poppins(fontWeight: FontWeight.w700),),
+            bodyWidget:Text('Original with 1000 product from a lot of  different brand accros the world. buy so easy with just simple step then your item will send it.',
+              style: GoogleFonts.poppins(fontWeight: FontWeight.w300),textAlign: TextAlign.center,),
             image: buildImage('assets/images/img1.png'),
             decoration: getPageDecoration(),
           ),
           PageViewModel(
-            title: 'FREE SHIPPING',
-            body:
-                'Original with 1000 product from a lot of  different brand accros the world. buy so easy with just simple step then your item will send it.',
+            titleWidget: Text('FREE SHIPPING', style: GoogleFonts.poppins(fontWeight: FontWeight.w700),),
+            bodyWidget:Text('Original with 1000 product from a lot of  different brand accros the world. buy so easy with just simple step then your item will send it.',
+              style: GoogleFonts.poppins(fontWeight: FontWeight.w300),textAlign: TextAlign.center),
             image: buildImage('assets/images/img2.png'),
             decoration: getPageDecoration(),
           ),
           PageViewModel(
-            title: 'FAST DELIVERY',
-            body:
-                'Original with 1000 product from a lot of  different brand accros the world. buy so easy with just simple step then your item will send it.',
+            titleWidget: Text(
+              'FAST DELIVERY',
+              style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
+            ),
+            bodyWidget: Text(
+              'Original with 1000 product from a lot of  different brand accros the world. buy so easy with just simple step then your item will send it.',
+              style: GoogleFonts.poppins(fontWeight: FontWeight.w300,),
+                textAlign: TextAlign.center
+            ),
             image: buildImage('assets/images/img3.png'),
             decoration: getPageDecoration(),
           ),
         ],
-        done:  Icon(
+        done: const Icon(
           Icons.arrow_forward,
           size: 24,
           color: Color(0xffFFC33A),

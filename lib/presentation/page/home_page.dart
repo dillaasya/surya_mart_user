@@ -1,9 +1,15 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:surya_mart_v1/presentation/page/cart_page.dart';
-import 'package:surya_mart_v1/presentation/widget/first_card.dart';
-import 'package:surya_mart_v1/presentation/widget/second_cart.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:surya_mart_v1/data/service/auth.dart';
+import 'package:surya_mart_v1/presentation/page/article_page.dart';
+import 'package:surya_mart_v1/presentation/page/bottom_navbar.dart';
+import 'package:surya_mart_v1/presentation/page/cart_page.dart';
+import 'package:surya_mart_v1/presentation/widget/horizontal_list_card.dart';
+import 'package:url_launcher/link.dart';
+import 'package:badges/badges.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,273 +19,379 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final currentUser = Auth();
+
+  String? uid;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    uid = currentUser.currentUser?.uid;
+  }
+
+  Future<bool?> _onBackPressed() async {
+    return showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          actionsAlignment: MainAxisAlignment.center,
+          content: Text(
+            "Apakah anda yakin ingin keluar dari aplikasi?",
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w300,
+              color: Colors.black,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(
+                "Ya",
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w300,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text(
+                "Tidak",
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w300,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xff025ab4),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              header(),
-              Container(
-                width: MediaQuery.of(context).size.width - 40,
-                height: 50,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  color: Colors.white,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
+      child: WillPopScope(
+        onWillPop: () async {
+          final shouldPop = await _onBackPressed();
+          return shouldPop ?? false;
+        },
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(80),
+            child: Container(
+              color: const Color(0xff025ab4),
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('users')
+                    .where('uid', isEqualTo: uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.connectionState == ConnectionState.active) {
+                    var x = snapshot.data!.docs.first;
+
+                    return Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                              color: Colors.grey,
-                              child: const Icon(Icons.circle_outlined)),
-                          const SizedBox(
-                            width: 4,
+                          Expanded(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade300,
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  child: x.get('profilePicture').toString().isEmpty
+                                      ? ClipRRect(
+                                          borderRadius: BorderRadius.circular(50),
+                                          child: const Icon(Icons.person),
+                                        )
+                                      : ClipRRect(
+                                          borderRadius: BorderRadius.circular(50),
+                                          child: x.data()['profilePicture'] == null
+                                              ? const Icon(Icons.person,
+                                                  color: Colors.black)
+                                              : Image.network(
+                                                  x.get('profilePicture'),
+                                                  fit: BoxFit.cover,
+                                                  width: 100,
+                                                ),
+                                        ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Flexible(
+                                  child: Text(x.get('displayName'),
+                                      maxLines: 1,
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                          fontSize: 16),),
+                                )
+                              ],
+                            ),
                           ),
-                          const Text('POIN'),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return const CartPage();
+                              }));
+                            },
+                            icon: Badge(
+                              badgeContent: Text(
+                                x.get('shoppingCart').toString(),
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              child: const Icon(Icons.shopping_cart_outlined),
+                            ),
+                            color: Colors.white,
+                          )
                         ],
                       ),
-                      const Text('6.700')
-                    ],
-                  ),
-                ),
-              ),
-              carousel(),
-              Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20))),
-                child: Column(
-                  children: [
-                    productSection('TOP SELLING'),
-                    productSection('BEST DEALS'),
-                    recomendation(),
-                    article(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget header() {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: SizedBox(
-        height: 50,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Amalia Putri',
-                  style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const CartPage();
-                }));
-              },
-              icon: const Icon(Icons.shopping_cart_outlined),
-              color: Colors.white,
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  final List<Widget> imgList = [
-    Container(
-      decoration: BoxDecoration(
-        color: Colors.blue.shade300,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(20),
-        ),
-      ),
-    ),
-    Container(
-      decoration: BoxDecoration(
-        color: Colors.blue.shade200,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(20),
-        ),
-      ),
-    ),
-    Container(
-      decoration: BoxDecoration(
-        color: Colors.blue.shade100,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(20),
-        ),
-      ),
-    ),
-  ];
-
-  Widget carousel() {
-    int current = 0;
-    final CarouselController controller = CarouselController();
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 20),
-      child: Column(
-        children: [
-          CarouselSlider(
-            carouselController: controller,
-            items: imgList.map((e) => SizedBox(height: 125, child: e)).toList(),
-            options: CarouselOptions(
-                enlargeCenterPage: true,
-                aspectRatio: 2.0,
-                autoPlay: true,
-                onPageChanged: (index, x) {
-                  setState(() {
-                    current = index;
-                  });
-                }),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: imgList
-                  .asMap()
-                  .entries
-                  .map((e) => GestureDetector(
-                        onTap: () => controller.animateToPage(e.key),
-                        child: Container(
-                          width: 12.0,
-                          height: 12.0,
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 4.0),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: (Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.white
-                                      : Colors.black)
-                                  .withOpacity(current == e.key ? 0.9 : 0.4)),
-                        ),
-                      ))
-                  .toList())
-        ],
-      ),
-    );
-  }
-
-  Widget productSection(String subHeader) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 15),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(subHeader),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text('SEE ALL'),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: SizedBox(
-              height: 90,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 6,
-                /*separatorBuilder: (context, _) => SizedBox(
-                  width: 10,
-                ),*/
-                itemBuilder: (context, index) {
-                  return Row(
-                    children: const [
-                      //SizedBox(width: 20),
-                      FirstCard(),
-                      SizedBox(width: 20),
-                    ],
-                  );
+                    );
+                  } else {
+                    return const Text('EROR');
+                  }
                 },
               ),
             ),
-          )
-        ],
+          ),
+          //backgroundColor: const Color(0xff025ab4),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                product(),
+                article()
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  Widget recomendation() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 27, left: 20, right: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'RECOMENDATION',
+  Widget product() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 15),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('TOP SELLING',
+                        style:
+                            GoogleFonts.poppins(fontWeight: FontWeight.w500)),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                              builder: (_) => const BottomNavbar(
+                                    currentIndex: 1,
+                                  )),
+                        );
+                      },
+                      child: Text('SEE ALL',
+                          style:
+                              GoogleFonts.poppins(fontWeight: FontWeight.w500)),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                height: 215,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('products')
+                      .orderBy('sold', descending: true)
+                      .limit(10)
+                      .snapshots(),
+                  builder: (_, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("Eror : ${snapshot.hasError}");
+                    }
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return const Center(child: CircularProgressIndicator());
+                      default:
+                        return ListView.separated(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 10,
+                          separatorBuilder: (context, _) => const SizedBox(
+                            width: 10,
+                          ),
+                          itemBuilder: (context, index) {
+                            var ds = snapshot.data?.docs[index];
+                            return ListCard(ds?.id);
+                          },
+                        );
+                    }
+                  },
+                ),
+              )
+            ],
           ),
-          const SizedBox(
-            height: 27,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 15),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('BEST DEALS',
+                        style:
+                            GoogleFonts.poppins(fontWeight: FontWeight.w500)),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                              builder: (_) => const BottomNavbar(
+                                    currentIndex: 1,
+                                  )),
+                        );
+                      },
+                      child: Text('SEE ALL',
+                          style:
+                              GoogleFonts.poppins(fontWeight: FontWeight.w500)),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                height: 215,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('products')
+                      .orderBy('price')
+                      .limit(10)
+                      .snapshots(),
+                  builder: (_, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("Eror : ${snapshot.hasError}");
+                    }
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return const Center(child: CircularProgressIndicator());
+                      default:
+                        return ListView.separated(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 10,
+                          separatorBuilder: (context, _) => const SizedBox(
+                            width: 10,
+                          ),
+                          itemBuilder: (context, index) {
+                            var ds = snapshot.data?.docs[index];
+                            log('Index : $ds');
+                            return ListCard(ds?.id);
+                          },
+                        );
+                    }
+                  },
+                ),
+              )
+            ],
           ),
-          GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, crossAxisSpacing: 16, mainAxisSpacing: 20),
-              itemCount: 6,
-              itemBuilder: (context, index) {
-                return const SecondCart();
-                //return Container(height: 180, color: Colors.yellow,);
-              }),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Align(
-                alignment: Alignment.center,
-                child: TextButton(
-                  child: const Text('SEE ALL'),
-                  onPressed: () {},
-                )),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 15),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('NEW PRODUCT',
+                        style:
+                            GoogleFonts.poppins(fontWeight: FontWeight.w500)),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                              builder: (_) => const BottomNavbar(
+                                    currentIndex: 1,
+                                  )),
+                        );
+                      },
+                      child: Text('SEE ALL',
+                          style:
+                              GoogleFonts.poppins(fontWeight: FontWeight.w500)),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                height: 215,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('products')
+                      .orderBy('dateCreated', descending: true)
+                      .limit(10)
+                      .snapshots(),
+                  builder: (_, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("Eror : ${snapshot.hasError}");
+                    }
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return const Center(child: CircularProgressIndicator());
+                      default:
+                        return ListView.separated(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          scrollDirection: Axis.horizontal,
+                          separatorBuilder: (context, _) => const SizedBox(
+                            width: 10,
+                          ),
+                          itemCount: 10,
+                          itemBuilder: (context, index) {
+                            var ds = snapshot.data?.docs[index];
+                            log('Index : $ds');
+                            return ListCard(ds?.id);
+                          },
+                        );
+                    }
+                  },
+                ),
+              )
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -289,44 +401,75 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'ARTICLE',
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('ARTICLE',
+                  style: GoogleFonts.poppins(fontWeight: FontWeight.w500)),
+              TextButton(
+                child: Text('SEE ALL',
+                    style: GoogleFonts.poppins(fontWeight: FontWeight.w500)),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const ArticlePage()),
+                  );
+                },
+              )
+            ],
           ),
           const SizedBox(
-            height: 27,
+            height: 15,
           ),
-          ListView.builder(
-              itemCount: 4,
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Artikel $index'),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    const Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Purus in massa tempor nec feugiat nisl pretium fusce id. Condimentum mattis pellentesque id nibh.',
-                      maxLines: 3,
-                    ),
-                    const Divider(),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                  ],
+          StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('articles')
+                .orderBy("dateModified", descending: true)
+                .limit(4)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
-                //return Container(height: 180, color: Colors.yellow,);
-              }),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Align(
-                alignment: Alignment.center,
-                child: TextButton(
-                  child: const Text('SEE ALL'),
-                  onPressed: () {},
-                )),
+              } else if (snapshot.connectionState == ConnectionState.active) {
+                return ListView.builder(
+                    itemCount: snapshot.data?.docs.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      var ds = snapshot.data?.docs[index];
+                      return Link(
+                        uri: Uri.parse((ds!.data())["link"]),
+                        builder: (context, followLink) {
+                          return InkWell(
+                            onTap: followLink,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('${(ds.data())["title"]}',
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w500)),
+                                const SizedBox(
+                                  height: 4,
+                                ),
+                                Text('${(ds.data())["overview"]}',
+                                    maxLines: 3,
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w300)),
+                                const Divider(),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    });
+              } else {
+                return const Text('EROR');
+              }
+            },
           ),
         ],
       ),

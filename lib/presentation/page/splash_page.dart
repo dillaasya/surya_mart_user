@@ -6,13 +6,17 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff0063c6),
+      backgroundColor: const Color(0xff0063c6),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Flexible(child: Image.asset('assets/images/Logo.png', width: 200,))
+            Flexible(
+                child: Image.asset(
+              'assets/images/logo-suryamart-new.png',
+              width: 250,
+            ))
           ],
         ),
       ),

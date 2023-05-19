@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 TextTheme textTheme() {
-  return TextTheme(
+  return const TextTheme(
     headline2: TextStyle(
         color: Colors.black,
         fontFamily: 'Poppins',
@@ -18,6 +18,5 @@ TextTheme textTheme() {
         color: Colors.black,
         fontFamily: 'Poppins',
         fontWeight: FontWeight.w600),
-
   );
 }

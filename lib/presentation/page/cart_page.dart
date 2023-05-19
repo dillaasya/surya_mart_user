@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:surya_mart_v1/data/service/auth.dart';
+import 'package:surya_mart_v1/presentation/page/bottom_navbar.dart';
 import 'package:surya_mart_v1/presentation/page/checkout_page.dart';
-import 'package:surya_mart_v1/presentation/widget/third_card.dart';
+
+import 'package:surya_mart_v1/presentation/widget/cart_card.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -10,102 +15,273 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  bool? isChecked = false;
-  bool? isCardChecked = false;
+  getIdUserForCart() {
+    String idUser = Auth().currentUser!.uid;
+    //print('UID USER YANG LOGIN SEKARANG: $idUser');
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: idUser)
+        .get()
+        .then((value) {
+      setState(() {
+        idDocUser = value.docs.first.id;
+      });
+    });
+    //print('ID doc user nya : $idDocUser');
+  }
+  
+  Future<bool> addressCek(String idUser){
+    Future<bool> x = FirebaseFirestore.instance.collection('users').doc(idUser).collection('address').get().then((value){
+      if (value.docs.isEmpty) {
+        return false;
+      }else{
+        return true;
+      }
+    });
+
+    return x;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getIdUserForCart();
+  }
+
+  String? idDocUser;
+  bool isButtonDisabled = false;
+
   @override
   Widget build(BuildContext context) {
+    var cartUser = FirebaseFirestore.instance
+        .collection('users')
+        .doc(idDocUser)
+        .collection('cart');
+
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black),
-          elevation: 0,
-          title: Text(
-            'Cart',
-            style: TextStyle(color: Colors.black),
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            iconTheme: const IconThemeData(color: Colors.black),
+            elevation: 0,
+            title: Text('Cart',
+                style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                    fontSize: 16)),
           ),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Checkbox(
-                        activeColor: Colors.orangeAccent,
-                        value: isChecked,
-                        onChanged: (newValue) {
-                          setState(() {
-                            isChecked = newValue;
-                          });
-                        }),
-                    //SizedBox(width: 10,),
-                    Text('Select All'),
-                  ],
-                ),
-                ListView.builder(
-                  itemCount: 4,
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          ThirdCard(isChecked: isCardChecked,),
-                          SizedBox(height: 8,),
-                        ],
-                      );
-                      //return Container(height: 180, color: Colors.yellow,);
-                    }
-
-                ),
-              ],
-            ),
-          ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          child: Container(
-            height: 70,
+          body: Center(
             child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('TOTAL'),
-                        SizedBox(height: 4,),
-                        Text('Rp 1.200.000', style: TextStyle(color: Colors.redAccent),)
-                      ],
-                    )
-                  ),
-                  Expanded(
-                    child: Container(
-                      height: 50,
-                      //width: 160,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.orangeAccent),
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                                return CheckoutPage();
-                              }));
+              padding: const EdgeInsets.all(8.0),
+              child: StreamBuilder(
+                stream: cartUser.snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.active) {
+                    if (snapshot.data!.docs.isNotEmpty) {
+                      return ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          var x = snapshot.data?.docs[index];
+                          //print('nilai id : $x');
+                          return CartCard(cartUser: cartUser, x: x, idDocUser: idDocUser);
                         },
-                        child: Text('CHECKOUT',
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                    ),
-                  ),
-                ],
+                      );
+                    } else {
+                      return SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/images/img4.png',
+                              width: 200,
+                            ),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Text(
+                            'Wah, keranjang belanjamu masih kosong nih',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w400,),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                          ],
+                        ),
+                      );
+                    }
+                  } else {
+                    return const Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Text('EROR'),
+                    );
+                  }
+                },
               ),
             ),
           ),
-        ),
-      ),
+          bottomNavigationBar: StreamBuilder(
+            stream: cartUser.snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.connectionState == ConnectionState.active) {
+                var listData = snapshot.data!.docs.toList();
+
+                if (listData.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.only(top: 18, bottom: 18)),
+                          minimumSize: MaterialStateProperty.all<Size>(
+                              const Size(350, 0)),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              const Color(0XFFFFC33A)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: const BorderSide(
+                                color: Color(0XFFFFC33A),
+                              ),
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          'Shop Now',
+                          style: GoogleFonts.poppins(
+                              color: Colors.grey.shade800,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (_) => const BottomNavbar(
+                                      currentIndex: 1,
+                                    )),
+                          );
+                        }),
+                  );
+                } else {
+                  num total = 0;
+
+                  for (var i = 0; i < listData.length; i++) {
+                    var temp =
+                        listData[i].get('qty') * listData[i].get('price');
+                    total = total + temp;
+                  }
+                  return BottomAppBar(
+                    child: SizedBox(
+                      height: 80,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                                child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('TOTAL', style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w700, color: Colors.black),),
+                                const SizedBox(
+                                  height: 4,
+                                ),
+                                Text('Rp ${total.toString()}',style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w700, color: Colors.redAccent),),
+                              ],
+                            )),
+                            Expanded(
+                              child: Container(
+                                height: 50,
+                                //width: 160,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.orangeAccent),
+                                child: TextButton(
+                                  onPressed: () {
+                                    addressCek(idDocUser!).then((value) {
+                                      if (value) {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) {
+                                              return CheckoutPage(
+                                                idUser: idDocUser.toString(),
+                                              );
+                                            }));
+                                      }else{
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              actionsAlignment: MainAxisAlignment.center,
+                                              title: Text(
+                                                "Perhatian",
+                                                style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.black,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              content: Text(
+                                                "Anda belum mendaftarkan alamat pengiriman, tambahkan alamat baru pada menu Profile > Shipping Address",
+                                                style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w300,
+                                                  color: Colors.black,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              actions: [
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context).pushReplacement(
+                                                      MaterialPageRoute(
+                                                          builder: (_) => const BottomNavbar(
+                                                            currentIndex: 2,
+                                                          )),
+                                                    );
+                                                  },
+                                                  child: Text(
+                                                    "Tambah Alamat",
+                                                    style: GoogleFonts.poppins(
+                                                      fontWeight: FontWeight.w300,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ));
+                                      }
+                                    });
+
+                                  },
+                                  child: Text('Periksa',style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w700, color: Colors.black),),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              } else {
+                return const Text('EROR');
+              }
+            },
+          )),
     );
   }
 }
+

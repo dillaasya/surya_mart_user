@@ -1,244 +1,272 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:surya_mart_v1/data/service/auth.dart';
+import 'package:surya_mart_v1/presentation/page/about_page.dart';
+import 'package:surya_mart_v1/presentation/page/address_page.dart';
+import 'package:surya_mart_v1/presentation/page/edit_profile.dart';
+import 'package:surya_mart_v1/presentation/page/order_history.dart';
+import 'package:surya_mart_v1/presentation/page/review_page.dart';
+import 'package:surya_mart_v1/presentation/page/signin_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  Future<bool?> _onBackPressed() async {
+    return showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          actionsAlignment: MainAxisAlignment.center,
+          content: Text(
+            "Apakah anda yakin ingin keluar dari aplikasi?",
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w300,
+              color: Colors.black,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(
+                "Ya",
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w300,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text(
+                "Tidak",
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w300,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Color(0xff025ab4),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Header(),
-              ProfilePicture(),
-              SizedBox(
-                height: 60,
-              ),
-              Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20)),
-                      color: Colors.white),
-                  child: ProfileMenu())
-            ],
+      child: WillPopScope(
+        onWillPop: () async {
+          final shouldPop = await _onBackPressed();
+          return shouldPop ?? false;
+        },
+        child: Scaffold(
+          appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(80),
+              child: Container(
+                color: const Color(0xff025ab4),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Profile',
+                        style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          await Auth().signOut().whenComplete(() {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (_) => const SigninPage(),
+                              ),
+                            );
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.logout,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )),
+          //backgroundColor: const Color(0xff025ab4),
+          body: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('users')
+                .where('uid', isEqualTo: Auth().currentUser!.uid)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.connectionState == ConnectionState.active) {
+                var x = snapshot.data!.docs.first;
+                return ListView(
+                  children: [
+                    Container(
+                        color: const Color(0xff025ab4), child: profilePicture(x)),
+                    profileMenu(x),
+                  ],
+                );
+              } else {
+                return const Text('Eror');
+              }
+            },
           ),
         ),
       ),
     );
   }
 
-  Widget Header() {
+  Widget profilePicture(QueryDocumentSnapshot user) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-      child: Container(
-        height: 50,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Profile',
-              style: TextStyle(color: Colors.white, fontSize: 14),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.logout,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget ProfilePicture() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 30),
-      child: Center(
-          child: Column(
+      padding: const EdgeInsets.only(top: 10, bottom: 50),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: Colors.grey.shade300),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Text(
-            'Max Havelar',
-            style: TextStyle(color: Colors.white, fontSize: 14),
-          ),
+      Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(100),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(50),
+          child: user.get('profilePicture').toString().isNotEmpty
+              ? Image.network(
+                  user.get('profilePicture').toString(),
+                  fit: BoxFit.cover,
+                  width: 100,
+                )
+              : const Icon(
+                  Icons.person,
+                  size: 30,
+                  color: Colors.black,
+                ),
+        ),
+      ),
+      const SizedBox(
+        height: 15,
+      ),
+      SizedBox(
+        width: 150,
+        child: Text(
+          user.get('displayName'),
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.visible,
+          style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontWeight: FontWeight.w300),
+        ),
+      ),
         ],
-      )),
+      ),
     );
   }
 
-  Widget ProfileMenu() {
+  Widget profileMenu(QueryDocumentSnapshot user) {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 4),
       child: Column(
         children: [
-          Container(
-            height: 60,
-            //color: Colors.grey,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.person_outline),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text('Edit Profile')
-                  ],
-                ),
-                Icon(Icons.arrow_forward_ios_rounded)
-              ],
-            ),
+          ListTile(
+            leading: const Icon(Icons.people_outline),
+            title: Text('Edit Profile',style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w300, color: Colors.black,),),
+            trailing: const Icon(Icons.navigate_next_rounded),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const EditProfile()),
+              );
+            },
           ),
-          Container(
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.location_on_outlined),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text('Shipping Address')
-                  ],
-                ),
-                Icon(Icons.arrow_forward_ios_rounded)
-              ],
-            ),
+
+          ListTile(
+            leading:  const Icon(Icons.location_on_outlined),
+            title: Text('Shipping Address',style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w300, color: Colors.black,),),
+            trailing: const Icon(Icons.navigate_next_rounded),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (_) => AddressPage(
+                      id: user.id,
+                    )),
+              );
+            },
           ),
-          Container(
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.access_time),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text('Order History')
-                  ],
-                ),
-                Icon(Icons.arrow_forward_ios_rounded)
-              ],
-            ),
+
+          ListTile(
+            leading:  const Icon(Icons.access_time),
+            title: Text('Order History',style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w300, color: Colors.black,),),
+            trailing: const Icon(Icons.navigate_next_rounded),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (_) => OrderHistory(
+                      id: user.id,
+                    )),
+              );
+            },
           ),
-          Container(
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.reorder_outlined),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text('My Reviews')
-                  ],
-                ),
-                Icon(Icons.arrow_forward_ios_rounded)
-              ],
-            ),
+
+          ListTile(
+            leading:  const Icon(Icons.reorder_outlined),
+            title: Text('My Reviews',style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w300, color: Colors.black,),),
+            trailing: const Icon(Icons.navigate_next_rounded),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const ReviewPage()),
+              );
+            },
           ),
-          Container(
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.chat_bubble_outline),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text('Refund requests')
-                  ],
-                ),
-                Icon(Icons.arrow_forward_ios_rounded)
-              ],
-            ),
+
+          ListTile(
+            leading:   const Icon(Icons.chat_bubble_outline),
+            title: Text('Refund Request',style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w300, color: Colors.black,),),
+            trailing: const Icon(Icons.navigate_next_rounded),
+            onTap: () {
+              launchUrl(Uri.parse(
+                  'whatsapp://send/?phone=+6285231803644&text=Hi, can you help me?'));
+            },
           ),
-          Container(
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.help_outline_rounded),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text('Help Center')
-                  ],
-                ),
-                Icon(Icons.arrow_forward_ios_rounded)
-              ],
-            ),
+
+          ListTile(
+            leading:
+            const Icon(Icons.info_outline),
+            title: Text('About',style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w300, color: Colors.black,),),
+            trailing: const Icon(Icons.navigate_next_rounded),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const AboutPage()),
+              );
+            },
           ),
-          Container(
-            height: 60,
-            //color: Colors.grey,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.privacy_tip_outlined),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text('Privacy & Policy')
-                  ],
-                ),
-                Icon(Icons.arrow_forward_ios_rounded)
-              ],
-            ),
-          ),
-          Container(
-            height: 60,
-            //color: Colors.grey,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.info_outline),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text('About')
-                  ],
-                ),
-                Icon(Icons.arrow_forward_ios_rounded)
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Center(
-            child: Text(' App v1.0.0'),
-          )
+
         ],
       ),
     );

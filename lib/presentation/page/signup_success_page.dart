@@ -25,13 +25,13 @@ class SuccessPage extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width * 0.3,
               height: 40,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color(0XFFFFC33A),
               ),
               child: TextButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (_) =>SigninPage()),
+                    MaterialPageRoute(builder: (_) => const SigninPage()),
                   );
                 },
                 child: Text(

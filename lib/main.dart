@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:surya_mart_v1/data/service/auth.dart';
+import 'package:surya_mart_v1/presentation/page/bottom_navbar.dart';
 import 'package:surya_mart_v1/presentation/page/introduction_page.dart';
 import 'package:surya_mart_v1/presentation/page/splash_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class Init {
   Init._();
+
   static final instance = Init._();
 
   Future initialize() async {
@@ -12,10 +16,16 @@ class Init {
   }
 }
 
-void main() {WidgetsFlutterBinding.ensureInitialized();
-SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-    overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);
-runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+      overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -23,25 +33,50 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //final user = Auth().signOut();
+
     return FutureBuilder(
-      future:  Init.instance.initialize(),
-      builder: (context, AsyncSnapshot snapshot){
+      future: Init.instance.initialize(),
+      builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return MaterialApp(
+          return const MaterialApp(
             home: SplashPage(),
             debugShowCheckedModeBanner: false,
           );
         } else {
-          return MaterialApp(
-            home: IntroductionPage(),
-            debugShowCheckedModeBanner: false,
+          return StreamBuilder(
+            stream: Auth().authChanges,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return const MaterialApp(
+                  home: BottomNavbar(
+                    currentIndex: 0,
+                  ),
+                  debugShowCheckedModeBanner: false,
+                );
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const MaterialApp(
+                  home: Center(
+                    child: SafeArea(
+                      child: Scaffold(
+                        body: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  debugShowCheckedModeBanner: false,
+                );
+              } else {
+                return const MaterialApp(
+                  home: IntroductionPage(),
+                  debugShowCheckedModeBanner: false,
+                );
+              }
+            },
           );
         }
       },
     );
   }
 }
-
-
-
-
