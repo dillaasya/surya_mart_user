@@ -1,4 +1,4 @@
-# Suryamart v1 - User
+# Suryamart - User
 
 Final Project of Bachelor of Informatics Engineering Universitas Muhammadiyah Sidoarjo 2023
 
