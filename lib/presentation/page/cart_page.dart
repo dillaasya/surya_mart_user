@@ -23,8 +23,10 @@ class _CartPageState extends State<CartPage> {
         .where('uid', isEqualTo: idUser)
         .get()
         .then((value) {
+
       setState(() {
         idDocUser = value.docs.first.id;
+        poinUser = value.docs.first.data()['poin'];
       });
     });
     //print('ID doc user nya : $idDocUser');
@@ -50,6 +52,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   String? idDocUser;
+  int poinUser=0;
   bool isButtonDisabled = false;
 
   @override
@@ -216,6 +219,8 @@ class _CartPageState extends State<CartPage> {
                                         Navigator.push(context,
                                             MaterialPageRoute(builder: (context) {
                                               return CheckoutPage(
+                                                poinUser: poinUser,
+                                                total: total,
                                                 idUser: idDocUser.toString(),
                                               );
                                             }));

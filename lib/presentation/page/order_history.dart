@@ -108,34 +108,38 @@ class _OrderHistoryState extends State<OrderHistory> {
                                       ),
                                     ),
                                     const SizedBox(width: 8),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${first['productName']}',
-                                          style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'Rp ${first['price']} ',
-                                              style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                            Text(
-                                              'x${first['qty']}',
-                                              style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${first['productName']}',
+                                            style: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.w300),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.clip,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Rp ${first['price']} ',
+                                                style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                              Text(
+                                                'x${first['qty']}',
+                                                style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -332,7 +336,51 @@ class _OrderHistoryState extends State<OrderHistory> {
                                 FirebaseFirestore.instance
                                     .collection('orders')
                                     .doc(x.id)
-                                    .update({'statusOrder': 'SUCCEED'});
+                                    .update({'statusOrder': 'SUCCEED'}).whenComplete((){
+
+                                      //update poin yang diperoleh user dari pembelian
+                                  var jumlah = x.data()['totalPrice']/50000;
+
+
+                                  if (jumlah>5) {
+                                    var subPoin = jumlah.floor()*10;
+                                    FirebaseFirestore.instance
+                                        .collection('users')
+                                        .doc(widget.id)
+                                        .update({'poin' : FieldValue.increment(subPoin)}).whenComplete(() {
+                                      showDialog(
+                                          barrierDismissible: true,
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 2), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              actionsAlignment: MainAxisAlignment.center,
+                                              title: Text(
+                                                "Selamat!",
+                                                style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.black,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              content: Text(
+                                                "Anda telah mendapatkan $subPoin poin",
+                                                style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w300,
+                                                  color: Colors.black,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            );
+                                          });
+                                    });
+                                  } else {
+
+                                  }
+
+                                });
                               },
                               child: x.data()['statusOrder'] == 'SHIPPED'
                                   ? Padding(
@@ -479,34 +527,38 @@ class _OrderHistoryState extends State<OrderHistory> {
                                       ),
                                     ),
                                     const SizedBox(width: 8),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${first['productName']}',
-                                          style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'Rp ${first['price']} ',
-                                              style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                            Text(
-                                              'x${first['qty']}',
-                                              style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${first['productName']}',
+                                            style: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.w300),
+                                            overflow: TextOverflow.clip,
+                                            maxLines: 1,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Rp ${first['price']} ',
+                                                style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                              Text(
+                                                'x${first['qty']}',
+                                                style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -679,7 +731,51 @@ class _OrderHistoryState extends State<OrderHistory> {
                                 FirebaseFirestore.instance
                                     .collection('orders')
                                     .doc(x.id)
-                                    .update({'statusOrder': 'SUCCEED'});
+                                    .update({'statusOrder': 'SUCCEED'}).whenComplete((){
+
+                                  //update poin yang diperoleh user dari pembelian
+                                  var jumlah = x.data()['totalPrice']/50000;
+
+
+                                  if (jumlah>5) {
+                                    var subPoin = jumlah.floor()*10;
+                                    FirebaseFirestore.instance
+                                        .collection('users')
+                                        .doc(widget.id)
+                                        .update({'poin' : FieldValue.increment(subPoin)}).whenComplete(() {
+                                      showDialog(
+                                          barrierDismissible: true,
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 2), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              actionsAlignment: MainAxisAlignment.center,
+                                              title: Text(
+                                                "Selamat!",
+                                                style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.black,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              content: Text(
+                                                "Anda telah mendapatkan $subPoin poin",
+                                                style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w300,
+                                                  color: Colors.black,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            );
+                                          });
+                                    });
+                                  } else {
+
+                                  }
+
+                                });
                               },
                               child: x.data()['statusOrder'] == 'SHIPPED'
                                   ? Padding(

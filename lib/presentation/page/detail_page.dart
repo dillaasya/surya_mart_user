@@ -34,26 +34,11 @@ class _DetailPageState extends State<DetailPage> {
   int shoppingCart = 0;
   String? name, description, image, idProduct;
 
-  Future<void> getShoppingCartUser() async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .where('uid', isEqualTo: Auth().currentUser!.uid)
-        .get()
-        .then((value) {
-      var x = value.docs.first;
-      if (mounted) {
-        setState(() {
-          shoppingCart = x.data()['shoppingCart'];
-        });
-      }
-    });
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getShoppingCartUser();
+    //getShoppingCartUser();
   }
 
   @override
@@ -276,11 +261,15 @@ class _DetailPageState extends State<DetailPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Deskripsi',
-                                  style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Deskripsi',
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(height: 8),
                                 ExpandableText(

@@ -7,8 +7,15 @@ import 'package:surya_mart_v1/presentation/page/success_order_page.dart';
 
 class CheckoutPage extends StatefulWidget {
   final String idUser;
+  final num total;
+  final int poinUser;
 
-  const CheckoutPage({required this.idUser, Key? key}) : super(key: key);
+  const CheckoutPage(
+      {required this.poinUser,
+      required this.idUser,
+      required this.total,
+      Key? key})
+      : super(key: key);
 
   @override
   State<CheckoutPage> createState() => _CheckoutPageState();
@@ -65,10 +72,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
   String? idOrder;
   String? shippingAddress;
   var listCart = [];
+  int poin = 0;
+  int potonganPoin = 0;
+  int ongkir = 0;
 
   Future<void> saveOrder() async {
     await deleteAllCart().whenComplete(() {
       FirebaseFirestore.instance.collection('users').doc(widget.idUser).update({
+        'poin': FieldValue.increment(-poin),
         'shoppingCart': 0,
       });
     }).whenComplete(() {
@@ -77,7 +88,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
         'paymentMethod': 'COD',
         'shippingAddress': shippingAddress,
         'statusOrder': 'PACKED',
-        'totalPrice': totalPrice,
+        'potongannPoin': potonganPoin,
+        'subTotal': widget.total,
+        'totalPrice': widget.total - potonganPoin,
+        'deliveryFee': ongkir,
         'userId': widget.idUser,
         'cordinatAddress': const GeoPoint(0, 0),
         'productItem': listCart,
@@ -107,11 +121,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
           child: Column(
             children: [
               InkWell(
-                onTap: (){
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) {
-                        return ChooseAddress(idUser: widget.idUser);
-                      }));
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return ChooseAddress(idUser: widget.idUser);
+                  }));
                 },
                 child: Container(
                   decoration: const BoxDecoration(
@@ -120,84 +133,126 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ),
                       color: Colors.white),
                   child: Padding(
-                    padding: const EdgeInsets.only(left:20, right:20,bottom:20, top:10),
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 20, bottom: 20, top: 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Icon(Icons.location_on_outlined),
-                        const SizedBox(width:4),
+                        const SizedBox(width: 4),
                         Expanded(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Alamat Pengiriman',style: GoogleFonts.poppins(fontWeight: FontWeight.w500),),
-                                    const SizedBox(height:8),
+                                    Text(
+                                      'Alamat Pengiriman',
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    const SizedBox(height: 8),
                                     Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                      StreamBuilder(
-                                        stream: FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(widget.idUser)
-                                            .collection('address')
-                                            .where('isSelected', isEqualTo: true).snapshots(),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return const Center(
-                                              child: CircularProgressIndicator(),
-                                            );
-                                          } else if (snapshot.connectionState ==
-                                              ConnectionState.active) {
+                                          StreamBuilder(
+                                            stream: FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(widget.idUser)
+                                                .collection('address')
+                                                .where('isSelected',
+                                                    isEqualTo: true)
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              } else if (snapshot
+                                                      .connectionState ==
+                                                  ConnectionState.active) {
+                                                if (snapshot
+                                                    .data!.docs.isNotEmpty) {
+                                                  var x =
+                                                      snapshot.data!.docs.first;
+                                                  shippingAddress = x.data()[
+                                                          'fullAddress'] +
+                                                      ' ' +
+                                                      x.data()[
+                                                          'detailAddress'] +
+                                                      ' ' +
+                                                      x.data()['city'] +
+                                                      ' ' +
+                                                      x.data()['province'] +
+                                                      ' ' +
+                                                      x
+                                                          .data()['codeNumber']
+                                                          .toString();
 
-
-                                            if (snapshot.data!.docs.isNotEmpty) {
-                                              var x = snapshot.data!.docs.first;
-                                              shippingAddress = x.data()['fullAddress'] +
-                                                  ' ' +
-                                                  x.data()['detailAddress'] +
-                                                  ' ' +
-                                                  x.data()['city'] +
-                                                  ' ' +
-                                                  x.data()['province'] +
-                                                  ' ' +
-                                                  x.data()['codeNumber'].toString();
-
-                                              return Column(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(x.data()['recipientName'],style: GoogleFonts.poppins(fontWeight: FontWeight.w400),),
-                                                  Text((x.data()['phone']).toString(),style: GoogleFonts.poppins(fontWeight: FontWeight.w300),),
-                                                  Text(
-                                                    x.data()['fullAddress'],
-                                                    overflow: TextOverflow.ellipsis,
-                                                    maxLines: 3,
-                                                    style: GoogleFonts.poppins(fontWeight: FontWeight.w300),
-                                                  ),
-                                                  Text((x.data()['codeNumber'])
-                                                      .toString()),
-                                                ],
-                                              );
-                                            }else{
-                                              return Center(
-                                                child: Text('Tidak ada alamat yang dipilih',style:
-                                                GoogleFonts.poppins(fontWeight: FontWeight.w400),),
-                                              );
-                                            }
-                                          } else {
-                                            return const Text('eror');
-                                          }
-                                        },
-                                      )
-                                    ]),
+                                                  return Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        x.data()[
+                                                            'recipientName'],
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
+                                                      ),
+                                                      Text(
+                                                        (x.data()['phone'])
+                                                            .toString(),
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300),
+                                                      ),
+                                                      Text(
+                                                        x.data()['fullAddress'],
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 3,
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300),
+                                                      ),
+                                                      Text((x.data()[
+                                                              'codeNumber'])
+                                                          .toString()),
+                                                    ],
+                                                  );
+                                                } else {
+                                                  return Center(
+                                                    child: Text(
+                                                      'Tidak ada alamat yang dipilih',
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                return const Text('eror');
+                                              }
+                                            },
+                                          )
+                                        ]),
                                   ],
                                 ),
                               ),
@@ -205,7 +260,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             ],
                           ),
                         ),
-
                       ],
                     ),
                   ),
@@ -226,21 +280,25 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           children: [
                             Text(
                               'Estimasi Pengiriman',
-                              style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w500),
                             ),
                             const SizedBox(
                               height: 8,
                             ),
                             Text(
                               DateFormat.yMMMEd().format(DateTime.now()),
-                              style: GoogleFonts.poppins(fontWeight: FontWeight.w400),
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400),
                             ),
                             const SizedBox(
                               height: 5,
                             ),
                             Text(
-                                'Maksimal 1 jam setelah pembayaran selama jam operasional (09.00 - 15.00)',
-                              style: GoogleFonts.poppins(fontWeight: FontWeight.w300),)
+                              'Maksimal 1 jam setelah pembayaran selama jam operasional (09.00 - 15.00)',
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w300),
+                            )
                           ],
                         ),
                       ),
@@ -248,9 +306,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 8,),
+              const SizedBox(
+                height: 8,
+              ),
               Container(
-                color:Colors.white,
+                color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.all(8),
                   child: StreamBuilder(
@@ -287,14 +347,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       height: 60,
                                       decoration: BoxDecoration(
                                           //color: Colors.grey.shade200,
-                                        border: Border.all(width: 0.5, color: Colors.grey),
-                                          borderRadius: BorderRadius.circular(8)
-                                      ),
+                                          border: Border.all(
+                                              width: 0.5, color: Colors.grey),
+                                          borderRadius:
+                                              BorderRadius.circular(8)),
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
                                         child: x.data()['picture'] == null
-                                            ? const Icon(Icons.image_not_supported_outlined)
-                                            : Image.network(x.data()['picture']),
+                                            ? const Icon(Icons
+                                                .image_not_supported_outlined)
+                                            : Image.network(
+                                                x.data()['picture']),
                                       ),
                                     ),
                                     const SizedBox(
@@ -302,17 +365,21 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                     ),
                                     Expanded(
                                       child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               '${x.get('productName')}',
                                               maxLines: 1,
                                               overflow: TextOverflow.clip,
-                                              style:
-                                              GoogleFonts.poppins(fontWeight: FontWeight.w500),
+                                              style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w500),
                                             ),
-                                            Text('Rp ${x.get('price')} x${x.data()['qty']}',style:
-                                            GoogleFonts.poppins(fontWeight: FontWeight.w300),),
+                                            Text(
+                                              'Rp ${x.get('price')} x${x.data()['qty']}',
+                                              style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w300),
+                                            ),
                                           ]),
                                     ),
                                   ],
@@ -328,9 +395,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 8,),
+              const SizedBox(
+                height: 8,
+              ),
               Container(
-                color:Colors.white,
+                color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: Row(
@@ -339,72 +408,499 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     children: [
                       Row(
                         children: [
-
                           const Icon(Icons.credit_card_rounded),
-                          const SizedBox(width: 4,),
-                          Text('Metode Pembayaran',style: GoogleFonts.poppins(fontWeight: FontWeight.w500),),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Text(
+                            'Metode Pembayaran',
+                            style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w500),
+                          ),
                         ],
                       ),
-                      Expanded(child: Text('COD',style: GoogleFonts.poppins(fontWeight: FontWeight.w300,),textAlign: TextAlign.end,)),
+                      Expanded(
+                          child: Text(
+                        'COD',
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w300,
+                        ),
+                        textAlign: TextAlign.end,
+                      )),
                     ],
                   ),
                 ),
-              ),const SizedBox(height: 8,),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
               Container(
-                color:Colors.white,
+                color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Rincian Pembayaran', style: GoogleFonts.poppins(fontWeight: FontWeight.w500),),
-                      const SizedBox(height: 10,),
-                      StreamBuilder(
-                        stream: FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(widget.idUser)
-                            .collection('cart')
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const Center(child: CircularProgressIndicator());
-                          } else if (snapshot.connectionState ==
-                              ConnectionState.active) {
-                            var listData = snapshot.data!.docs.toList();
-
-                            for (var i = 0; i < listData.length; i++) {
-                              var temp = listData[i].get('subPrice');
-                              var weight = listData[i].get('subWeight');
-
-                              totalPrice = totalPrice + temp;
-                              totalWeight = totalWeight + weight;
-                            }
-
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('SubTotal Produk',style: GoogleFonts.poppins(fontWeight: FontWeight.w300),),
-                                    Text('Biaya Pengiriman',style: GoogleFonts.poppins(fontWeight: FontWeight.w300),),
-                                    Text('Total Belanja',style: GoogleFonts.poppins(fontWeight: FontWeight.w500),),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Rp ${totalPrice.toString()}',style: GoogleFonts.poppins(fontWeight: FontWeight.w300),),
-                                    Text('Rp 0',style: GoogleFonts.poppins(fontWeight: FontWeight.w300),),
-                                    Text('Rp ${totalPrice.toString()}',style: GoogleFonts.poppins(fontWeight: FontWeight.w500, color: Colors.redAccent),),
-                                  ],
-                                )
-                              ],
-                            );
-                          } else {
-                            return const Text('eror');
-                          }
-                        },
+                      Text(
+                        'Tukarkan poin',
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Kamu memiliki ${widget.poinUser} poin',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w500, fontSize: 9),
+                              ),
+                              Text(
+                                'Belanja diatas Rp 10.000 dan gunakan minimal 100 poin untuk mendapatkan potongan harga',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 9,
+                                    color: Colors.orangeAccent),
+                              ),
+                            ],
+                          )),
+                          InkWell(
+                            onTap: widget.poinUser >= 100
+                                ? widget.total > 10000
+                                    ? () {
+                                        showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          builder: (context) {
+                                            return SingleChildScrollView(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(20),
+                                                child: Column(
+                                                  children: [
+                                                    InkWell(
+                                                      onTap:
+                                                          widget.poinUser >= 100
+                                                              ? widget.total >=
+                                                                      10000
+                                                                  ? () {
+                                                                      setState(
+                                                                          () {
+                                                                        poin =
+                                                                            100;
+                                                                        potonganPoin =
+                                                                            10000;
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      });
+                                                                    }
+                                                                  : () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      ScaffoldMessenger.of(
+                                                                              context)
+                                                                          .showSnackBar(
+                                                                              SnackBar(
+                                                                        content:
+                                                                            Text('Anda tidak mencapai minimal belanja Rp 10.000'),
+                                                                        duration:
+                                                                            Duration(seconds: 2),
+                                                                      ));
+                                                                    }
+                                                              : null,
+                                                      child: Container(
+                                                        color:
+                                                            widget.poinUser >=
+                                                                    100
+                                                                ? Colors.blue
+                                                                : Colors.grey,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(
+                                                            '100',
+                                                            style: GoogleFonts
+                                                                .poppins(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: Colors
+                                                                        .white),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Divider(),
+                                                    InkWell(
+                                                      onTap:
+                                                          widget.poinUser >= 200
+                                                              ? widget.total >=
+                                                                      20000
+                                                                  ? () {
+                                                                      setState(
+                                                                          () {
+                                                                        poin =
+                                                                            200;
+                                                                        potonganPoin =
+                                                                            20000;
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      });
+                                                                    }
+                                                                  : () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      ScaffoldMessenger.of(
+                                                                              context)
+                                                                          .showSnackBar(
+                                                                              SnackBar(
+                                                                        content:
+                                                                            Text('Anda tidak mencapai minimal belanja Rp 20.000'),
+                                                                        duration:
+                                                                            Duration(seconds: 2),
+                                                                      ));
+                                                                    }
+                                                              : null,
+                                                      child: Container(
+                                                        color:
+                                                            widget.poinUser >=
+                                                                    200
+                                                                ? Colors.blue
+                                                                : Colors.grey,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(
+                                                            '200',
+                                                            style: GoogleFonts
+                                                                .poppins(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: Colors
+                                                                        .white),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Divider(),
+                                                    InkWell(
+                                                      onTap:
+                                                          widget.poinUser >= 300
+                                                              ? widget.total >=
+                                                                      30000
+                                                                  ? () {
+                                                                      setState(
+                                                                          () {
+                                                                        poin =
+                                                                            300;
+                                                                        potonganPoin =
+                                                                            30000;
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      });
+                                                                    }
+                                                                  : () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      ScaffoldMessenger.of(
+                                                                              context)
+                                                                          .showSnackBar(
+                                                                              SnackBar(
+                                                                        content:
+                                                                            Text('Anda tidak mencapai minimal belanja Rp 30.000'),
+                                                                        duration:
+                                                                            Duration(seconds: 2),
+                                                                      ));
+                                                                    }
+                                                              : null,
+                                                      child: Container(
+                                                        color:
+                                                            widget.poinUser >=
+                                                                    300
+                                                                ? Colors.blue
+                                                                : Colors.grey,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(
+                                                            '300',
+                                                            style: GoogleFonts
+                                                                .poppins(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: Colors
+                                                                        .white),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Divider(),
+                                                    InkWell(
+                                                      onTap:
+                                                          widget.poinUser >= 400
+                                                              ? widget.total >=
+                                                                      40000
+                                                                  ? () {
+                                                                      setState(
+                                                                          () {
+                                                                        poin =
+                                                                            400;
+                                                                        potonganPoin =
+                                                                            40000;
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      });
+                                                                    }
+                                                                  : () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      ScaffoldMessenger.of(
+                                                                              context)
+                                                                          .showSnackBar(
+                                                                              SnackBar(
+                                                                        content:
+                                                                            Text('Anda tidak mencapai minimal belanja Rp 40.000'),
+                                                                        duration:
+                                                                            Duration(seconds: 2),
+                                                                      ));
+                                                                    }
+                                                              : null,
+                                                      child: Container(
+                                                        color:
+                                                            widget.poinUser >=
+                                                                    400
+                                                                ? Colors.blue
+                                                                : Colors.grey,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(
+                                                            '400',
+                                                            style: GoogleFonts
+                                                                .poppins(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: Colors
+                                                                        .white),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Divider(),
+                                                    InkWell(
+                                                      onTap:
+                                                          widget.poinUser >= 500
+                                                              ? widget.total >=
+                                                                      50000
+                                                                  ? () {
+                                                                      setState(
+                                                                          () {
+                                                                        poin =
+                                                                            500;
+                                                                        potonganPoin =
+                                                                            50000;
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      });
+                                                                    }
+                                                                  : () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      ScaffoldMessenger.of(
+                                                                              context)
+                                                                          .showSnackBar(
+                                                                              SnackBar(
+                                                                        content:
+                                                                            Text('Anda tidak mencapai minimal belanja Rp 50.000'),
+                                                                        duration:
+                                                                            Duration(seconds: 2),
+                                                                      ));
+                                                                    }
+                                                              : null,
+                                                      child: Container(
+                                                        color:
+                                                            widget.poinUser >=
+                                                                    500
+                                                                ? Colors.blue
+                                                                : Colors.grey,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(
+                                                            '500',
+                                                            style: GoogleFonts
+                                                                .poppins(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: Colors
+                                                                        .white),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    //Divider(),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      }
+                                    : null
+                                : null,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                color: widget.poinUser > 100
+                                    ? widget.total > 10000
+                                        ? Colors.lightBlue.shade300
+                                        : Colors.grey
+                                    : Colors.grey,
+                              ),
+                              child: potonganPoin == 0
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        'Pilih nominal',
+                                        style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white),
+                                      ),
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        '$poin Poin',
+                                        style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                            ),
+                          )
+                        ],
+                      ),
+                      poin == 0
+                          ? Container()
+                          : Center(
+                              child: Column(
+                                children: [
+                                  Divider(),
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        poin = 0;
+                                        potonganPoin = 0;
+                                      });
+                                    },
+                                    child: Text(
+                                      'Batalkan reedem',
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.redAccent),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Container(
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Rincian Pembayaran',
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'SubTotal Produk',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w300),
+                              ),
+                              Text(
+                                'Potongan poin',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w300),
+                              ),
+                              Text(
+                                'Biaya Pengiriman',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w300),
+                              ),
+                              Text(
+                                'Total Belanja',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                'Rp ${widget.total}',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w300),
+                              ),
+                              potonganPoin == 0
+                                  ? Text(
+                                      'Rp 0',
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.redAccent),
+                                    )
+                                  : Text(
+                                      '- Rp $potonganPoin',
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.redAccent),
+                                    ),
+                              Text(
+                                'Rp $ongkir',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w300),
+                              ),
+                              Text(
+                                'Rp ${widget.total - potonganPoin}',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.redAccent),
+                              ),
+                            ],
+                          )
+                        ],
                       ),
                     ],
                   ),
@@ -439,8 +935,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       );
                     });
                   },
-                  child: Text('Buat Pesanan',
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.w500, color:Colors.black),),
+                  child: Text(
+                    'Buat Pesanan',
+                    style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w500, color: Colors.black),
+                  ),
                 ),
               ),
             ),

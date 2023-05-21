@@ -127,12 +127,6 @@ class _ChooseAddressState extends State<ChooseAddress> {
                                 .update({'isSelected': true});
                           });
                           Navigator.pop(context);
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    CheckoutPage(idUser: widget.idUser),
-                              ));
                         });
                       },
                       title: Text(x.data()['recipientName'],style: GoogleFonts.poppins(

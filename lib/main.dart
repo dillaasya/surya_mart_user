@@ -42,20 +42,23 @@ class MyApp extends StatelessWidget {
           return const MaterialApp(
             home: SplashPage(),
             debugShowCheckedModeBanner: false,
+            title: 'Suryamart',
           );
         } else {
           return StreamBuilder(
             stream: Auth().authChanges,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return const MaterialApp(
+                return MaterialApp(
                   home: BottomNavbar(
                     currentIndex: 0,
                   ),
+                  title: 'Suryamart',
                   debugShowCheckedModeBanner: false,
                 );
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return const MaterialApp(
+
                   home: Center(
                     child: SafeArea(
                       child: Scaffold(
@@ -66,11 +69,13 @@ class MyApp extends StatelessWidget {
                     ),
                   ),
                   debugShowCheckedModeBanner: false,
+                  title: 'Suryamart',
                 );
               } else {
                 return const MaterialApp(
                   home: IntroductionPage(),
                   debugShowCheckedModeBanner: false,
+                  title: 'Suryamart',
                 );
               }
             },
