@@ -82,10 +82,11 @@ class _HomePageState extends State<HomePage> {
           return shouldPop ?? false;
         },
         child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(80),
-            child: Container(
-              color: const Color(0xff025ab4),
+          appBar: AppBar(
+            backgroundColor: const Color(0xff025ab4),
+            elevation: 0,
+            flexibleSpace: Padding(
+              padding: const EdgeInsets.only(left: 20,right: 20, top: 8, bottom: 8),
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('users')
@@ -97,75 +98,72 @@ class _HomePageState extends State<HomePage> {
                   } else if (snapshot.connectionState == ConnectionState.active) {
                     var x = snapshot.data!.docs.first;
 
-                    return Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
+                    return Row(
 
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade300,
-                                    borderRadius: BorderRadius.circular(100),
-                                  ),
-                                  child: x.get('profilePicture').toString().isEmpty
-                                      ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(50),
-                                          child: const Icon(Icons.person),
-                                        )
-                                      : ClipRRect(
-                                          borderRadius: BorderRadius.circular(50),
-                                          child: x.data()['profilePicture'] == null
-                                              ? const Icon(Icons.person,
-                                                  color: Colors.black)
-                                              : Image.network(
-                                                  x.get('profilePicture'),
-                                                  fit: BoxFit.cover,
-                                                  width: 100,
-                                                ),
-                                        ),
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade300,
+                                  borderRadius: BorderRadius.circular(100),
                                 ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Flexible(
-                                  child: Text(x.get('displayName'),
-                                      maxLines: 1,
-                                      style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.white,
-                                          fontSize: 16),),
+                                child: x.get('profilePicture').toString().isEmpty
+                                    ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: const Icon(Icons.person),
                                 )
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return const CartPage();
-                              }));
-                            },
-                            icon: Badge(
-                              badgeContent: Text(
-                                x.get('shoppingCart').toString(),
-                                style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
+                                    : ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: x.data()['profilePicture'] == null
+                                      ? const Icon(Icons.person,
+                                      color: Colors.black)
+                                      : Image.network(
+                                    x.get('profilePicture'),
+                                    fit: BoxFit.cover,
+                                    width: 100,
+                                  ),
                                 ),
                               ),
-                              child: const Icon(Icons.shopping_cart_outlined),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                child: Text(x.get('displayName'),
+                                  maxLines: 1,
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                      fontSize: 16),),
+                              )
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                                  return const CartPage();
+                                }));
+                          },
+                          icon: Badge(
+                            badgeContent: Text(
+                              x.get('shoppingCart').toString(),
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
                             ),
-                            color: Colors.white,
-                          )
-                        ],
-                      ),
+                            child: const Icon(Icons.shopping_cart_outlined),
+                          ),
+                          color: Colors.white,
+                        )
+                      ],
                     );
                   } else {
                     return const Text('EROR');
@@ -174,7 +172,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          //backgroundColor: const Color(0xff025ab4),
           body: SingleChildScrollView(
             child: Column(
               children: [
