@@ -8,13 +8,13 @@ The output of this project is an application intended for buyers at Suryamart st
   
 ### Features
 
-1. Store customer membership
-2. Points system (the buyer will get points after making a transaction, and the points that have been collected can be exchanged for a discount on the next transaction)
+1. Sign in and Sign up (store customer membership)
+2. Points royalty system (the buyer will get points after making a transaction, and the points that have been collected can be exchanged for a discount on the next transaction)
 3. E-catalog
 4. Reading articles
 5. Buyer reviews
 6. Edit profile and shipping address (buyers can customize profiles and delivery addresses by changing, deleting and adding new data)
-7. Complaint by WhatsApp
+7. Complaint chat by WhatsApp
 8. Shopping cart (add product to cart, increase and decrease product quantity, remove product from cart)
 9. Order history tracking
 10. Checkout and place order
