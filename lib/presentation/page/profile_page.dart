@@ -262,7 +262,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ListTile(
             leading: const Icon(Icons.chat_bubble_outline),
             title: Text(
-              'Refund Request',
+              'Contact The Store',
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w300,
                 color: Colors.black,
