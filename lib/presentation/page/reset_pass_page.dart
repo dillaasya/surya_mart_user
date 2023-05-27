@@ -60,7 +60,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     emailController.dispose();
   }
@@ -88,7 +87,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                   padding: const EdgeInsets.only(
                                       top: 40, left: 20, right: 20, bottom: 20),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Reset Password',
@@ -127,7 +127,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                const Text('E-mail'),
+                                Text(
+                                  'Email',
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
                                 Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 10),
@@ -138,9 +143,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                         return null;
                                       } else if (value.length < 5 &&
                                           value.isNotEmpty) {
-                                        return 'Nama resep anda terlalu singkat!';
+                                        return 'Please enter a valid email';
                                       } else {
-                                        return 'Tidak boleh kosong!';
+                                        return 'It can\'t be empty!';
                                       }
                                     },
                                     style: GoogleFonts.poppins(),
@@ -186,42 +191,46 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                 Padding(
                                   padding: const EdgeInsets.only(
                                       top: 10, bottom: 10),
-                                  child: Row(children:[Expanded(child:ElevatedButton(
-                                      style: ButtonStyle(
-                                          padding: MaterialStateProperty.all(
-                                              const EdgeInsets.only(
-                                                  top: 18, bottom: 18)),
-                                          minimumSize: MaterialStateProperty.all<Size>(
-                                              const Size(350, 0)),
-                                          backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              const Color(0XFFFFC33A)),
-                                          shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(18.0),
-                                                  side: const BorderSide(color: Color(0XFFFFC33A))))),
-                                      child: Text(
-                                        'Reset Password',
-                                        style: GoogleFonts.poppins(
-                                            color: Colors.grey.shade800,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      onPressed: () {
-                                        if (mounted) {
-                                          reset().then((value) {
-                                            if (value) {
-                                              Navigator.of(context).pushReplacement(
-                                                MaterialPageRoute(
-                                                    builder: (_) => const SuccessResetPage()),
-                                              );
-                                            } else {
-                                              //print('nilai reset : $value');
+                                  child: Row(children: [
+                                    Expanded(
+                                      child: ElevatedButton(
+                                          style: ButtonStyle(
+                                              padding: MaterialStateProperty.all(
+                                                  const EdgeInsets.only(
+                                                      top: 18, bottom: 18)),
+                                              minimumSize: MaterialStateProperty.all<Size>(
+                                                  const Size(350, 0)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all<Color>(
+                                                      const Color(0XFFFFC33A)),
+                                              shape: MaterialStateProperty.all<
+                                                      RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(18.0),
+                                                      side: const BorderSide(color: Color(0XFFFFC33A))))),
+                                          child: Text(
+                                            'Reset Password',
+                                            style: GoogleFonts.poppins(
+                                                color: Colors.grey.shade800,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          onPressed: () {
+                                            if (mounted) {
+                                              reset().then((value) {
+                                                if (value) {
+                                                  Navigator.of(context)
+                                                      .pushReplacement(
+                                                    MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            const SuccessResetPage()),
+                                                  );
+                                                } else {}
+                                              });
                                             }
-                                          });
-                                        }
-                                      }),),]),
+                                          }),
+                                    ),
+                                  ]),
                                 ),
                               ],
                             ),

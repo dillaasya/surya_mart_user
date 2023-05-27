@@ -59,7 +59,7 @@ class _SearchPageState extends State<SearchPage> {
                             Padding(
                               padding: const EdgeInsets.all(20),
                               child: Text(
-                                'Oops! Tidak ada yang sesuai. Coba gunakan kata kunci yang lain.',
+                                'Oops! There is no suitable product. Try using different keywords.',
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w400),
                                 textAlign: TextAlign.center,
@@ -96,7 +96,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Text(
-                  'Ketik kata kunci nama produk untuk mulai mencari',
+                  'Type in the product name keyword to start searching',
                   style: GoogleFonts.poppins(fontWeight: FontWeight.w400),
                   textAlign: TextAlign.center,
                 ),
@@ -117,7 +117,7 @@ class _SearchPageState extends State<SearchPage> {
             fontWeight: FontWeight.bold,
             fontSize: 16),
         //<-- SEE HERE
-        hintText: 'cari barang disini',
+        hintText: 'Search Products Here',
         prefixIcon: Icon(Icons.search, color: Colors.grey.shade600),
         suffixIcon: querySearch.text.isNotEmpty
             ? IconButton(

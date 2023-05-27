@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:surya_mart_v1/presentation/page/checkout_page.dart';
 
 class ChooseAddress extends StatefulWidget {
   final String idUser;
@@ -37,7 +36,6 @@ class _ChooseAddressState extends State<ChooseAddress> {
   }
 
   Future<void> updateMainAddress(String id) async {
-    //print('panggil delete satu item address');
     await FirebaseFirestore.instance
         .collection('users')
         .doc(widget.idUser)
@@ -47,7 +45,6 @@ class _ChooseAddressState extends State<ChooseAddress> {
   }
 
   Future<void> updateAllAddress() async {
-    //print('panggil delete all address');
     await FirebaseFirestore.instance
         .collection('users')
         .doc(widget.idUser)
@@ -59,34 +56,28 @@ class _ChooseAddressState extends State<ChooseAddress> {
         updateMainAddress(element.id);
       }
     });
-
-    //print('selesai delete all address');
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getGroupValue();
-    //print('group value $indexRadio');
   }
 
   @override
   Widget build(BuildContext context) {
-    //print('group value $indexRadio');
-    //getGroupValue();
     return SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            iconTheme: const IconThemeData(color: Colors.black),
-            elevation: 0,
-            title: Text(
-                'Choose Address',
-                style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w500, color: Colors.black, fontSize:16)
-            ),
-          ),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.black),
+        elevation: 0,
+        title: Text('Choose Address',
+            style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+                fontSize: 16)),
+      ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('users')
@@ -104,14 +95,11 @@ class _ChooseAddressState extends State<ChooseAddress> {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 var x = snapshot.data!.docs[index];
-
-                /*print(
-                    'indeks $index kode pos ${x.data()['codeNumber'].toString()}');*/
                 return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(12),
                     child: RadioListTile(
-                      isThreeLine:true,
+                      isThreeLine: true,
                       //dense:true,
                       activeColor: const Color(0xffFFC33A),
                       value: index,
@@ -129,17 +117,24 @@ class _ChooseAddressState extends State<ChooseAddress> {
                           Navigator.pop(context);
                         });
                       },
-                      title: Text(x.data()['recipientName'],style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black),),
+                      title: Text(
+                        x.data()['recipientName'],
+                        style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w400, color: Colors.black),
+                      ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(x.data()['phone'].toString(),style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w300,
-                              color: Colors.black54),),
-                          Text('${x.data()['fullAddress']}, ${x.data()['codeNumber']}',style:
-                          GoogleFonts.poppins(color: Colors.black54),),
+                          Text(
+                            x.data()['phone'].toString(),
+                            style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black54),
+                          ),
+                          Text(
+                            '${x.data()['fullAddress']}, ${x.data()['codeNumber']}',
+                            style: GoogleFonts.poppins(color: Colors.black54),
+                          ),
                         ],
                       ),
                     ),

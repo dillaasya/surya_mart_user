@@ -53,305 +53,302 @@ class _SigninPageState extends State<SigninPage> {
   Widget build(BuildContext context) {
     return isLoading
         ? const SafeArea(
-      child: Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-    )
+            child: Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          )
         : SafeArea(
-        child: WillPopScope(
-          onWillPop: () async {
-            if (isLoading) {
-              return false;
-            } else {
-              return true;
-            }
-          },
-          child: Scaffold(
-            body: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Row(children: [
-                    Expanded(
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Color(0xff0062CD),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: 40, left: 20, right: 20, bottom: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Welcome Back!',
-                                style: GoogleFonts.poppins(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.white),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Please fill E-mail & password to login your app account.',
-                                style: GoogleFonts.poppins(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.white),
-                              ),
-                              const SizedBox(height: 10)
-                            ],
+            child: WillPopScope(
+            onWillPop: () async {
+              if (isLoading) {
+                return false;
+              } else {
+                return true;
+              }
+            },
+            child: Scaffold(
+              body: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(children: [
+                      Expanded(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Color(0xff0062CD),
                           ),
-                        ),
-                      ),
-                    ),
-                  ]),
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Form(
-                      key: _formKeyValue,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            'E-mail',
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: TextFormField(
-                              validator: (value) {
-                                if (value!.isNotEmpty && value.length > 2) {
-                                  return null;
-                                } else if (value.length < 5 &&
-                                    value.isNotEmpty) {
-                                  return 'Email anda terlalu singkat!';
-                                } else {
-                                  return 'Tidak boleh kosong!';
-                                }
-                              },
-                              style: GoogleFonts.poppins(),
-                              controller: emailController,
-                              decoration: InputDecoration(
-                                hintText: "example@gmail.com",
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(18),
-                                  borderSide: const BorderSide(
-                                    color: Colors.black,
-                                    width: 1.0,
-                                  ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(18),
-                                  borderSide: const BorderSide(
-                                    color: Colors.black,
-                                    width: 1.0,
-                                  ),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(18),
-                                  borderSide: const BorderSide(
-                                    color: Colors.red,
-                                    width: 1.0,
-                                  ),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(18),
-                                  borderSide: const BorderSide(
-                                    color: Colors.red,
-                                    width: 1.0,
-                                  ),
-                                ),
-                                contentPadding: const EdgeInsets.only(
-                                    left: 24, top: 18, bottom: 18, right: 24),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            'Password',
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: TextFormField(
-                              obscureText: visibility,
-                              style: GoogleFonts.poppins(),
-                              controller: passwordController,
-                              decoration: InputDecoration(
-                                suffixIcon: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        visibility = !visibility;
-                                      });
-                                    },
-                                    icon: visibility == false
-                                        ? const Icon(
-                                        Icons.visibility_outlined)
-                                        : const Icon(
-                                        Icons.visibility_off_outlined)),
-                                hintText: "********",
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(18),
-                                  borderSide: const BorderSide(
-                                    color: Colors.black,
-                                    width: 1.0,
-                                  ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(18),
-                                  borderSide: const BorderSide(
-                                    color: Colors.black,
-                                    width: 1.0,
-                                  ),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(18),
-                                  borderSide: const BorderSide(
-                                    color: Colors.red,
-                                    width: 1.0,
-                                  ),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(18),
-                                  borderSide: const BorderSide(
-                                    color: Colors.red,
-                                    width: 1.0,
-                                  ),
-                                ),
-                                contentPadding: const EdgeInsets.only(
-                                    left: 24, top: 18, bottom: 4, right: 24),
-                              ),
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (_) =>
-                                        const ResetPasswordPage()),
-                                  );
-                                },
-                                child: Text(
-                                  'Forgot Password?',
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.lightBlueAccent),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
+                          child: Padding(
                             padding: const EdgeInsets.only(
-                              top: 30,
-                              bottom: 10,
-                            ),
-                            child: Row(
+                                top: 40, left: 20, right: 20, bottom: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                      style: ButtonStyle(
-                                          padding: MaterialStateProperty.all(
-                                              const EdgeInsets.only(
-                                                  top: 18, bottom: 18)),
-                                          minimumSize:
-                                          MaterialStateProperty.all<Size>(
-                                              const Size(350, 0)),
-                                          backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              const Color(0XFFFFC33A)),
-                                          shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                  BorderRadius.circular(18.0),
-                                                  side: const BorderSide(
-                                                      color: Color(
-                                                          0XFFFFC33A))))),
-                                      child: Text(
-                                        'Login Now',
-                                        style: GoogleFonts.poppins(
-                                            color: Colors.grey.shade800,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      onPressed: () {
-                                        if (_formKeyValue.currentState!
-                                            .validate()) {
-                                          login().then((value) {
-                                            if (value) {
-                                              Navigator.of(context)
-                                                  .pushReplacement(
-                                                MaterialPageRoute(
-                                                    builder: (_) =>
-                                                    const BottomNavbar(
-                                                      currentIndex: 0,
-                                                    )),
-                                              );
-                                            }
-                                          });
-                                        }
-                                      }),
+                                Text(
+                                  'Welcome Back!',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.white),
                                 ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  'Please fill E-mail & password to login your app account.',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.white),
+                                ),
+                                const SizedBox(height: 10)
                               ],
                             ),
                           ),
-                        ],
+                        ),
+                      ),
+                    ]),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Form(
+                        key: _formKeyValue,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              'E-mail',
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value!.isNotEmpty && value.length > 2) {
+                                    return null;
+                                  } else if (value.length < 5 &&
+                                      value.isNotEmpty) {
+                                    return 'Please enter a valid email';
+                                  } else {
+                                    return 'It can\'t be empty!';
+                                  }
+                                },
+                                style: GoogleFonts.poppins(),
+                                controller: emailController,
+                                decoration: InputDecoration(
+                                  hintText: "example@gmail.com",
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: const BorderSide(
+                                      color: Colors.black,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: const BorderSide(
+                                      color: Colors.black,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: const BorderSide(
+                                      color: Colors.red,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: const BorderSide(
+                                      color: Colors.red,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  contentPadding: const EdgeInsets.only(
+                                      left: 24, top: 18, bottom: 18, right: 24),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              'Password',
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: TextFormField(
+                                obscureText: visibility,
+                                style: GoogleFonts.poppins(),
+                                controller: passwordController,
+                                decoration: InputDecoration(
+                                  suffixIcon: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          visibility = !visibility;
+                                        });
+                                      },
+                                      icon: visibility == false
+                                          ? const Icon(
+                                              Icons.visibility_outlined)
+                                          : const Icon(
+                                              Icons.visibility_off_outlined)),
+                                  hintText: "********",
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: const BorderSide(
+                                      color: Colors.black,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: const BorderSide(
+                                      color: Colors.black,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: const BorderSide(
+                                      color: Colors.red,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: const BorderSide(
+                                      color: Colors.red,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  contentPadding: const EdgeInsets.only(
+                                      left: 24, top: 18, bottom: 4, right: 24),
+                                ),
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              const ResetPasswordPage()),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Forgot Password?',
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.lightBlueAccent),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 30,
+                                bottom: 10,
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                        style: ButtonStyle(
+                                            padding: MaterialStateProperty.all(
+                                                const EdgeInsets.only(
+                                                    top: 18, bottom: 18)),
+                                            minimumSize:
+                                                MaterialStateProperty.all<Size>(
+                                                    const Size(350, 0)),
+                                            backgroundColor:
+                                                MaterialStateProperty.all<Color>(
+                                                    const Color(0XFFFFC33A)),
+                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(18.0),
+                                                    side: const BorderSide(color: Color(0XFFFFC33A))))),
+                                        child: Text(
+                                          'Login Now',
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.grey.shade800,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        onPressed: () {
+                                          if (_formKeyValue.currentState!
+                                              .validate()) {
+                                            login().then((value) {
+                                              if (value) {
+                                                Navigator.of(context)
+                                                    .pushReplacement(
+                                                  MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          const BottomNavbar(
+                                                            currentIndex: 0,
+                                                          )),
+                                                );
+                                              }
+                                            });
+                                          }
+                                        }),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            bottomNavigationBar: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Belum punya akun?',
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const SignupPage(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Sign Up',
+              bottomNavigationBar: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Don\'t have an account yet?',
                       style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.lightBlueAccent),
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
-                  ),
-                ],
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const SignupPage(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Sign Up',
+                        style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.lightBlueAccent),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ));
+          ));
   }
 }

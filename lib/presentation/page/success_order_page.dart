@@ -75,10 +75,9 @@ class _SuccessOrderPageState extends State<SuccessOrderPage> {
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: Text(
-                      'Pesanan anda berhasil dibuat! Update informasi status pesanan pada menu Profile > Order History',
+                    'Your order has been successfully placed! Track order status information on Profile > Order History menu',
                     style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black),
+                        fontWeight: FontWeight.w400, color: Colors.black),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -96,8 +95,8 @@ class _SuccessOrderPageState extends State<SuccessOrderPage> {
                               backgroundColor: MaterialStateProperty.all<Color>(
                                 const Color(0XFFFFC33A),
                               ),
-                              shape:
-                                  MaterialStateProperty.all<RoundedRectangleBorder>(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(18.0),
                                   side: const BorderSide(
@@ -114,8 +113,9 @@ class _SuccessOrderPageState extends State<SuccessOrderPage> {
                                   fontWeight: FontWeight.w500),
                             ),
                             onPressed: () async {
-                              var idPrimaryAddress = await getIdPrimaryAddress();
-                              //set kembali alamat primary jadi selected
+                              var idPrimaryAddress =
+                                  await getIdPrimaryAddress();
+
                               updateAllAddress().whenComplete(() {
                                 if (mounted) {
                                   FirebaseFirestore.instance
@@ -123,20 +123,21 @@ class _SuccessOrderPageState extends State<SuccessOrderPage> {
                                       .doc(widget.idUser)
                                       .collection('address')
                                       .doc(idPrimaryAddress)
-                                      .update({'isSelected': true}).whenComplete(() {
+                                      .update({
+                                    'isSelected': true
+                                  }).whenComplete(() {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                           builder: (_) => const BottomNavbar(
-                                            currentIndex: 2,
-                                          )),
+                                                currentIndex: 2,
+                                              )),
                                     );
                                   });
                                 }
                               });
-
                             }),
                       ),
                     ],

@@ -14,8 +14,6 @@ class AddressPage extends StatefulWidget {
 }
 
 class _AddressPageState extends State<AddressPage> {
-  //bool light = false;
-
   @override
   void initState() {
     super.initState();
@@ -54,7 +52,7 @@ class _AddressPageState extends State<AddressPage> {
       builder: (context) => AlertDialog(
         actionsAlignment: MainAxisAlignment.center,
         title: Text(
-          "Perhatian",
+          "Warning!",
           style: GoogleFonts.poppins(
             fontWeight: FontWeight.w500,
             color: Colors.black,
@@ -62,7 +60,7 @@ class _AddressPageState extends State<AddressPage> {
           textAlign: TextAlign.center,
         ),
         content: Text(
-          "Apakah anda yakin ingin menjadikan alamat ini sebagai alamat utama?",
+          "Are you sure you want to change this address as the primary address?",
           style: GoogleFonts.poppins(
             fontWeight: FontWeight.w300,
             color: Colors.black,
@@ -83,7 +81,7 @@ class _AddressPageState extends State<AddressPage> {
               Navigator.pop(context);
             },
             child: Text(
-              "Ya",
+              "Yes",
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w300,
                 color: Colors.white,
@@ -95,7 +93,7 @@ class _AddressPageState extends State<AddressPage> {
               Navigator.of(context).pop(false);
             },
             child: Text(
-              "Tidak",
+              "No",
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w300,
                 color: Colors.white,
@@ -115,11 +113,11 @@ class _AddressPageState extends State<AddressPage> {
           backgroundColor: Colors.white,
           iconTheme: const IconThemeData(color: Colors.black),
           elevation: 0,
-          title: Text(
-            'Shipping Address',
+          title: Text('Shipping Address',
               style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w500, color: Colors.black, fontSize:16)
-          ),
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                  fontSize: 16)),
         ),
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
@@ -160,13 +158,11 @@ class _AddressPageState extends State<AddressPage> {
                               x.data()['fullAddress'] +
                                   ', ' +
                                   (x.data()['codeNumber']).toString(),
-                              style:
-                                  GoogleFonts.poppins(color: Colors.black54),
+                              style: GoogleFonts.poppins(color: Colors.black54),
                             ),
                             const Divider(),
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
                                   children: [
@@ -185,85 +181,94 @@ class _AddressPageState extends State<AddressPage> {
                                           ),
                                         );
                                       },
-                                      child: Text('Ubah', style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w500, color: Colors.black,)),
+                                      child: Text('Edit',
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black,
+                                          )),
                                     ),
                                     TextButton(
-                                        style: TextButton.styleFrom(
-                                          foregroundColor: x
-                                                  .data()['isPrimary']==true
-                                              ? Colors.black.withOpacity(0.4)
-                                              : Colors.black,
+                                      style: TextButton.styleFrom(
+                                        foregroundColor:
+                                            x.data()['isPrimary'] == true
+                                                ? Colors.black.withOpacity(0.4)
+                                                : Colors.black,
+                                      ),
+                                      onPressed: () {
+                                        if (x.data()['isPrimary'] == true) {
+                                          null;
+                                        } else {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                actionsAlignment:
+                                                    MainAxisAlignment.center,
+                                                title: Text(
+                                                  "Warning!",
+                                                  style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.black,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                content: Text(
+                                                  "Are you sure you want to delete this address?",
+                                                  style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.w300,
+                                                    color: Colors.black,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                actions: [
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      FirebaseFirestore.instance
+                                                          .collection('users')
+                                                          .doc(widget.id)
+                                                          .collection('address')
+                                                          .doc(x.id)
+                                                          .delete();
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text(
+                                                      "Yes",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(false);
+                                                    },
+                                                    child: Text(
+                                                      "No",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        }
+                                      },
+                                      child: Text(
+                                        'Delete',
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w500,
                                         ),
-                                        onPressed: () {
-                                          if (x.data()['isPrimary']==true) {
-                                            null;
-                                          } else {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  actionsAlignment: MainAxisAlignment.center,
-                                                  title: Text(
-                                                    "Perhatian",
-                                                    style: GoogleFonts.poppins(
-                                                      fontWeight: FontWeight.w500,
-                                                      color: Colors.black,
-                                                    ),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                  content: Text(
-                                                    "Apakah anda yakin ingin menghapus alamat ini?",
-                                                    style: GoogleFonts.poppins(
-                                                      fontWeight: FontWeight.w300,
-                                                      color: Colors.black,
-                                                    ),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                  actions: [
-                                                    ElevatedButton(
-                                                      onPressed: () {
-                                                        FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                            'users')
-                                                            .doc(widget.id)
-                                                            .collection(
-                                                            'address')
-                                                            .doc(x.id)
-                                                            .delete();
-                                                        Navigator.pop(
-                                                            context);
-                                                      },
-                                                      child: Text(
-                                                        "Ya",
-                                                        style: GoogleFonts.poppins(
-                                                          fontWeight: FontWeight.w300,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    ElevatedButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop(false);
-                                                      },
-                                                      child: Text(
-                                                        "Tidak",
-                                                        style: GoogleFonts.poppins(
-                                                          fontWeight: FontWeight.w300,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
-
-                                              },
-                                            );
-                                          }
-                                        },
-                                        child: Text('Hapus',style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w500,),),),
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 Switch(
@@ -291,9 +296,10 @@ class _AddressPageState extends State<AddressPage> {
                   padding: const EdgeInsets.all(20),
                   child: Center(
                     child: Text(
-                        'Anda belum menambahkan alamat! klik ikon di pojok kanan bawah untuk menambahkan alamat baru',
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w400,),
+                      'You haven\'t added an address yet! Click the icon in the bottom-right corner to add a new address',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w400,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ),

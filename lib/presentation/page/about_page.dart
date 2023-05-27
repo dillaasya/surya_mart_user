@@ -10,40 +10,48 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: PreferredSize(preferredSize: const Size.fromHeight(80),child: Container(color:const Color(0xff025ab4),child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              Flexible(
-                  child: Image.asset(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(80),
+          child: Container(
+            color: const Color(0xff025ab4),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Flexible(
+                      child: Image.asset(
                     'assets/images/logo-suryamart-new.png',
                   )),
-            ],
+                ],
+              ),
+            ),
           ),
-        ),),),
+        ),
         body: SingleChildScrollView(
           child: Column(children: [
-
             Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
                   Text(
-                    'Suryamart merupakan unit bisnis swalayan kepemilikan Universitas Muhammadiyah Sidoarjo yang bergerak di bidang bisnis eceran atau ritel produk rumah tangga, makanan serta produk terkait lainnya. Suryamat terdiri dari dua unit bertempat di Kampus 2 UMSIDA Jl Raya Gelam No 16 Candi, dan Kampus 1 UMSIDA Jl. Mojopahit No.666 B, Sidowayah, Celep. Suryamart beroperasi setiap hari pukul 08.00 hingga 21.00. Melalui aplikasi Suryamart kamu dapat melakukan transaksi tanpa harus datang ke toko dan barang belanjaanmu akan dikirim langsung kerumah selama pemesanan masuk pada jam kerja.',style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300,)
-                  ),
+                      'Suryamart merupakan unit bisnis swalayan kepemilikan Universitas Muhammadiyah Sidoarjo yang bergerak di bidang bisnis eceran atau ritel produk rumah tangga, makanan serta produk terkait lainnya. Suryamat terdiri dari dua unit bertempat di Kampus 2 UMSIDA Jl Raya Gelam No 16 Candi, dan Kampus 1 UMSIDA Jl. Mojopahit No.666 B, Sidowayah, Celep. Suryamart beroperasi setiap hari pukul 08.00 hingga 21.00. Melalui aplikasi Suryamart kamu dapat melakukan transaksi tanpa harus datang ke toko dan barang belanjaanmu akan dikirim langsung kerumah selama pemesanan masuk pada jam kerja.',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w300,
+                      )),
                   const SizedBox(
                     height: 50,
                   ),
-                  Text('Get to know us more',style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w500,)),
+                  Text('Get to know us more',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w500,
+                      )),
                   Padding(
                     padding: const EdgeInsets.all(20),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Link(
-                            uri: Uri.tryParse('uri'),
+                            uri: Uri.tryParse(''),
                             builder: (context, followLink) {
                               return InkWell(
                                 onTap: followLink,
@@ -67,7 +75,7 @@ class AboutPage extends StatelessWidget {
                             width: 10,
                           ),
                           Link(
-                            uri: Uri.tryParse('uri'),
+                            uri: Uri.tryParse(''),
                             builder: (context, followLink) {
                               return InkWell(
                                 onTap: followLink,
@@ -91,7 +99,7 @@ class AboutPage extends StatelessWidget {
                             width: 10,
                           ),
                           Link(
-                            uri: Uri.tryParse('uri'),
+                            uri: Uri.tryParse(''),
                             builder: (context, followLink) {
                               return InkWell(
                                 onTap: followLink,

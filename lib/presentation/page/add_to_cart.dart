@@ -29,13 +29,12 @@ class _AddToCartState extends State<AddToCart> {
 
   getIdUserForCart() {
     String idUser = Auth().currentUser!.uid;
-    //print('UID USER YANG LOGIN SEKARANG: $idUser');
+
     return FirebaseFirestore.instance
         .collection('users')
         .where('uid', isEqualTo: idUser)
         .get()
         .then((value) => value.docs.first.id);
-    //print('ID doc user nya : $idDocUser');
   }
 
   @override
@@ -59,8 +58,7 @@ class _AddToCartState extends State<AddToCart> {
                         height: 50,
                         decoration: BoxDecoration(
                             color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.circular(8)
-                        ),
+                            borderRadius: BorderRadius.circular(8)),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: widget.image == null
@@ -79,11 +77,14 @@ class _AddToCartState extends State<AddToCart> {
                                 widget.name,
                                 maxLines: 1,
                                 overflow: TextOverflow.clip,
-                                style:
-                                GoogleFonts.poppins(fontWeight: FontWeight.w500),
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w500),
                               ),
-                              Text('Rp ${widget.price}',style:
-                              GoogleFonts.poppins(fontWeight: FontWeight.w300),),
+                              Text(
+                                'Rp ${widget.price}',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w300),
+                              ),
                             ]),
                       ),
                     ],
@@ -142,7 +143,6 @@ class _AddToCartState extends State<AddToCart> {
                     child: TextButton(
                       onPressed: () async {
                         var id = await getIdUserForCart();
-                        //print('Ini Id user nya : $id');
 
                         String? x = await FirebaseFirestore.instance
                             .collection('users')
@@ -157,8 +157,6 @@ class _AddToCartState extends State<AddToCart> {
                             return null;
                           }
                         });
-
-                        //print('nilai x ${x}');
 
                         if (x != null) {
                           FirebaseFirestore.instance
@@ -211,11 +209,11 @@ class _AddToCartState extends State<AddToCart> {
                             );
                           });
                         } else {
-                          print('EROR');
+                          const Center(child: Text('EROR'));
                         }
                       },
                       child: Text(
-                        'ADD TO CART',
+                        'Add',
                         style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w700, color: Colors.black),
                       ),

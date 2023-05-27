@@ -73,7 +73,7 @@ class _AddReviewState extends State<AddReview> {
         builder: (context) => AlertDialog(
               actionsAlignment: MainAxisAlignment.center,
               title: Text(
-                "Perhatian",
+                "Warning!",
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
@@ -81,7 +81,7 @@ class _AddReviewState extends State<AddReview> {
                 textAlign: TextAlign.center,
               ),
               content: Text(
-                "Apakah anda yakin ingin kembali? Data yang sudah ada tidak akan disimpan",
+                "Are you sure you want to come back? Existing data will not be saved",
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w300,
                   color: Colors.black,
@@ -94,7 +94,7 @@ class _AddReviewState extends State<AddReview> {
                     Navigator.of(context).pop(true);
                   },
                   child: Text(
-                    "Ya",
+                    "Yes",
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w300,
                       color: Colors.white,
@@ -106,7 +106,7 @@ class _AddReviewState extends State<AddReview> {
                     Navigator.of(context).pop(false);
                   },
                   child: Text(
-                    "Tidak",
+                    "No",
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w300,
                       color: Colors.white,
@@ -119,10 +119,6 @@ class _AddReviewState extends State<AddReview> {
 
   @override
   Widget build(BuildContext context) {
-
-
-    //print('ini list Cart : ${nama.join(',')}');
-
     return isLoading
         ? const SafeArea(
             child: Scaffold(
@@ -146,11 +142,13 @@ class _AddReviewState extends State<AddReview> {
                   backgroundColor: Colors.white,
                   iconTheme: const IconThemeData(color: Colors.black),
                   elevation: 0,
-                  title: Text('Beri Ulasan',
-                      style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                          fontSize: 16),),
+                  title: Text(
+                    'Leave a Review',
+                    style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontSize: 16),
+                  ),
                 ),
                 body: SingleChildScrollView(
                   child: Form(
@@ -160,7 +158,7 @@ class _AddReviewState extends State<AddReview> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height:8),
+                        const SizedBox(height: 8),
                         Container(
                             color: Colors.white,
                             child: Padding(
@@ -168,131 +166,144 @@ class _AddReviewState extends State<AddReview> {
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                Text(
-                                  nama.join(','),
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w300,
-                                      color: Colors.black),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const Divider(),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
                                     Text(
-                                      'Whats your rate?',
+                                      nama.join(','),
                                       style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.w300,
                                           color: Colors.black),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    RatingBar.builder(
-                                      itemSize: 25,
-                                      minRating: 1,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: true,
-                                      updateOnDrag: true,
-                                      itemCount: 5,
-                                      itemPadding: const EdgeInsets.symmetric(
-                                          horizontal: 2.0),
-                                      itemBuilder: (context, _) => const Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                      ),
-                                      onRatingUpdate: (rating) {
-                                        setState(() {
-                                          this.rating = rating;
-                                        });
-                                      },
+                                    const Divider(),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Whats your rate?',
+                                          style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w300,
+                                              color: Colors.black),
+                                        ),
+                                        RatingBar.builder(
+                                          itemSize: 25,
+                                          minRating: 1,
+                                          direction: Axis.horizontal,
+                                          allowHalfRating: true,
+                                          updateOnDrag: true,
+                                          itemCount: 5,
+                                          itemPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 2.0),
+                                          itemBuilder: (context, _) =>
+                                              const Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                          ),
+                                          onRatingUpdate: (rating) {
+                                            setState(() {
+                                              this.rating = rating;
+                                            });
+                                          },
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ]),
+                                  ]),
                             )),
                         const SizedBox(height: 8),
-                        Container(color: Colors.white,child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                            Text(
-                              'What can we improve?',
-                              style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w300, color: Colors.black),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20, bottom: 10),
-                              child: TextFormField(
-                                maxLines: 5,
-                                validator: (value) {
-                                  if (value!.isNotEmpty && value.length > 2) {
-                                    return null;
-                                  } else if (value.length < 5 && value.isNotEmpty) {
-                                    return 'Review anda terlalu singkat!';
-                                  } else {
-                                    return 'Tidak boleh kosong!';
-                                  }
-                                },
-                                style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.w300,
-                                    color: Colors.black),
-                                controller: reviewController,
-                                decoration: InputDecoration(
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    borderSide: const BorderSide(
-                                      color: Colors.deepOrangeAccent,
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    borderSide: const BorderSide(
-                                      color: Colors.black,
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    borderSide: const BorderSide(
-                                      color: Colors.red,
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    borderSide: const BorderSide(
-                                      color: Colors.red,
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                  contentPadding: const EdgeInsets.only(
-                                      left: 24, top: 18, bottom: 18, right: 24),
+                        Container(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'What can we improve?',
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black),
                                 ),
-                              ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 20, bottom: 10),
+                                  child: TextFormField(
+                                    maxLines: 5,
+                                    validator: (value) {
+                                      if (value!.isNotEmpty &&
+                                          value.length > 2) {
+                                        return null;
+                                      } else if (value.length < 5 &&
+                                          value.isNotEmpty) {
+                                        return 'Your review is too short!';
+                                      } else {
+                                        return 'It can\'t be empty!';
+                                      }
+                                    },
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w300,
+                                        color: Colors.black),
+                                    controller: reviewController,
+                                    decoration: InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                        borderSide: const BorderSide(
+                                          color: Colors.deepOrangeAccent,
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                        borderSide: const BorderSide(
+                                          color: Colors.black,
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                        borderSide: const BorderSide(
+                                          color: Colors.red,
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                        borderSide: const BorderSide(
+                                          color: Colors.red,
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                      contentPadding: const EdgeInsets.only(
+                                          left: 24,
+                                          top: 18,
+                                          bottom: 18,
+                                          right: 24),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],),
-                        ),),
-
-
-
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ),
-                bottomNavigationBar:BottomAppBar(
+                bottomNavigationBar: BottomAppBar(
                   child: Padding(
                     padding: const EdgeInsets.all(12),
                     child: ElevatedButton(
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all(
                               const EdgeInsets.only(top: 18, bottom: 18)),
-                          backgroundColor:
-                          MaterialStateProperty.all<Color>(
+                          backgroundColor: MaterialStateProperty.all<Color>(
                               const Color(0XFFFFC33A)),
-                          shape: MaterialStateProperty.all<
-                              RoundedRectangleBorder>(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
                               side: const BorderSide(

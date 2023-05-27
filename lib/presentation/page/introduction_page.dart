@@ -12,16 +12,27 @@ class IntroductionPage extends StatelessWidget {
       child: IntroductionScreen(
         pages: [
           PageViewModel(
-            titleWidget: Text('EASY SHOPPING',style: GoogleFonts.poppins(fontWeight: FontWeight.w700),),
-            bodyWidget:Text('Original with 1000 product from a lot of  different brand accros the world. buy so easy with just simple step then your item will send it.',
-              style: GoogleFonts.poppins(fontWeight: FontWeight.w300),textAlign: TextAlign.center,),
+            titleWidget: Text(
+              'EASY SHOPPING',
+              style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
+            ),
+            bodyWidget: Text(
+              'Original with 1000 product from a lot of  different brand accros the world. buy so easy with just simple step then your item will send it.',
+              style: GoogleFonts.poppins(fontWeight: FontWeight.w300),
+              textAlign: TextAlign.center,
+            ),
             image: buildImage('assets/images/img1.png'),
             decoration: getPageDecoration(),
           ),
           PageViewModel(
-            titleWidget: Text('FREE SHIPPING', style: GoogleFonts.poppins(fontWeight: FontWeight.w700),),
-            bodyWidget:Text('Original with 1000 product from a lot of  different brand accros the world. buy so easy with just simple step then your item will send it.',
-              style: GoogleFonts.poppins(fontWeight: FontWeight.w300),textAlign: TextAlign.center),
+            titleWidget: Text(
+              'FREE SHIPPING',
+              style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
+            ),
+            bodyWidget: Text(
+                'Original with 1000 product from a lot of  different brand accros the world. buy so easy with just simple step then your item will send it.',
+                style: GoogleFonts.poppins(fontWeight: FontWeight.w300),
+                textAlign: TextAlign.center),
             image: buildImage('assets/images/img2.png'),
             decoration: getPageDecoration(),
           ),
@@ -31,10 +42,11 @@ class IntroductionPage extends StatelessWidget {
               style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
             ),
             bodyWidget: Text(
-              'Original with 1000 product from a lot of  different brand accros the world. buy so easy with just simple step then your item will send it.',
-              style: GoogleFonts.poppins(fontWeight: FontWeight.w300,),
-                textAlign: TextAlign.center
-            ),
+                'Original with 1000 product from a lot of  different brand accros the world. buy so easy with just simple step then your item will send it.',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w300,
+                ),
+                textAlign: TextAlign.center),
             image: buildImage('assets/images/img3.png'),
             decoration: getPageDecoration(),
           ),

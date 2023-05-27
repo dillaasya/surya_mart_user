@@ -71,7 +71,7 @@ class _DetailOrderState extends State<DetailOrder> {
                             children: [
                               const Icon(Icons.location_on_outlined),
                               Text(
-                                'Alamat Pengiriman',
+                                'Shipping Address',
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w500),
                               ),
@@ -163,7 +163,7 @@ class _DetailOrderState extends State<DetailOrder> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Total Belanja',
+                                  'Total Spend',
                                   style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w300),
                                 ),
@@ -197,7 +197,7 @@ class _DetailOrderState extends State<DetailOrder> {
                                 width: 4,
                               ),
                               Text(
-                                'Metode Pembayaran',
+                                'Payment Method',
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w500),
                               ),
@@ -215,127 +215,134 @@ class _DetailOrderState extends State<DetailOrder> {
                       ),
                     ),
                   ),
-                  const SizedBox(height:8),
-
-                  x!['isReviewed'] ? Container(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: ExpansionTile(
-                        title: Text(
-                          'Ulasan Anda',
-                          style:
-                          GoogleFonts.poppins(fontWeight: FontWeight.w500),
-                        ),
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 16, right:16, bottom:16),
-                            child: StreamBuilder(
-                              stream: FirebaseFirestore.instance
-                                  .collection('reviews')
-                                  .where('idOrder', isEqualTo: x.id)
-                                  .snapshots(),
-                              builder: (context, snapshot) {
-                                var x = snapshot.data?.docs.first;
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                } else if (snapshot.connectionState ==
-                                    ConnectionState.active) {
-                                  if (snapshot.data!.docs.isNotEmpty) {
-                                    return Text(x?.data()['review'],style:
-                                    GoogleFonts.poppins(fontWeight: FontWeight.w300),);
-                                  } else {
-                                    return const Text('review kosong');
-                                  }
-                                } else {
-                                  return const Text('eror data produk item nya');
-                                }
-                              },
-                            ),
-                          ),
-                        ],
-
-                      ),
-                    ),
-
-                  )
-                      : Container(),
-                ],
-              );
-            } else {
-              return const Text('eror riwayat order nya');
-            }
-          },
-        ),
-        bottomNavigationBar:
-        StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('orders').doc(widget.idOrder).snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState==ConnectionState.waiting) {
-              return const Center(child:CircularProgressIndicator());
-            }else if(snapshot.connectionState == ConnectionState.active){
-              if (snapshot.data!['statusOrder'] == 'SUCCEED') {
-                if (snapshot.data!['isReviewed']==true) {
-                  return const BottomAppBar(child: null,);
-                }else{
-                  return BottomAppBar(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (context) {
-                                return AddReview(
-                                    idOrder: widget.idOrder,
-                                    idUser: widget.idUser,
-                                    listCart: widget.listCart);
-                              },
-                            ));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.orangeAccent,
-                            ),
-                            height: 50,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                  const SizedBox(height: 8),
+                  x!['isReviewed']
+                      ? Container(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: ExpansionTile(
+                              title: Text(
+                                'Your Review',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w500),
+                              ),
                               children: [
-                                Icon(
-                                  Icons.rate_review_outlined,
-                                  color: Colors.grey.shade800,
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Beri Ulasan',
-                                  style: GoogleFonts.poppins(
-                                      color: Colors.grey.shade800,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 16, right: 16, bottom: 16),
+                                  child: StreamBuilder(
+                                    stream: FirebaseFirestore.instance
+                                        .collection('reviews')
+                                        .where('idOrder', isEqualTo: x.id)
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      var x = snapshot.data?.docs.first;
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      } else if (snapshot.connectionState ==
+                                          ConnectionState.active) {
+                                        if (snapshot.data!.docs.isNotEmpty) {
+                                          return Text(
+                                            x?.data()['review'],
+                                            style: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.w300),
+                                            textAlign: TextAlign.justify,
+                                          );
+                                        } else {
+                                          return const Text('No reviews');
+                                        }
+                                      } else {
+                                        return const Text('eror');
+                                      }
+                                    },
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                      ));
-
-                }
-              }else{
-                return const BottomAppBar(child: null,);
-              }
-            }else{
+                        )
+                      : Container(),
+                ],
+              );
+            } else {
               return const Text('eror');
             }
-          },),
+          },
+        ),
+        bottomNavigationBar: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('orders')
+              .doc(widget.idOrder)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.connectionState == ConnectionState.active) {
+              if (snapshot.data!['statusOrder'] == 'SUCCEED') {
+                if (snapshot.data!['isReviewed'] == true) {
+                  return const BottomAppBar(
+                    child: null,
+                  );
+                } else {
+                  return BottomAppBar(
+                      child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return AddReview(
+                                idOrder: widget.idOrder,
+                                idUser: widget.idUser,
+                                listCart: widget.listCart);
+                          },
+                        ));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.orangeAccent,
+                        ),
+                        height: 50,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.rate_review_outlined,
+                              color: Colors.grey.shade800,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Leave a Review',
+                              style: GoogleFonts.poppins(
+                                  color: Colors.grey.shade800,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ));
+                }
+              } else {
+                return const BottomAppBar(
+                  child: null,
+                );
+              }
+            } else {
+              return const Text('eror');
+            }
+          },
+        ),
       ),
     );
   }
-
-  
 }

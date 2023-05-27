@@ -115,19 +115,22 @@ class _DetailPageState extends State<DetailPage> {
                               .where('uid', isEqualTo: Auth().currentUser!.uid)
                               .snapshots(),
                           builder: (context, snapshot) {
-                          if (snapshot.connectionState==ConnectionState.waiting) {
-                            return const Center(child:CircularProgressIndicator());
-                          }else if(snapshot.connectionState==ConnectionState.active){
-                            var x = snapshot.data!.docs.first;
-                            return Text(x['shoppingCart'].toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ));
-                          }else{
-                            return const Text('eror');
-                          }
-                        },),
-
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            } else if (snapshot.connectionState ==
+                                ConnectionState.active) {
+                              var x = snapshot.data!.docs.first;
+                              return Text(x['shoppingCart'].toString(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ));
+                            } else {
+                              return const Text('eror');
+                            }
+                          },
+                        ),
                         child: const Icon(Icons.shopping_cart_outlined),
                       ),
                       color: Colors.white,
@@ -225,7 +228,7 @@ class _DetailPageState extends State<DetailPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Pengiriman',
+                                Text('Delivery',
                                     style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w500,
                                     )),
@@ -239,7 +242,7 @@ class _DetailPageState extends State<DetailPage> {
                                       width: 4,
                                     ),
                                     Text(
-                                      'Gratis Ongkos Kirim',
+                                      'Free Shipping',
                                       style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w300,
                                       ),
@@ -264,7 +267,7 @@ class _DetailPageState extends State<DetailPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      'Deskripsi',
+                                      'Description',
                                       style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -315,10 +318,11 @@ class _DetailPageState extends State<DetailPage> {
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.orangeAccent.withOpacity(0.7),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'Produk Tidak Tersedia',
-                          style: TextStyle(color: Colors.white),
+                          'Not Available',
+                          style:
+                              GoogleFonts.poppins(fontWeight: FontWeight.w500),
                         ),
                       ),
                     ),
@@ -336,7 +340,7 @@ class _DetailPageState extends State<DetailPage> {
                               widget.idProduct, name, image, price, weight);
                         },
                         child: Text(
-                          'Masukkan Keranjang',
+                          'Add to cart',
                           style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w700, color: Colors.black),
                         ),
@@ -368,8 +372,8 @@ class _DetailPageState extends State<DetailPage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (_) => const BottomNavbar(
-                          currentIndex: 1,
-                        )),
+                              currentIndex: 1,
+                            )),
                   );
                 },
                 child: const Text(

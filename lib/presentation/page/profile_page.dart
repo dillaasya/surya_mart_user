@@ -22,42 +22,42 @@ class _ProfilePageState extends State<ProfilePage> {
     return showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          actionsAlignment: MainAxisAlignment.center,
-          content: Text(
-            "Apakah anda yakin ingin keluar dari aplikasi?",
-            style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300,
-              color: Colors.black,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text(
-                "Ya",
+              actionsAlignment: MainAxisAlignment.center,
+              content: Text(
+                "Are you sure you want to exit the app?",
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w300,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text(
-                "Tidak",
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w300,
-                  color: Colors.white,
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(
+                    "Yes",
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ],
-        ));
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text(
+                    "No",
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ));
   }
 
   @override
@@ -121,7 +121,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 return ListView(
                   children: [
                     Container(
-                        color: const Color(0xff025ab4), child: profilePicture(x)),
+                        color: const Color(0xff025ab4),
+                        child: profilePicture(x)),
                     profileMenu(x),
                   ],
                 );
@@ -142,43 +143,42 @@ class _ProfilePageState extends State<ProfilePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-      Container(
-        width: 100,
-        height: 100,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(100),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(50),
-          child: user.get('profilePicture').toString().isNotEmpty
-              ? Image.network(
-                  user.get('profilePicture').toString(),
-                  fit: BoxFit.cover,
-                  width: 100,
-                )
-              : const Icon(
-                  Icons.person,
-                  size: 30,
-                  color: Colors.black,
-                ),
-        ),
-      ),
-      const SizedBox(
-        height: 15,
-      ),
-      SizedBox(
-        width: 150,
-        child: Text(
-          user.get('displayName'),
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          overflow: TextOverflow.visible,
-          style: GoogleFonts.poppins(
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
               color: Colors.white,
-              fontWeight: FontWeight.w300),
-        ),
-      ),
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: user.get('profilePicture').toString().isNotEmpty
+                  ? Image.network(
+                      user.get('profilePicture').toString(),
+                      fit: BoxFit.cover,
+                      width: 100,
+                    )
+                  : const Icon(
+                      Icons.person,
+                      size: 30,
+                      color: Colors.black,
+                    ),
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          SizedBox(
+            width: 150,
+            child: Text(
+              user.get('displayName'),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.visible,
+              style: GoogleFonts.poppins(
+                  color: Colors.white, fontWeight: FontWeight.w300),
+            ),
+          ),
         ],
       ),
     );
@@ -191,8 +191,13 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           ListTile(
             leading: const Icon(Icons.people_outline),
-            title: Text('Edit Profile',style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300, color: Colors.black,),),
+            title: Text(
+              'Edit Profile',
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w300,
+                color: Colors.black,
+              ),
+            ),
             trailing: const Icon(Icons.navigate_next_rounded),
             onTap: () {
               Navigator.of(context).push(
@@ -200,41 +205,53 @@ class _ProfilePageState extends State<ProfilePage> {
               );
             },
           ),
-
           ListTile(
-            leading:  const Icon(Icons.location_on_outlined),
-            title: Text('Shipping Address',style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300, color: Colors.black,),),
+            leading: const Icon(Icons.location_on_outlined),
+            title: Text(
+              'Shipping Address',
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w300,
+                color: Colors.black,
+              ),
+            ),
             trailing: const Icon(Icons.navigate_next_rounded),
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (_) => AddressPage(
-                      id: user.id,
-                    )),
+                          id: user.id,
+                        )),
               );
             },
           ),
-
           ListTile(
-            leading:  const Icon(Icons.access_time),
-            title: Text('Order History',style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300, color: Colors.black,),),
+            leading: const Icon(Icons.access_time),
+            title: Text(
+              'Order History',
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w300,
+                color: Colors.black,
+              ),
+            ),
             trailing: const Icon(Icons.navigate_next_rounded),
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (_) => OrderHistory(
-                      id: user.id,
-                    )),
+                          id: user.id,
+                        )),
               );
             },
           ),
-
           ListTile(
-            leading:  const Icon(Icons.reorder_outlined),
-            title: Text('My Reviews',style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300, color: Colors.black,),),
+            leading: const Icon(Icons.reorder_outlined),
+            title: Text(
+              'My Reviews',
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w300,
+                color: Colors.black,
+              ),
+            ),
             trailing: const Icon(Icons.navigate_next_rounded),
             onTap: () {
               Navigator.of(context).push(
@@ -242,23 +259,30 @@ class _ProfilePageState extends State<ProfilePage> {
               );
             },
           ),
-
           ListTile(
-            leading:   const Icon(Icons.chat_bubble_outline),
-            title: Text('Refund Request',style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300, color: Colors.black,),),
+            leading: const Icon(Icons.chat_bubble_outline),
+            title: Text(
+              'Refund Request',
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w300,
+                color: Colors.black,
+              ),
+            ),
             trailing: const Icon(Icons.navigate_next_rounded),
             onTap: () {
               launchUrl(Uri.parse(
                   'whatsapp://send/?phone=+6285231803644&text=Hi, can you help me?'));
             },
           ),
-
           ListTile(
-            leading:
-            const Icon(Icons.info_outline),
-            title: Text('About',style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300, color: Colors.black,),),
+            leading: const Icon(Icons.info_outline),
+            title: Text(
+              'About',
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w300,
+                color: Colors.black,
+              ),
+            ),
             trailing: const Icon(Icons.navigate_next_rounded),
             onTap: () {
               Navigator.of(context).push(
@@ -266,7 +290,6 @@ class _ProfilePageState extends State<ProfilePage> {
               );
             },
           ),
-
         ],
       ),
     );

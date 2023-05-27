@@ -49,7 +49,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
       'stock': FieldValue.increment(-(qty)),
       'sold': FieldValue.increment(qty),
     });
-    //print('berhasil hapus produk $id');
   }
 
   Future<void> updateStockEachProduct() async {
@@ -60,8 +59,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
         .get()
         .then((value) {
       for (var element in value.docs) {
-        /*print(
-            'nama produk : ${element.data()['productName']} id produk : ${element.data()['productID']} qty : ${element.data()['qty']}');*/
         updateStock(element.data()['productId'], element.data()['qty']);
       }
     });
@@ -99,8 +96,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
         'totalWeight': totalWeight,
       });
     });
-
-    //update sold dari semua produk yang terjual
   }
 
   @override
@@ -149,7 +144,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Alamat Pengiriman',
+                                      'Shipping Address',
                                       style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.w500),
                                     ),
@@ -238,7 +233,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                 } else {
                                                   return Center(
                                                     child: Text(
-                                                      'Tidak ada alamat yang dipilih',
+                                                      'No address selected',
                                                       style:
                                                           GoogleFonts.poppins(
                                                               fontWeight:
@@ -279,7 +274,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Estimasi Pengiriman',
+                              'Estimated Delivery',
                               style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w500),
                             ),
@@ -295,7 +290,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               height: 5,
                             ),
                             Text(
-                              'Maksimal 1 jam setelah pembayaran selama jam operasional (09.00 - 15.00)',
+                              'Maximum 1 hour after make an order during operating hours (09.00 - 20.00)',
                               style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w300),
                             )
@@ -413,7 +408,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             width: 4,
                           ),
                           Text(
-                            'Metode Pembayaran',
+                            'Payment Method',
                             style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w500),
                           ),
@@ -442,10 +437,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Tukarkan poin',
+                        'Redeem Points',
                         style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Row(
@@ -456,12 +451,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Kamu memiliki ${widget.poinUser} poin',
+                                'You have ${widget.poinUser} points',
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w500, fontSize: 9),
                               ),
                               Text(
-                                'Belanja diatas Rp 10.000 dan gunakan minimal 100 poin untuk mendapatkan potongan harga',
+                                'Spend above Rp 10.000 and use at least 100 points to get a discount',
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 9,
@@ -507,9 +502,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                                           .showSnackBar(
                                                                               SnackBar(
                                                                         content:
-                                                                            Text('Anda tidak mencapai minimal belanja Rp 10.000'),
+                                                                            Text(
+                                                                          'You do not reach a minimum spend of Rp 10.000',
+                                                                          style:
+                                                                              GoogleFonts.poppins(
+                                                                            fontWeight:
+                                                                                FontWeight.w400,
+                                                                          ),
+                                                                        ),
                                                                         duration:
-                                                                            Duration(seconds: 2),
+                                                                            const Duration(seconds: 2),
                                                                       ));
                                                                     }
                                                               : null,
@@ -536,7 +538,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                         ),
                                                       ),
                                                     ),
-                                                    Divider(),
+                                                    const Divider(),
                                                     InkWell(
                                                       onTap:
                                                           widget.poinUser >= 200
@@ -560,10 +562,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                                               context)
                                                                           .showSnackBar(
                                                                               SnackBar(
-                                                                        content:
-                                                                            Text('Anda tidak mencapai minimal belanja Rp 20.000'),
+                                                                        content: Text(
+                                                                            'You do not reach a minimum spend of Rp 20.000',
+                                                                            style:
+                                                                                GoogleFonts.poppins(
+                                                                              fontWeight: FontWeight.w400,
+                                                                            )),
                                                                         duration:
-                                                                            Duration(seconds: 2),
+                                                                            const Duration(seconds: 2),
                                                                       ));
                                                                     }
                                                               : null,
@@ -590,7 +596,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                         ),
                                                       ),
                                                     ),
-                                                    Divider(),
+                                                    const Divider(),
                                                     InkWell(
                                                       onTap:
                                                           widget.poinUser >= 300
@@ -614,10 +620,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                                               context)
                                                                           .showSnackBar(
                                                                               SnackBar(
-                                                                        content:
-                                                                            Text('Anda tidak mencapai minimal belanja Rp 30.000'),
+                                                                        content: Text(
+                                                                            'You do not reach a minimum spend of Rp 30.000',
+                                                                            style:
+                                                                                GoogleFonts.poppins(
+                                                                              fontWeight: FontWeight.w400,
+                                                                            )),
                                                                         duration:
-                                                                            Duration(seconds: 2),
+                                                                            const Duration(seconds: 2),
                                                                       ));
                                                                     }
                                                               : null,
@@ -644,7 +654,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                         ),
                                                       ),
                                                     ),
-                                                    Divider(),
+                                                    const Divider(),
                                                     InkWell(
                                                       onTap:
                                                           widget.poinUser >= 400
@@ -668,10 +678,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                                               context)
                                                                           .showSnackBar(
                                                                               SnackBar(
-                                                                        content:
-                                                                            Text('Anda tidak mencapai minimal belanja Rp 40.000'),
+                                                                        content: Text(
+                                                                            'You do not reach a minimum spend of Rp 40.000',
+                                                                            style:
+                                                                                GoogleFonts.poppins(
+                                                                              fontWeight: FontWeight.w400,
+                                                                            )),
                                                                         duration:
-                                                                            Duration(seconds: 2),
+                                                                            const Duration(seconds: 2),
                                                                       ));
                                                                     }
                                                               : null,
@@ -698,7 +712,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                         ),
                                                       ),
                                                     ),
-                                                    Divider(),
+                                                    const Divider(),
                                                     InkWell(
                                                       onTap:
                                                           widget.poinUser >= 500
@@ -722,10 +736,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                                               context)
                                                                           .showSnackBar(
                                                                               SnackBar(
-                                                                        content:
-                                                                            Text('Anda tidak mencapai minimal belanja Rp 50.000'),
+                                                                        content: Text(
+                                                                            'You do not reach a minimum spend of Rp 50.000',
+                                                                            style:
+                                                                                GoogleFonts.poppins(
+                                                                              fontWeight: FontWeight.w400,
+                                                                            )),
                                                                         duration:
-                                                                            Duration(seconds: 2),
+                                                                            const Duration(seconds: 2),
                                                                       ));
                                                                     }
                                                               : null,
@@ -775,7 +793,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   ? Padding(
                                       padding: const EdgeInsets.all(8),
                                       child: Text(
-                                        'Pilih nominal',
+                                        'Reedem',
                                         style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.w500,
                                             color: Colors.white),
@@ -784,7 +802,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   : Padding(
                                       padding: const EdgeInsets.all(8),
                                       child: Text(
-                                        '$poin Poin',
+                                        '$poin Points',
                                         style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.w500,
                                             color: Colors.white),
@@ -799,7 +817,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           : Center(
                               child: Column(
                                 children: [
-                                  Divider(),
+                                  const Divider(),
                                   InkWell(
                                     onTap: () {
                                       setState(() {
@@ -808,7 +826,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       });
                                     },
                                     child: Text(
-                                      'Batalkan reedem',
+                                      'Cancel reedem',
                                       style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.w300,
                                           color: Colors.redAccent),
@@ -832,7 +850,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Rincian Pembayaran',
+                        'Payment Details',
                         style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
                       ),
                       const SizedBox(
@@ -845,22 +863,22 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'SubTotal Produk',
+                                'SubTotal Products',
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w300),
                               ),
                               Text(
-                                'Potongan poin',
+                                ' Points Discount',
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w300),
                               ),
                               Text(
-                                'Biaya Pengiriman',
+                                'Shipping Cost',
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w300),
                               ),
                               Text(
-                                'Total Belanja',
+                                'Total Spend',
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w500),
                               ),
@@ -936,7 +954,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     });
                   },
                   child: Text(
-                    'Buat Pesanan',
+                    'Make an order',
                     style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w500, color: Colors.black),
                   ),

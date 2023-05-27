@@ -26,7 +26,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     uid = currentUser.currentUser?.uid;
   }
@@ -35,42 +34,42 @@ class _HomePageState extends State<HomePage> {
     return showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          actionsAlignment: MainAxisAlignment.center,
-          content: Text(
-            "Apakah anda yakin ingin keluar dari aplikasi?",
-            style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300,
-              color: Colors.black,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text(
-                "Ya",
+              actionsAlignment: MainAxisAlignment.center,
+              content: Text(
+                "Apakah anda yakin ingin keluar dari aplikasi?",
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w300,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text(
-                "Tidak",
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w300,
-                  color: Colors.white,
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(
+                    "Ya",
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ],
-        ));
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text(
+                    "Tidak",
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ));
   }
 
   @override
@@ -86,7 +85,8 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: const Color(0xff025ab4),
             elevation: 0,
             flexibleSpace: Padding(
-              padding: const EdgeInsets.only(left: 20,right: 20, top: 8, bottom: 8),
+              padding:
+                  const EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('users')
@@ -95,11 +95,11 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.connectionState == ConnectionState.active) {
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.active) {
                     var x = snapshot.data!.docs.first;
 
                     return Row(
-
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
@@ -113,33 +113,39 @@ class _HomePageState extends State<HomePage> {
                                   color: Colors.grey.shade300,
                                   borderRadius: BorderRadius.circular(100),
                                 ),
-                                child: x.get('profilePicture').toString().isEmpty
+                                child: x
+                                        .get('profilePicture')
+                                        .toString()
+                                        .isEmpty
                                     ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: const Icon(Icons.person),
-                                )
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: const Icon(Icons.person),
+                                      )
                                     : ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: x.data()['profilePicture'] == null
-                                      ? const Icon(Icons.person,
-                                      color: Colors.black)
-                                      : Image.network(
-                                    x.get('profilePicture'),
-                                    fit: BoxFit.cover,
-                                    width: 100,
-                                  ),
-                                ),
+                                        borderRadius: BorderRadius.circular(50),
+                                        child:
+                                            x.data()['profilePicture'] == null
+                                                ? const Icon(Icons.person,
+                                                    color: Colors.black)
+                                                : Image.network(
+                                                    x.get('profilePicture'),
+                                                    fit: BoxFit.cover,
+                                                    width: 100,
+                                                  ),
+                                      ),
                               ),
                               const SizedBox(
                                 width: 10,
                               ),
                               Flexible(
-                                child: Text(x.get('displayName'),
+                                child: Text(
+                                  x.get('displayName'),
                                   maxLines: 1,
                                   style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white,
-                                      fontSize: 16),),
+                                      fontSize: 16),
+                                ),
                               )
                             ],
                           ),
@@ -148,8 +154,8 @@ class _HomePageState extends State<HomePage> {
                           onPressed: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                                  return const CartPage();
-                                }));
+                              return const CartPage();
+                            }));
                           },
                           icon: Badge(
                             badgeContent: Text(
@@ -174,10 +180,7 @@ class _HomePageState extends State<HomePage> {
           ),
           body: SingleChildScrollView(
             child: Column(
-              children: [
-                product(),
-                article()
-              ],
+              children: [product(), article()],
             ),
           ),
         ),

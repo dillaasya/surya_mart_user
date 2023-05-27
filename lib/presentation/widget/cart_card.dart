@@ -36,7 +36,6 @@ class CartCard extends StatelessWidget {
       ]),
       child: InkWell(
         onTap: () {
-          //print('id produk dari kartu ke detail : ${x?.data()['productId']}');
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return DetailPage(
               idProduct: x?.data()['productId'],
@@ -55,10 +54,8 @@ class CartCard extends StatelessWidget {
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-
                       border: Border.all(width: 0.5, color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
+                      borderRadius: BorderRadius.circular(8)),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: x!.data()['picture'] == null
@@ -78,10 +75,13 @@ class CartCard extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.clip,
                           style:
-                          GoogleFonts.poppins(fontWeight: FontWeight.w500),
+                              GoogleFonts.poppins(fontWeight: FontWeight.w500),
                         ),
-                        Text('Rp ${x?.get('price')}',style:
-                        GoogleFonts.poppins(fontWeight: FontWeight.w300),),
+                        Text(
+                          'Rp ${x?.get('price')}',
+                          style:
+                              GoogleFonts.poppins(fontWeight: FontWeight.w300),
+                        ),
                       ]),
                 ),
                 Row(
@@ -92,15 +92,13 @@ class CartCard extends StatelessWidget {
                           'qty': FieldValue.increment(1),
                           'subWeight':
                               FieldValue.increment(x?.data()['weight']),
-                          'subPrice':
-                              FieldValue.increment(x?.data()['price'])
+                          'subPrice': FieldValue.increment(x?.data()['price'])
                         });
                       },
                       icon: const Icon(Icons.add),
                     ),
                     Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text('${x?.get('qty')}'),
                     ),
                     IconButton(
@@ -111,8 +109,8 @@ class CartCard extends StatelessWidget {
                                 'qty': FieldValue.increment(-1),
                                 'subWeight': FieldValue.increment(
                                     -(x?.data()['weight'])),
-                                'subPrice': FieldValue.increment(
-                                    -(x?.data()['price']))
+                                'subPrice':
+                                    FieldValue.increment(-(x?.data()['price']))
                               });
                             },
                       icon: const Icon(Icons.remove),

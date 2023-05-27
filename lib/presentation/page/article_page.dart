@@ -14,11 +14,9 @@ class ArticlePage extends StatelessWidget {
               backgroundColor: Colors.white,
               iconTheme: const IconThemeData(color: Colors.black),
               elevation: 0,
-              title: Text(
-                'Articles',
+              title: Text('Articles',
                   style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w500, color: Colors.black)
-              ),
+                      fontWeight: FontWeight.w500, color: Colors.black)),
             ),
             body: StreamBuilder(
               stream:
@@ -56,12 +54,10 @@ class ArticlePage extends StatelessWidget {
                                           const SizedBox(
                                             height: 4,
                                           ),
-                                          Text(
-                                            '${(x.data())["overview"]}',
-                                            maxLines: 3,
+                                          Text('${(x.data())["overview"]}',
+                                              maxLines: 3,
                                               style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w300)
-                                          ),
+                                                  fontWeight: FontWeight.w300)),
                                         ],
                                       ),
                                     ),
@@ -75,7 +71,8 @@ class ArticlePage extends StatelessWidget {
                       },
                     );
                   } else {
-                    return const Center(child: Text('Tidak ada article'));
+                    return const Center(
+                        child: Text('No articles can be loaded'));
                   }
                 } else {
                   return const Center(

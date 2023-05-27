@@ -28,7 +28,6 @@ class ReviewPage extends StatelessWidget {
               .where('uid', isEqualTo: Auth().currentUser!.uid)
               .snapshots(),
           builder: (context, snapshot) {
-            //print('nilai uid sekaang : ${Auth().currentUser!.uid}');
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -37,20 +36,20 @@ class ReviewPage extends StatelessWidget {
               if (snapshot.data!.docs.isNotEmpty) {
                 return Column(
                   children: [
-                    const SizedBox(height:8),
+                    const SizedBox(height: 8),
                     Expanded(
                       child: ListView.separated(
-                        separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 8,),
-                        //padding: EdgeInsets.all(16),
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const SizedBox(
+                          height: 8,
+                        ),
                         shrinkWrap: true,
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {
                           var x = snapshot.data!.docs[index];
 
-                          //DateTime dateReviewed = DateTime.parse(x['dateCreated'].toString());
-
                           return Container(
-                            color:Colors.white,
+                            color: Colors.white,
                             child: Padding(
                               padding: const EdgeInsets.all(20),
                               child: Column(
@@ -58,31 +57,32 @@ class ReviewPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
-
                                       Text(
-                                        DateFormat.yMMMEd()
-                                            .format(x['dateCreated'].toDate(), ),
-                                        style:
-                                        GoogleFonts.poppins(fontWeight: FontWeight.w300),
+                                        DateFormat.yMMMEd().format(
+                                          x['dateCreated'].toDate(),
+                                        ),
+                                        style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w300),
                                       ),
-                              
-                                  RatingBar.builder(
-                                    initialRating: x['rate'],
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: true,
-                                    itemCount: 5,
-                                    itemSize: 25,
-                                    itemBuilder: (context, _) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    onRatingUpdate: (double value) {
-                                      null;
-                                    },
-                                  ),
+                                      RatingBar.builder(
+                                        initialRating: x['rate'],
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemSize: 25,
+                                        itemBuilder: (context, _) => const Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        onRatingUpdate: (double value) {
+                                          null;
+                                        },
+                                      ),
                                     ],
                                   ),
                                   const SizedBox(
@@ -98,13 +98,16 @@ class ReviewPage extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(15),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Expanded(
                                             flex: 1,
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Text(
                                                 x.data()['review'],
                                                 style: GoogleFonts.poppins(
@@ -125,7 +128,7 @@ class ReviewPage extends StatelessWidget {
                         },
                       ),
                     ),
-                    const SizedBox(height:8),
+                    const SizedBox(height: 8),
                   ],
                 );
               } else {
@@ -133,7 +136,7 @@ class ReviewPage extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   child: Center(
                     child: Text(
-                      'Belum ada review',
+                      'No reviews',
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w400,
                       ),

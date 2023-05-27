@@ -56,7 +56,6 @@ class _OrderHistoryState extends State<OrderHistory> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          //Text(x.id),
                           InkWell(
                             onTap: () {
                               Navigator.push(context,
@@ -129,12 +128,14 @@ class _OrderHistoryState extends State<OrderHistory> {
                                               Text(
                                                 'Rp ${first['price']} ',
                                                 style: GoogleFonts.poppins(
-                                                    fontWeight: FontWeight.w300),
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                               Text(
                                                 'x${first['qty']}',
                                                 style: GoogleFonts.poppins(
-                                                    fontWeight: FontWeight.w300),
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                             ],
                                           ),
@@ -148,7 +149,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                         const Divider(),
                                         Center(
                                           child: Text(
-                                            'Tampilkan produk lainnya',
+                                            'Show more products',
                                             style: GoogleFonts.poppins(
                                                 fontWeight: FontWeight.w300),
                                           ),
@@ -161,13 +162,13 @@ class _OrderHistoryState extends State<OrderHistory> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      '${z.length.toString()} produk',
+                                      '${z.length.toString()} products',
                                       style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.w300),
                                     ),
                                     Row(children: [
                                       Text(
-                                        'Total Belanja ',
+                                        'Total Spend ',
                                         style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.w300),
                                       ),
@@ -223,7 +224,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                               width: 10,
                                             ),
                                             Text(
-                                              'Beri Ulasan',
+                                              'Leave a Review',
                                               style: GoogleFonts.poppins(
                                                   color: Colors.grey.shade800,
                                                   fontSize: 15,
@@ -256,7 +257,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                               width: 10,
                                             ),
                                             Text(
-                                              'Sudah diulas',
+                                              'Reviewed',
                                               style: GoogleFonts.poppins(
                                                   color: Colors.grey.shade800,
                                                   fontSize: 15,
@@ -270,15 +271,12 @@ class _OrderHistoryState extends State<OrderHistory> {
                           else if (x.data()['statusOrder'] == 'PACKED')
                             InkWell(
                               onTap: () {
-                                //update status order ke cancelled
                                 FirebaseFirestore.instance
                                     .collection('orders')
                                     .doc(x.id)
                                     .update({
                                   'statusOrder': 'CANCELLED'
                                 }).whenComplete(() {
-                                  //update semua stok barang yang dibeli kembali spt semula
-
                                   List<String> listIdProduct = [];
                                   List<int> listQtyProduct = [];
                                   for (var element in x['productItem']) {
@@ -295,7 +293,8 @@ class _OrderHistoryState extends State<OrderHistory> {
                                         .update({
                                       'stock': FieldValue.increment(
                                           listQtyProduct[i]),
-                                      'sold': FieldValue.increment(-(listQtyProduct[i])),
+                                      'sold': FieldValue.increment(
+                                          -(listQtyProduct[i])),
                                     });
                                   }
                                 });
@@ -317,7 +316,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Text(
-                                              'Batalkan Pesanan',
+                                              'Cancel Order',
                                               style: GoogleFonts.poppins(
                                                   color: Colors.grey.shade800,
                                                   fontSize: 15,
@@ -332,33 +331,35 @@ class _OrderHistoryState extends State<OrderHistory> {
                           else if (x.data()['statusOrder'] == 'SHIPPED')
                             InkWell(
                               onTap: () {
-                                //update status order ke succeed
                                 FirebaseFirestore.instance
                                     .collection('orders')
                                     .doc(x.id)
-                                    .update({'statusOrder': 'SUCCEED'}).whenComplete((){
+                                    .update({
+                                  'statusOrder': 'SUCCEED'
+                                }).whenComplete(() {
+                                  var jumlah = x.data()['totalPrice'] / 50000;
 
-                                      //update poin yang diperoleh user dari pembelian
-                                  var jumlah = x.data()['totalPrice']/50000;
-
-
-                                  if (jumlah>5) {
-                                    var subPoin = jumlah.floor()*10;
+                                  if (jumlah > 5) {
+                                    var subPoin = jumlah.floor() * 10;
                                     FirebaseFirestore.instance
                                         .collection('users')
                                         .doc(widget.id)
-                                        .update({'poin' : FieldValue.increment(subPoin)}).whenComplete(() {
+                                        .update({
+                                      'poin': FieldValue.increment(subPoin)
+                                    }).whenComplete(() {
                                       showDialog(
                                           barrierDismissible: true,
                                           context: context,
                                           builder: (context) {
-                                            Future.delayed(Duration(seconds: 2), () {
+                                            Future.delayed(Duration(seconds: 2),
+                                                () {
                                               Navigator.of(context).pop(true);
                                             });
                                             return AlertDialog(
-                                              actionsAlignment: MainAxisAlignment.center,
+                                              actionsAlignment:
+                                                  MainAxisAlignment.center,
                                               title: Text(
-                                                "Selamat!",
+                                                "Congratulations!",
                                                 style: GoogleFonts.poppins(
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.black,
@@ -366,7 +367,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                 textAlign: TextAlign.center,
                                               ),
                                               content: Text(
-                                                "Anda telah mendapatkan $subPoin poin",
+                                                "You have earned $subPoin points",
                                                 style: GoogleFonts.poppins(
                                                   fontWeight: FontWeight.w300,
                                                   color: Colors.black,
@@ -376,10 +377,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                             );
                                           });
                                     });
-                                  } else {
-
-                                  }
-
+                                  } else {}
                                 });
                               },
                               child: x.data()['statusOrder'] == 'SHIPPED'
@@ -399,7 +397,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Text(
-                                              'Pesanan Telah Diterima',
+                                              'Order Received',
                                               style: GoogleFonts.poppins(
                                                   color: Colors.grey.shade800,
                                                   fontSize: 15,
@@ -423,7 +421,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                 padding: const EdgeInsets.all(20),
                 child: Center(
                   child: Text(
-                    'Belum ada riwayat pembelian',
+                    'No purchase history',
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w400,
                     ),
@@ -466,8 +464,6 @@ class _OrderHistoryState extends State<OrderHistory> {
                   List z = x.data()['productItem'];
                   Map first = z.first;
 
-                  //print('nilai id untuk buka detail order ${x.id}');
-
                   return Card(
                     child: Padding(
                       padding: const EdgeInsets.all(10),
@@ -475,7 +471,6 @@ class _OrderHistoryState extends State<OrderHistory> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          //Text(x.id),
                           InkWell(
                             onTap: () {
                               Navigator.push(context,
@@ -548,12 +543,14 @@ class _OrderHistoryState extends State<OrderHistory> {
                                               Text(
                                                 'Rp ${first['price']} ',
                                                 style: GoogleFonts.poppins(
-                                                    fontWeight: FontWeight.w300),
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                               Text(
                                                 'x${first['qty']}',
                                                 style: GoogleFonts.poppins(
-                                                    fontWeight: FontWeight.w300),
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                             ],
                                           ),
@@ -567,7 +564,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                         const Divider(),
                                         Center(
                                           child: Text(
-                                            'Tampilkan produk lainnya',
+                                            'Show more products',
                                             style: GoogleFonts.poppins(
                                                 fontWeight: FontWeight.w300),
                                           ),
@@ -580,13 +577,13 @@ class _OrderHistoryState extends State<OrderHistory> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      '${z.length.toString()} produk',
+                                      '${z.length.toString()} products',
                                       style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.w300),
                                     ),
                                     Row(children: [
                                       Text(
-                                        'Total Belanja ',
+                                        'Total Spend ',
                                         style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.w300),
                                       ),
@@ -642,7 +639,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                               width: 10,
                                             ),
                                             Text(
-                                              'Beri Ulasan',
+                                              'Leave a Review',
                                               style: GoogleFonts.poppins(
                                                   color: Colors.grey.shade800,
                                                   fontSize: 15,
@@ -675,7 +672,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                               width: 10,
                                             ),
                                             Text(
-                                              'Sudah diulas',
+                                              'Reviewed',
                                               style: GoogleFonts.poppins(
                                                   color: Colors.grey.shade800,
                                                   fontSize: 15,
@@ -712,7 +709,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Text(
-                                              'Batalkan Pesanan',
+                                              'Cancel Order',
                                               style: GoogleFonts.poppins(
                                                   color: Colors.grey.shade800,
                                                   fontSize: 15,
@@ -727,33 +724,35 @@ class _OrderHistoryState extends State<OrderHistory> {
                           else if (x.data()['statusOrder'] == 'SHIPPED')
                             InkWell(
                               onTap: () {
-                                //update status order ke succeed
                                 FirebaseFirestore.instance
                                     .collection('orders')
                                     .doc(x.id)
-                                    .update({'statusOrder': 'SUCCEED'}).whenComplete((){
+                                    .update({
+                                  'statusOrder': 'SUCCEED'
+                                }).whenComplete(() {
+                                  var jumlah = x.data()['totalPrice'] / 50000;
 
-                                  //update poin yang diperoleh user dari pembelian
-                                  var jumlah = x.data()['totalPrice']/50000;
-
-
-                                  if (jumlah>5) {
-                                    var subPoin = jumlah.floor()*10;
+                                  if (jumlah > 5) {
+                                    var subPoin = jumlah.floor() * 10;
                                     FirebaseFirestore.instance
                                         .collection('users')
                                         .doc(widget.id)
-                                        .update({'poin' : FieldValue.increment(subPoin)}).whenComplete(() {
+                                        .update({
+                                      'poin': FieldValue.increment(subPoin)
+                                    }).whenComplete(() {
                                       showDialog(
                                           barrierDismissible: true,
                                           context: context,
                                           builder: (context) {
-                                            Future.delayed(Duration(seconds: 2), () {
+                                            Future.delayed(Duration(seconds: 2),
+                                                () {
                                               Navigator.of(context).pop(true);
                                             });
                                             return AlertDialog(
-                                              actionsAlignment: MainAxisAlignment.center,
+                                              actionsAlignment:
+                                                  MainAxisAlignment.center,
                                               title: Text(
-                                                "Selamat!",
+                                                "Congratulations!",
                                                 style: GoogleFonts.poppins(
                                                   fontWeight: FontWeight.w500,
                                                   color: Colors.black,
@@ -761,7 +760,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                 textAlign: TextAlign.center,
                                               ),
                                               content: Text(
-                                                "Anda telah mendapatkan $subPoin poin",
+                                                "You have earned $subPoin points",
                                                 style: GoogleFonts.poppins(
                                                   fontWeight: FontWeight.w300,
                                                   color: Colors.black,
@@ -771,10 +770,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                             );
                                           });
                                     });
-                                  } else {
-
-                                  }
-
+                                  } else {}
                                 });
                               },
                               child: x.data()['statusOrder'] == 'SHIPPED'
@@ -794,7 +790,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Text(
-                                              'Pesanan Telah Diterima',
+                                              'Order Received',
                                               style: GoogleFonts.poppins(
                                                   color: Colors.grey.shade800,
                                                   fontSize: 15,
@@ -818,7 +814,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                 padding: const EdgeInsets.all(20),
                 child: Center(
                   child: Text(
-                    'Belum ada riwayat pembelian',
+                    'No purchase history',
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w400,
                     ),

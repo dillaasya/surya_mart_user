@@ -38,7 +38,7 @@ class _EditProfileState extends State<EditProfile> {
         builder: (context) => AlertDialog(
               actionsAlignment: MainAxisAlignment.center,
               title: Text(
-                "Perhatian",
+                "Warning!",
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
@@ -46,7 +46,7 @@ class _EditProfileState extends State<EditProfile> {
                 textAlign: TextAlign.center,
               ),
               content: Text(
-                "Apakah anda yakin ingin kembali? Data yang sudah ada tidak akan disimpan",
+                "Are you sure you want to come back? Existing data will not be saved",
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w300,
                   color: Colors.black,
@@ -59,7 +59,7 @@ class _EditProfileState extends State<EditProfile> {
                     Navigator.of(context).pop(true);
                   },
                   child: Text(
-                    "Ya",
+                    "Yes",
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w300,
                       color: Colors.white,
@@ -71,7 +71,7 @@ class _EditProfileState extends State<EditProfile> {
                     Navigator.of(context).pop(false);
                   },
                   child: Text(
-                    "Tidak",
+                    "No",
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w300,
                       color: Colors.white,
@@ -379,17 +379,13 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     setValue();
-    //print('image dari nit state : $image');
   }
 
   @override
   Widget build(BuildContext context) {
-    //print('image setelah build : $image');
-
     return SafeArea(
       child: WillPopScope(
         onWillPop: () async {
@@ -402,181 +398,256 @@ class _EditProfileState extends State<EditProfile> {
         },
         child: isLoading
             ? const SafeArea(
-              child: Scaffold(
-                body: Center(
-          child: CircularProgressIndicator(),
-        ),
-              ),
-            )
+                child: Scaffold(
+                  body: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              )
             : Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            iconTheme: const IconThemeData(color: Colors.black),
-            elevation: 0,
-            title: Text('Edit Profile',
-                style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                    fontSize: 16)),
-          ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Form(
-                key: _formKeyValue,
-                child: Column(
-                  children: [
-                    image.isEmpty
-                        ? gambarSebelumnyaKosong()
-                        : gambarSebelumnyaAda(),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Text(
-                        'Jumlah poin : ${poin.toString()}',
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w300,
+                appBar: AppBar(
+                  backgroundColor: Colors.white,
+                  iconTheme: const IconThemeData(color: Colors.black),
+                  elevation: 0,
+                  title: Text('Edit Profile',
+                      style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w500,
                           color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: TextFormField(
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w300,
-                          color: Colors.black,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: email,
-                          enabled: false,
-                          //label: const Text('example@gmail.com'),
-                          disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            borderSide: BorderSide(
-                              color: Colors.grey.shade400,
-                              width: 1.0,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            borderSide: const BorderSide(
-                              color: Colors.black,
-                              width: 1.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 20, right: 20, bottom: 20),
-                      child: TextFormField(
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w300,
-                          color: Colors.black,
-                        ),
-                        controller: displayNameController,
-                        decoration: InputDecoration(
-                          label: const Text('Display Name'),
-                          hintText: 'Display Name',
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            borderSide: const BorderSide(
-                              color: Colors.black,
-                              width: 1.0,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            borderSide: const BorderSide(
-                              color: Colors.black,
-                              width: 1.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 20, right: 20, bottom: 20),
-                      child: TextFormField(
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w300,
-                          color: Colors.black,
-                        ),
-                        keyboardType: TextInputType.phone,
-                        controller: phoneController,
-                        decoration: InputDecoration(
-                          label: const Text('phone'),
-                          hintText: '0889 - 3456 - 2134',
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            borderSide: const BorderSide(
-                              color: Colors.black,
-                              width: 1.0,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            borderSide: const BorderSide(
-                              color: Colors.black,
-                              width: 1.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 20, right: 20, top: 15),
-                      child: Row(
+                          fontSize: 16)),
+                ),
+                body: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Form(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      key: _formKeyValue,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                  padding: MaterialStateProperty.all(
-                                      const EdgeInsets.only(top: 18, bottom: 18)),
-
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          const Color(0XFFFFC33A)),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: const BorderSide(
-                                        color: Color(0XFFFFC33A),
-                                      ),
-                                    ),
+                          image.isEmpty
+                              ? gambarSebelumnyaKosong()
+                              : gambarSebelumnyaAda(),
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Text(
+                                'Number of points : ${poin.toString()}',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              'Email',
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 20, left: 20, right: 20, top: 8),
+                            child: TextFormField(
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: email,
+                                enabled: false,
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey.shade400,
+                                    width: 1.0,
                                   ),
                                 ),
-                                child: Text(
-                                  'Save',
-                                  style: GoogleFonts.poppins(
-                                      color: Colors.grey.shade800,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.black,
+                                    width: 1.0,
+                                  ),
                                 ),
-                                onPressed: () {
-                                  saveEdit().whenComplete(() {
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (_) => const BottomNavbar(
-                                            currentIndex: 2,
-                                          )),
-                                    );
-                                  });
-                                }),
+                              ),
+                            ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              'Full name',
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 20, left: 20, right: 20, top: 8),
+                            child: TextFormField(
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black,
+                              ),
+                              validator: (value) {
+                                if (value!.isNotEmpty && value.length > 2) {
+                                  return null;
+                                } else if (value.length < 5 &&
+                                    value.isNotEmpty) {
+                                  return 'Your name is too short!';
+                                } else {
+                                  return 'It can\'t be empty!';
+                                }
+                              },
+                              controller: displayNameController,
+                              decoration: InputDecoration(
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.deepOrangeAccent,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.black,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.red,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.red,
+                                    width: 1.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              'Phone number',
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 20, left: 20, right: 20, top: 8),
+                            child: TextFormField(
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black,
+                              ),
+                              keyboardType: TextInputType.phone,
+                              controller: phoneController,
+                              validator: (value) {
+                                if (value!.isNotEmpty && value.length > 2) {
+                                  return null;
+                                } else if (value.length < 5 &&
+                                    value.isNotEmpty) {
+                                  return 'Please enter a valid phone number';
+                                } else {
+                                  return 'It can\'t be empty!';
+                                }
+                              },
+                              decoration: InputDecoration(
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.deepOrangeAccent,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.black,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.red,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.red,
+                                    width: 1.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, right: 20, top: 15),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        padding: MaterialStateProperty.all(
+                                            const EdgeInsets.only(
+                                                top: 18, bottom: 18)),
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                const Color(0XFFFFC33A)),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                            side: const BorderSide(
+                                              color: Color(0XFFFFC33A),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        'Save',
+                                        style: GoogleFonts.poppins(
+                                            color: Colors.grey.shade800,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      onPressed: () {
+                                        saveEdit().whenComplete(() {
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    const BottomNavbar(
+                                                      currentIndex: 2,
+                                                    )),
+                                          );
+                                        });
+                                      }),
+                                ),
+                              ],
+                            ),
+                          )
                         ],
                       ),
-                    )
-                  ],
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
       ),
     );
   }

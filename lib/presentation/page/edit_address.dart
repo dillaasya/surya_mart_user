@@ -42,7 +42,6 @@ class _EditAddressState extends State<EditAddress> {
       cityController.text = value.data()?['city'];
       codeNumberController.text = value.data()?['codeNumber'].toString() ?? '';
       fullAddressController.text = value.data()?['fullAddress'];
-      //cordinatAddressController = TextEditingController();
       detailAddressController.text = value.data()?['detailAddress'];
     });
   }
@@ -51,51 +50,52 @@ class _EditAddressState extends State<EditAddress> {
     return showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          actionsAlignment: MainAxisAlignment.center,
-          title: Text(
-            "Perhatian",
-            style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w500,
-              color: Colors.black,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          content: Text(
-            "Apakah anda yakin ingin kembali? Data yang sudah ada tidak akan disimpan",
-            style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300,
-              color: Colors.black,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text(
-                "Ya",
+              actionsAlignment: MainAxisAlignment.center,
+              title: Text(
+                "Warning!",
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              content: Text(
+                "Are you sure you want to come back? Existing data will not be saved",
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w300,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text(
-                "Tidak",
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w300,
-                  color: Colors.white,
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(
+                    "Yes",
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ],
-        ));
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text(
+                    "No",
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ));
   }
+
   saveEdit() {
     setState(() {
       isLoading = true;
@@ -107,7 +107,6 @@ class _EditAddressState extends State<EditAddress> {
     String newCity = cityController.text;
     String newCodeNumber = codeNumberController.text;
     String newFullAddress = fullAddressController.text;
-    //cordinatAddressController = TextEditingController();
     String newDetailAddress = detailAddressController.text;
 
     FirebaseFirestore.instance
@@ -133,7 +132,6 @@ class _EditAddressState extends State<EditAddress> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setValue();
   }
@@ -164,11 +162,11 @@ class _EditAddressState extends State<EditAddress> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Nama Lengkap',
+                      'Full name',
                       style: GoogleFonts.poppins(fontWeight: FontWeight.w400),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20, top:8),
+                      padding: const EdgeInsets.only(bottom: 20, top: 8),
                       child: TextFormField(
                         controller: recipientNameController,
                         decoration: InputDecoration(
@@ -205,19 +203,19 @@ class _EditAddressState extends State<EditAddress> {
                           if (value!.isNotEmpty && value.length > 2) {
                             return null;
                           } else if (value.length < 5 && value.isNotEmpty) {
-                            return 'Nama anda terlalu singkat!';
+                            return 'Your name is too short!';
                           } else {
-                            return 'Tidak boleh kosong!';
+                            return 'It can\'t be empty!';
                           }
                         },
                       ),
                     ),
                     Text(
-                      'Nomor telepon',
+                      'Phone number',
                       style: GoogleFonts.poppins(fontWeight: FontWeight.w400),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20,top:8),
+                      padding: const EdgeInsets.only(bottom: 20, top: 8),
                       child: TextFormField(
                         keyboardType: TextInputType.phone,
                         controller: phoneController,
@@ -225,9 +223,9 @@ class _EditAddressState extends State<EditAddress> {
                           if (value!.isNotEmpty && value.length > 2) {
                             return null;
                           } else if (value.length < 5 && value.isNotEmpty) {
-                            return 'Masukkan nomor telpon yang valid';
+                            return 'Please enter a valid phone number';
                           } else {
-                            return 'Tidak boleh kosong!';
+                            return 'It can\'t be empty!';
                           }
                         },
                         decoration: InputDecoration(
@@ -263,20 +261,20 @@ class _EditAddressState extends State<EditAddress> {
                       ),
                     ),
                     Text(
-                      'Provinsi',
+                      'Province',
                       style: GoogleFonts.poppins(fontWeight: FontWeight.w400),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20, top:8),
+                      padding: const EdgeInsets.only(bottom: 20, top: 8),
                       child: TextFormField(
                         controller: provinceController,
                         validator: (value) {
                           if (value!.isNotEmpty && value.length > 2) {
                             return null;
                           } else if (value.length < 5 && value.isNotEmpty) {
-                            return 'Masukkan provinsi yang valid';
+                            return 'Please enter a valid province name';
                           } else {
-                            return 'Tidak boleh kosong!';
+                            return 'It can\'t be empty!';
                           }
                         },
                         decoration: InputDecoration(
@@ -312,20 +310,20 @@ class _EditAddressState extends State<EditAddress> {
                       ),
                     ),
                     Text(
-                      'Kota',
+                      'City',
                       style: GoogleFonts.poppins(fontWeight: FontWeight.w400),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20,top:8),
+                      padding: const EdgeInsets.only(bottom: 20, top: 8),
                       child: TextFormField(
                         controller: cityController,
                         validator: (value) {
                           if (value!.isNotEmpty && value.length > 2) {
                             return null;
                           } else if (value.length < 5 && value.isNotEmpty) {
-                            return 'Masukkan nama kota yang valid';
+                            return 'Please enter a valid city name';
                           } else {
-                            return 'Tidak boleh kosong!';
+                            return 'It can\'t be empty!';
                           }
                         },
                         decoration: InputDecoration(
@@ -361,11 +359,11 @@ class _EditAddressState extends State<EditAddress> {
                       ),
                     ),
                     Text(
-                      'Alamat lengkap',
+                      'Full address',
                       style: GoogleFonts.poppins(fontWeight: FontWeight.w400),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20,top:8),
+                      padding: const EdgeInsets.only(bottom: 20, top: 8),
                       child: TextFormField(
                         maxLines: 4,
                         controller: fullAddressController,
@@ -373,9 +371,9 @@ class _EditAddressState extends State<EditAddress> {
                           if (value!.isNotEmpty && value.length > 2) {
                             return null;
                           } else if (value.length < 5 && value.isNotEmpty) {
-                            return 'Masukkan alamat lengkap yang  valid';
+                            return 'Please enter a valid full address';
                           } else {
-                            return 'Tidak boleh kosong!';
+                            return 'It can\'t be empty!';
                           }
                         },
                         decoration: InputDecoration(
@@ -411,11 +409,11 @@ class _EditAddressState extends State<EditAddress> {
                       ),
                     ),
                     Text(
-                      'Kode pos',
+                      'Postal code',
                       style: GoogleFonts.poppins(fontWeight: FontWeight.w400),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20, top:8),
+                      padding: const EdgeInsets.only(bottom: 20, top: 8),
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         controller: codeNumberController,
@@ -423,9 +421,9 @@ class _EditAddressState extends State<EditAddress> {
                           if (value!.isNotEmpty && value.length > 2) {
                             return null;
                           } else if (value.length < 5 && value.isNotEmpty) {
-                            return 'Masukkan kode pos yang valid';
+                            return 'Please enter a valid postal code';
                           } else {
-                            return 'Tidak boleh kosong!';
+                            return 'It can\'t be empty!';
                           }
                         },
                         decoration: InputDecoration(
@@ -461,11 +459,33 @@ class _EditAddressState extends State<EditAddress> {
                       ),
                     ),
                     Text(
-                      'Detail lainnya (opsional)',
+                      'More details (optional)',
                       style: GoogleFonts.poppins(fontWeight: FontWeight.w400),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20,top:8),
+                      padding: const EdgeInsets.only(bottom: 20, top: 8),
+                      child: TextFormField(
+                        controller: detailAddressController,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 1.0,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 1.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20, top: 8),
                       child: TextFormField(
                         controller: detailAddressController,
                         decoration: InputDecoration(
@@ -494,13 +514,16 @@ class _EditAddressState extends State<EditAddress> {
                             child: ElevatedButton(
                                 style: ButtonStyle(
                                     padding: MaterialStateProperty.all(
-                                        const EdgeInsets.only(top: 18, bottom: 18)),
-                                    backgroundColor: MaterialStateProperty.all<Color>(
-                                        const Color(0XFFFFC33A)),
+                                        const EdgeInsets.only(
+                                            top: 18, bottom: 18)),
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            const Color(0XFFFFC33A)),
                                     shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
+                                            RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(18.0),
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
                                             side: const BorderSide(
                                                 color: Color(0XFFFFC33A))))),
                                 child: Text(

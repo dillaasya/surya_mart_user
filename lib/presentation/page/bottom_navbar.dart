@@ -40,8 +40,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
       body: _widgetOptions[_selectedIndex!],
       bottomNavigationBar: GNav(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        tabMargin:
-            const EdgeInsets.only(bottom: 16, top: 16),
+        tabMargin: const EdgeInsets.only(bottom: 16, top: 16),
         tabActiveBorder: Border.all(color: Colors.black),
         gap: 6,
         tabBorderRadius: 40,
@@ -58,12 +57,6 @@ class _BottomNavbarState extends State<BottomNavbar> {
             iconColor: Colors.grey.shade500,
             text: 'Catalogue',
           ),
-          /*GButton(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-            icon: Icons.notifications_none_outlined,
-            iconColor: Colors.grey.shade500,
-            text: 'Notifications',
-          ),*/
           GButton(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             icon: Icons.person_outline,

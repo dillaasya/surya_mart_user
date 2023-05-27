@@ -17,26 +17,29 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   getIdUserForCart() {
     String idUser = Auth().currentUser!.uid;
-    //print('UID USER YANG LOGIN SEKARANG: $idUser');
+
     FirebaseFirestore.instance
         .collection('users')
         .where('uid', isEqualTo: idUser)
         .get()
         .then((value) {
-
       setState(() {
         idDocUser = value.docs.first.id;
         poinUser = value.docs.first.data()['poin'];
       });
     });
-    //print('ID doc user nya : $idDocUser');
   }
-  
-  Future<bool> addressCek(String idUser){
-    Future<bool> x = FirebaseFirestore.instance.collection('users').doc(idUser).collection('address').get().then((value){
+
+  Future<bool> addressCek(String idUser) {
+    Future<bool> x = FirebaseFirestore.instance
+        .collection('users')
+        .doc(idUser)
+        .collection('address')
+        .get()
+        .then((value) {
       if (value.docs.isEmpty) {
         return false;
-      }else{
+      } else {
         return true;
       }
     });
@@ -52,7 +55,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   String? idDocUser;
-  int poinUser=0;
+  int poinUser = 0;
   bool isButtonDisabled = false;
 
   @override
@@ -89,8 +92,8 @@ class _CartPageState extends State<CartPage> {
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {
                           var x = snapshot.data?.docs[index];
-                          //print('nilai id : $x');
-                          return CartCard(cartUser: cartUser, x: x, idDocUser: idDocUser);
+                          return CartCard(
+                              cartUser: cartUser, x: x, idDocUser: idDocUser);
                         },
                       );
                     } else {
@@ -103,15 +106,16 @@ class _CartPageState extends State<CartPage> {
                               'assets/images/img4.png',
                               width: 200,
                             ),
-                        Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Text(
-                            'Wah, keranjang belanjamu masih kosong nih',
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w400,),
-                            textAlign: TextAlign.center,
-                          ),
-                        )
+                            Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Text(
+                                'Oops, your shopping cart is empty!',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            )
                           ],
                         ),
                       );
@@ -158,7 +162,7 @@ class _CartPageState extends State<CartPage> {
                           ),
                         ),
                         child: Text(
-                          'Shop Now',
+                          'Shop now',
                           style: GoogleFonts.poppins(
                               color: Colors.grey.shade800,
                               fontSize: 15,
@@ -196,13 +200,21 @@ class _CartPageState extends State<CartPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text('TOTAL', style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.w700, color: Colors.black),),
+                                Text(
+                                  'TOTAL',
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black),
+                                ),
                                 const SizedBox(
                                   height: 4,
                                 ),
-                                Text('Rp ${total.toString()}',style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.w700, color: Colors.redAccent),),
+                                Text(
+                                  'Rp ${total.toString()}',
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.redAccent),
+                                ),
                               ],
                             )),
                             Expanded(
@@ -217,61 +229,74 @@ class _CartPageState extends State<CartPage> {
                                     addressCek(idDocUser!).then((value) {
                                       if (value) {
                                         Navigator.push(context,
-                                            MaterialPageRoute(builder: (context) {
-                                              return CheckoutPage(
-                                                poinUser: poinUser,
-                                                total: total,
-                                                idUser: idDocUser.toString(),
-                                              );
-                                            }));
-                                      }else{
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return CheckoutPage(
+                                            poinUser: poinUser,
+                                            total: total,
+                                            idUser: idDocUser.toString(),
+                                          );
+                                        }));
+                                      } else {
                                         showDialog(
                                             context: context,
                                             builder: (context) => AlertDialog(
-                                              actionsAlignment: MainAxisAlignment.center,
-                                              title: Text(
-                                                "Perhatian",
-                                                style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.black,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              content: Text(
-                                                "Anda belum mendaftarkan alamat pengiriman, tambahkan alamat baru pada menu Profile > Shipping Address",
-                                                style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w300,
-                                                  color: Colors.black,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              actions: [
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                    Navigator.of(context).pushReplacement(
-                                                      MaterialPageRoute(
-                                                          builder: (_) => const BottomNavbar(
-                                                            currentIndex: 2,
-                                                          )),
-                                                    );
-                                                  },
-                                                  child: Text(
-                                                    "Tambah Alamat",
+                                                  actionsAlignment:
+                                                      MainAxisAlignment.center,
+                                                  title: Text(
+                                                    "Warning!",
                                                     style: GoogleFonts.poppins(
-                                                      fontWeight: FontWeight.w300,
-                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Colors.black,
                                                     ),
+                                                    textAlign: TextAlign.center,
                                                   ),
-                                                ),
-                                              ],
-                                            ));
+                                                  content: Text(
+                                                    "You have not registered a shipping address, add a new address on the Profile > Shipping Address menu",
+                                                    style: GoogleFonts.poppins(
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      color: Colors.black,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  actions: [
+                                                    ElevatedButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        Navigator.of(context)
+                                                            .pushReplacement(
+                                                          MaterialPageRoute(
+                                                              builder: (_) =>
+                                                                  const BottomNavbar(
+                                                                    currentIndex:
+                                                                        2,
+                                                                  )),
+                                                        );
+                                                      },
+                                                      child: Text(
+                                                        "Add new address",
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ));
                                       }
                                     });
-
                                   },
-                                  child: Text('Periksa',style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w700, color: Colors.black),),
+                                  child: Text(
+                                    'Checkout',
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black),
+                                  ),
                                 ),
                               ),
                             ),
@@ -289,4 +314,3 @@ class _CartPageState extends State<CartPage> {
     );
   }
 }
-

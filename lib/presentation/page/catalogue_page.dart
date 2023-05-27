@@ -40,42 +40,42 @@ class _CataloguePageState extends State<CataloguePage> {
     return showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          actionsAlignment: MainAxisAlignment.center,
-          content: Text(
-            "Apakah anda yakin ingin keluar dari aplikasi?",
-            style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300,
-              color: Colors.black,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text(
-                "Ya",
+              actionsAlignment: MainAxisAlignment.center,
+              content: Text(
+                "Are you sure you want to exit the app?",
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w300,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text(
-                "Tidak",
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w300,
-                  color: Colors.white,
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(
+                    "Yes",
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ],
-        ));
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text(
+                    "No",
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ));
   }
 
   @override
@@ -211,8 +211,10 @@ class _CataloguePageState extends State<CataloguePage> {
               );
             } else {
               return Center(
-                child: Text('Tidak ada produk tersedia',style:
-                GoogleFonts.poppins(fontWeight: FontWeight.w400),),
+                child: Text(
+                  'Tidak ada produk tersedia',
+                  style: GoogleFonts.poppins(fontWeight: FontWeight.w400),
+                ),
               );
             }
           } else {
@@ -233,15 +235,15 @@ class _CataloguePageState extends State<CataloguePage> {
         child: DefaultTabController(
           length: listHeaderTab.length,
           child: Scaffold(
-            appBar:
-            PreferredSize(
+            appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(128),
                 child: Container(
                   color: const Color(0xff025ab4),
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left:16, right:16, top:16, bottom:3),
+                        padding: const EdgeInsets.only(
+                            left: 16, right: 16, top: 16, bottom: 3),
                         child: search(),
                       ),
                       TabBar(
@@ -261,7 +263,8 @@ class _CataloguePageState extends State<CataloguePage> {
                   ),
                 )),
             body: TabBarView(
-                children: listHeaderTab.length < 4 ? viewTabDefault : viewTabAll),
+                children:
+                    listHeaderTab.length < 4 ? viewTabDefault : viewTabAll),
           ),
         ),
       ),
@@ -289,7 +292,7 @@ class _CataloguePageState extends State<CataloguePage> {
               color: Colors.white,
               fontSize: 14,
             ),
-            hintText: 'Type name here...',
+            hintText: 'Type product name here...',
             prefixIcon: const Icon(
               Icons.search,
               color: Colors.white,

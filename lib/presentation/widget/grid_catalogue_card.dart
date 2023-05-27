@@ -38,7 +38,6 @@ class _GridCatalogueCardState extends State<GridCatalogueCard> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getProductById();
   }
@@ -68,8 +67,6 @@ class _GridCatalogueCardState extends State<GridCatalogueCard> {
                     children: [
                       Center(
                         child: SizedBox(
-                          //color: Colors.grey,
-                          //width: 140,
                           height: 100,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
@@ -121,10 +118,9 @@ class _GridCatalogueCardState extends State<GridCatalogueCard> {
                     height: 100,
                     child: Center(
                       child: Text(
-                        'Tidak Tersedia',
+                        'Not available',
                         style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white),
+                            fontWeight: FontWeight.w600, color: Colors.white),
                       ),
                     ),
                   )
