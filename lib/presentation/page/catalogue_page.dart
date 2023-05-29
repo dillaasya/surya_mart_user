@@ -21,10 +21,13 @@ class _CataloguePageState extends State<CataloguePage> {
         .snapshots()
         .forEach((element) {
       for (var element in element.docs) {
-        setState(() {
-          listHeaderTab.add(element.data()['name']);
-          listCategoryName.add(element.data()['name']);
-        });
+        if (mounted) {
+          setState(() {
+            listHeaderTab.add(element.data()['name']);
+            listCategoryName.add(element.data()['name']);
+          });
+        }
+
       }
     });
   }
