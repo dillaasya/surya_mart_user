@@ -124,6 +124,7 @@ class _AddressPageState extends State<AddressPage> {
               .collection('users')
               .doc(widget.id)
               .collection('address')
+              .orderBy('isPrimary', descending: true)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {

@@ -26,6 +26,7 @@ class ReviewPage extends StatelessWidget {
           stream: FirebaseFirestore.instance
               .collection('reviews')
               .where('uid', isEqualTo: Auth().currentUser!.uid)
+              .orderBy('dateCreated', descending: true)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -70,6 +71,7 @@ class ReviewPage extends StatelessWidget {
                                             fontWeight: FontWeight.w300),
                                       ),
                                       RatingBar.builder(
+                                        ignoreGestures: true,
                                         initialRating: x['rate'],
                                         direction: Axis.horizontal,
                                         allowHalfRating: true,
