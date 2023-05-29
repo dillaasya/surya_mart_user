@@ -34,7 +34,6 @@ class _CataloguePageState extends State<CataloguePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getListCategory();
   }
