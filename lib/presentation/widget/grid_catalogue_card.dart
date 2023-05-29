@@ -5,6 +5,7 @@ import 'package:surya_mart_v1/presentation/page/detail_page.dart';
 
 class GridCatalogueCard extends StatefulWidget {
   final String? id;
+
   const GridCatalogueCard(this.id, {Key? key}) : super(key: key);
 
   @override
@@ -129,21 +130,33 @@ class _GridCatalogueCardState extends State<GridCatalogueCard> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
-                    child: SizedBox(
-                      //color: Colors.grey,
-                      //width: 140,
-                      height: 100,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: image == null
-                            ? const Icon(Icons.image_not_supported_outlined)
-                            : Image.network(
+                  SizedBox(
+                    height: 100,
+                    child: image == null
+                        ? Row(
+                            children: [
+                              Expanded(
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(10),
+                                            topLeft: Radius.circular(10),),
+                                        color: Colors.grey.shade300,
+                                      ),
+                                      height: 100,
+                                      child: const Icon(
+                                          Icons.image_not_supported_outlined))),
+                            ],
+                          )
+                        : Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
                                 image ?? '',
                                 fit: BoxFit.cover,
                               ),
-                      ),
-                    ),
+                            ),
+                          ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
