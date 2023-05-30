@@ -138,9 +138,10 @@ class _GridCatalogueCardState extends State<GridCatalogueCard> {
                               Expanded(
                                   child: Container(
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(10),
-                                            topLeft: Radius.circular(10),),
+                                        borderRadius: const BorderRadius.only(
+                                          topRight: Radius.circular(10),
+                                          topLeft: Radius.circular(10),
+                                        ),
                                         color: Colors.grey.shade300,
                                       ),
                                       height: 100,

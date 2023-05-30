@@ -139,13 +139,14 @@ class _ListCardState extends State<ListCard> {
                         width: 120,
                         child: ClipRRect(
                           borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(14),
-                              ),
+                            top: Radius.circular(14),
+                          ),
                           child: image == null
                               ? Container(
-                            color: Colors.grey.shade300,
-                            child: Icon(Icons.image_not_supported_outlined),
-                          )
+                                  color: Colors.grey.shade300,
+                                  child: const Icon(
+                                      Icons.image_not_supported_outlined),
+                                )
                               : Image.network(
                                   image ?? '',
                                   fit: BoxFit.scaleDown,

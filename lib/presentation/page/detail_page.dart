@@ -174,7 +174,11 @@ class _DetailPageState extends State<DetailPage> {
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.width,
                               child: x?['image'] == null
-                                  ? Container(child: Icon(Icons.image_not_supported_outlined, size: MediaQuery.of(context).size.width*0.3,),)
+                                  ? Icon(
+                                      Icons.image_not_supported_outlined,
+                                      size: MediaQuery.of(context).size.width *
+                                          0.3,
+                                    )
                                   : ClipRRect(
                                       child: Image.network(x?['image'] ?? '',
                                           fit: BoxFit.fill),

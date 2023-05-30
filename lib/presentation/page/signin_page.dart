@@ -188,8 +188,7 @@ class _SigninPageState extends State<SigninPage> {
                               ),
                             ),
                             Padding(
-                              padding:
-                              const EdgeInsets.symmetric(vertical: 10),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
                               child: TextFormField(
                                 obscureText: visibility,
                                 validator: (value) {
@@ -199,7 +198,6 @@ class _SigninPageState extends State<SigninPage> {
                                     return 'It can\'t be empty!';
                                   }
                                 },
-
                                 style: GoogleFonts.poppins(),
                                 controller: passwordController,
                                 decoration: InputDecoration(
@@ -213,9 +211,9 @@ class _SigninPageState extends State<SigninPage> {
                                       },
                                       icon: visibility == false
                                           ? const Icon(
-                                          Icons.visibility_outlined)
+                                              Icons.visibility_outlined)
                                           : const Icon(
-                                          Icons.visibility_off_outlined)),
+                                              Icons.visibility_off_outlined)),
                                   hintText: "********",
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(18),
@@ -245,7 +243,6 @@ class _SigninPageState extends State<SigninPage> {
                                       width: 1.0,
                                     ),
                                   ),
-
                                 ),
                               ),
                             ),

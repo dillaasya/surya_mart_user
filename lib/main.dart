@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
             stream: Auth().authChanges,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return MaterialApp(
+                return const MaterialApp(
                   home: BottomNavbar(
                     currentIndex: 0,
                   ),

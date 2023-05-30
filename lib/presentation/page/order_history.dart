@@ -351,8 +351,8 @@ class _OrderHistoryState extends State<OrderHistory> {
                                           barrierDismissible: true,
                                           context: context,
                                           builder: (context) {
-                                            Future.delayed(Duration(seconds: 2),
-                                                () {
+                                            Future.delayed(
+                                                const Duration(seconds: 2), () {
                                               Navigator.of(context).pop(true);
                                             });
                                             return AlertDialog(
@@ -744,8 +744,8 @@ class _OrderHistoryState extends State<OrderHistory> {
                                           barrierDismissible: true,
                                           context: context,
                                           builder: (context) {
-                                            Future.delayed(Duration(seconds: 2),
-                                                () {
+                                            Future.delayed(
+                                                const Duration(seconds: 2), () {
                                               Navigator.of(context).pop(true);
                                             });
                                             return AlertDialog(

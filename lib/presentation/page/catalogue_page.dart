@@ -27,7 +27,6 @@ class _CataloguePageState extends State<CataloguePage> {
             listCategoryName.add(element.data()['name']);
           });
         }
-
       }
     });
   }

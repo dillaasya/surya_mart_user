@@ -179,9 +179,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: Colors.white, fontWeight: FontWeight.w300),
             ),
           ),
-          const SizedBox(height: 4,),
-          Text('${user['poin'].toString()} points', style: GoogleFonts.poppins(
-              color: Colors.white, fontWeight: FontWeight.w300),),
+          const SizedBox(
+            height: 4,
+          ),
+          Text(
+            '${user['poin'].toString()} points',
+            style: GoogleFonts.poppins(
+                color: Colors.white, fontWeight: FontWeight.w300),
+          ),
         ],
       ),
     );

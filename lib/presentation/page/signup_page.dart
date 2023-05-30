@@ -197,13 +197,17 @@ class _SignupPageState extends State<SignupPage> {
                                   },
                                   style: GoogleFonts.poppins(),
                                   inputFormatters: [
-                                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z|\\ ]')),
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp('[a-zA-Z|\\ ]')),
                                     LengthLimitingTextInputFormatter(25),
                                   ],
                                   controller: usernameController,
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.only(
-                                        left: 24, top: 18, bottom: 18, right: 24),
+                                        left: 24,
+                                        top: 18,
+                                        bottom: 18,
+                                        right: 24),
                                     hintText: "Syana Mutia",
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(18),
@@ -233,7 +237,6 @@ class _SignupPageState extends State<SignupPage> {
                                         width: 1.0,
                                       ),
                                     ),
-
                                   ),
                                 ),
                               ),
@@ -264,7 +267,10 @@ class _SignupPageState extends State<SignupPage> {
                                   controller: emailController,
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.only(
-                                        left: 24, top: 18, bottom: 18, right: 24),
+                                        left: 24,
+                                        top: 18,
+                                        bottom: 18,
+                                        right: 24),
                                     hintText: "example@gmail.com",
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(18),
@@ -330,10 +336,12 @@ class _SignupPageState extends State<SignupPage> {
                                       return 'It can\'t be empty!';
                                     }
                                   },
-
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.only(
-                                        left: 24, top: 18, bottom: 18, right: 24),
+                                        left: 24,
+                                        top: 18,
+                                        bottom: 18,
+                                        right: 24),
                                     hintText: '0812- xxxx - xxxx',
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(18.0),
@@ -391,7 +399,10 @@ class _SignupPageState extends State<SignupPage> {
                                   controller: passwordController,
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.only(
-                                        left: 24, top: 18, bottom: 18, right: 24),
+                                        left: 24,
+                                        top: 18,
+                                        bottom: 18,
+                                        right: 24),
                                     suffixIcon: IconButton(
                                         onPressed: () {
                                           setState(() {
@@ -432,7 +443,6 @@ class _SignupPageState extends State<SignupPage> {
                                         width: 1.0,
                                       ),
                                     ),
-
                                   ),
                                 ),
                               ),

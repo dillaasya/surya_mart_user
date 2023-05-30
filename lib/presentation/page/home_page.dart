@@ -34,42 +34,42 @@ class _HomePageState extends State<HomePage> {
     return showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          actionsAlignment: MainAxisAlignment.center,
-          content: Text(
-            "Are you sure you want to exit the app?",
-            style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300,
-              color: Colors.black,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text(
-                "Yes",
+              actionsAlignment: MainAxisAlignment.center,
+              content: Text(
+                "Are you sure you want to exit the app?",
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w300,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text(
-                "No",
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w300,
-                  color: Colors.white,
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(
+                    "Yes",
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ],
-        ));
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text(
+                    "No",
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ));
   }
 
   @override
