@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:surya_mart_v1/data/service/auth.dart';
 import 'package:surya_mart_v1/presentation/page/bottom_navbar.dart';
 import 'package:surya_mart_v1/presentation/page/signin_page.dart';
+import 'package:flutter/services.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -195,8 +196,14 @@ class _SignupPageState extends State<SignupPage> {
                                     }
                                   },
                                   style: GoogleFonts.poppins(),
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z|\\ ]')),
+                                    LengthLimitingTextInputFormatter(25),
+                                  ],
                                   controller: usernameController,
                                   decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.only(
+                                        left: 24, top: 18, bottom: 18, right: 24),
                                     hintText: "Syana Mutia",
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(18),
@@ -226,11 +233,7 @@ class _SignupPageState extends State<SignupPage> {
                                         width: 1.0,
                                       ),
                                     ),
-                                    contentPadding: const EdgeInsets.only(
-                                        left: 24,
-                                        top: 18,
-                                        bottom: 18,
-                                        right: 24),
+
                                   ),
                                 ),
                               ),
@@ -260,6 +263,8 @@ class _SignupPageState extends State<SignupPage> {
                                   style: GoogleFonts.poppins(),
                                   controller: emailController,
                                   decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.only(
+                                        left: 24, top: 18, bottom: 18, right: 24),
                                     hintText: "example@gmail.com",
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(18),
@@ -289,11 +294,6 @@ class _SignupPageState extends State<SignupPage> {
                                         width: 1.0,
                                       ),
                                     ),
-                                    contentPadding: const EdgeInsets.only(
-                                        left: 24,
-                                        top: 18,
-                                        bottom: 18,
-                                        right: 24),
                                   ),
                                 ),
                               ),
@@ -315,6 +315,10 @@ class _SignupPageState extends State<SignupPage> {
                                     color: Colors.black,
                                   ),
                                   keyboardType: TextInputType.phone,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(14),
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
                                   controller: phoneController,
                                   validator: (value) {
                                     if (value!.isNotEmpty && value.length > 2) {
@@ -326,7 +330,10 @@ class _SignupPageState extends State<SignupPage> {
                                       return 'It can\'t be empty!';
                                     }
                                   },
+
                                   decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.only(
+                                        left: 24, top: 18, bottom: 18, right: 24),
                                     hintText: '0812- xxxx - xxxx',
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(18.0),
@@ -373,9 +380,18 @@ class _SignupPageState extends State<SignupPage> {
                                     const EdgeInsets.symmetric(vertical: 10),
                                 child: TextFormField(
                                   obscureText: visibility,
+                                  validator: (value) {
+                                    if (value!.isNotEmpty && value.length > 2) {
+                                      return null;
+                                    } else {
+                                      return 'It can\'t be empty!';
+                                    }
+                                  },
                                   style: GoogleFonts.poppins(),
                                   controller: passwordController,
                                   decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.only(
+                                        left: 24, top: 18, bottom: 18, right: 24),
                                     suffixIcon: IconButton(
                                         onPressed: () {
                                           setState(() {
@@ -416,11 +432,7 @@ class _SignupPageState extends State<SignupPage> {
                                         width: 1.0,
                                       ),
                                     ),
-                                    contentPadding: const EdgeInsets.only(
-                                        left: 24,
-                                        top: 18,
-                                        bottom: 18,
-                                        right: 24),
+
                                   ),
                                 ),
                               ),

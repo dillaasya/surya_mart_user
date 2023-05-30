@@ -297,7 +297,7 @@ class _AddressPageState extends State<AddressPage> {
                   padding: const EdgeInsets.all(20),
                   child: Center(
                     child: Text(
-                      'You haven\'t added an address yet! Click the icon in the bottom-right corner to add a new address',
+                      'You haven\'t added address yet! Click the icon in the bottom-right corner to add a new address',
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w400,
                       ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surya_mart_v1/data/service/auth.dart';
 import 'package:image_picker/image_picker.dart';
@@ -502,6 +503,11 @@ class _EditProfileState extends State<EditProfile> {
                                   return 'It can\'t be empty!';
                                 }
                               },
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[a-zA-Z|\\ ]')),
+                                LengthLimitingTextInputFormatter(25),
+                              ],
                               controller: displayNameController,
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
@@ -551,6 +557,11 @@ class _EditProfileState extends State<EditProfile> {
                                 fontWeight: FontWeight.w300,
                                 color: Colors.black,
                               ),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[0-9]')),
+                                LengthLimitingTextInputFormatter(14),
+                              ],
                               keyboardType: TextInputType.phone,
                               controller: phoneController,
                               validator: (value) {

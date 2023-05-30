@@ -80,7 +80,7 @@ class IntroductionPage extends StatelessWidget {
     );
   }
 
-  void goToHome(context) => Navigator.of(context).push(
+  void goToHome(context) => Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const SigninPage()),
       );
 
