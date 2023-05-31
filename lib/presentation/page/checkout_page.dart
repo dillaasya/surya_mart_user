@@ -66,8 +66,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   num totalWeight = 0;
   num totalPrice = 0;
-  String? idOrder;
-  String? shippingAddress;
+  String phone='';
+  String shippingAddress='';
   var listCart = [];
   int poin = 0;
   int potonganPoin = 0;
@@ -76,7 +76,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Future<void> saveOrder() async {
     await deleteAllCart().whenComplete(() {
       FirebaseFirestore.instance.collection('users').doc(widget.idUser).update({
-        'poin': FieldValue.increment(-poin),
+
         'shoppingCart': 0,
       });
     }).whenComplete(() {
@@ -85,7 +85,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         'paymentMethod': 'COD',
         'shippingAddress': shippingAddress,
         'statusOrder': 'PACKED',
-        'potongannPoin': potonganPoin,
+        'phone' : phone,
         'subTotal': widget.total,
         'totalPrice': widget.total - potonganPoin,
         'deliveryFee': ongkir,
@@ -175,12 +175,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                     .data!.docs.isNotEmpty) {
                                                   var x =
                                                       snapshot.data!.docs.first;
+
+                                                  phone=x.data()['phone'];
                                                   shippingAddress = x.data()[
                                                           'fullAddress'] +
                                                       ' ' +
                                                       x.data()[
-                                                          'detailAddress'] +
-                                                      ' ' +
+                                                          'detailAddress'] + ' ' +
                                                       x.data()['city'] +
                                                       ' ' +
                                                       x.data()['province'] +
@@ -437,419 +438,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Redeem Points',
-                        style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'You have ${widget.poinUser} points',
-                                style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.w500, fontSize: 9),
-                              ),
-                              Text(
-                                'Spend above Rp 10.000 and use at least 100 points to get a discount',
-                                style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 9,
-                                    color: Colors.orangeAccent),
-                              ),
-                            ],
-                          )),
-                          InkWell(
-                            onTap: widget.poinUser >= 100
-                                ? widget.total > 10000
-                                    ? () {
-                                        showModalBottomSheet(
-                                          isScrollControlled: true,
-                                          context: context,
-                                          builder: (context) {
-                                            return SingleChildScrollView(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(20),
-                                                child: Column(
-                                                  children: [
-                                                    InkWell(
-                                                      onTap:
-                                                          widget.poinUser >= 100
-                                                              ? widget.total >=
-                                                                      10000
-                                                                  ? () {
-                                                                      setState(
-                                                                          () {
-                                                                        poin =
-                                                                            100;
-                                                                        potonganPoin =
-                                                                            10000;
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      });
-                                                                    }
-                                                                  : () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                      ScaffoldMessenger.of(
-                                                                              context)
-                                                                          .showSnackBar(
-                                                                              SnackBar(
-                                                                        content:
-                                                                            Text(
-                                                                          'You do not reach a minimum spend of Rp 10.000',
-                                                                          style:
-                                                                              GoogleFonts.poppins(
-                                                                            fontWeight:
-                                                                                FontWeight.w400,
-                                                                          ),
-                                                                        ),
-                                                                        duration:
-                                                                            const Duration(seconds: 2),
-                                                                      ));
-                                                                    }
-                                                              : null,
-                                                      child: Container(
-                                                        color:
-                                                            widget.poinUser >=
-                                                                    100
-                                                                ? Colors.blue
-                                                                : Colors.grey,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                            '100',
-                                                            style: GoogleFonts
-                                                                .poppins(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                    color: Colors
-                                                                        .white),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const Divider(),
-                                                    InkWell(
-                                                      onTap:
-                                                          widget.poinUser >= 200
-                                                              ? widget.total >=
-                                                                      20000
-                                                                  ? () {
-                                                                      setState(
-                                                                          () {
-                                                                        poin =
-                                                                            200;
-                                                                        potonganPoin =
-                                                                            20000;
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      });
-                                                                    }
-                                                                  : () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                      ScaffoldMessenger.of(
-                                                                              context)
-                                                                          .showSnackBar(
-                                                                              SnackBar(
-                                                                        content: Text(
-                                                                            'You do not reach a minimum spend of Rp 20.000',
-                                                                            style:
-                                                                                GoogleFonts.poppins(
-                                                                              fontWeight: FontWeight.w400,
-                                                                            )),
-                                                                        duration:
-                                                                            const Duration(seconds: 2),
-                                                                      ));
-                                                                    }
-                                                              : null,
-                                                      child: Container(
-                                                        color:
-                                                            widget.poinUser >=
-                                                                    200
-                                                                ? Colors.blue
-                                                                : Colors.grey,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                            '200',
-                                                            style: GoogleFonts
-                                                                .poppins(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                    color: Colors
-                                                                        .white),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const Divider(),
-                                                    InkWell(
-                                                      onTap:
-                                                          widget.poinUser >= 300
-                                                              ? widget.total >=
-                                                                      30000
-                                                                  ? () {
-                                                                      setState(
-                                                                          () {
-                                                                        poin =
-                                                                            300;
-                                                                        potonganPoin =
-                                                                            30000;
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      });
-                                                                    }
-                                                                  : () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                      ScaffoldMessenger.of(
-                                                                              context)
-                                                                          .showSnackBar(
-                                                                              SnackBar(
-                                                                        content: Text(
-                                                                            'You do not reach a minimum spend of Rp 30.000',
-                                                                            style:
-                                                                                GoogleFonts.poppins(
-                                                                              fontWeight: FontWeight.w400,
-                                                                            )),
-                                                                        duration:
-                                                                            const Duration(seconds: 2),
-                                                                      ));
-                                                                    }
-                                                              : null,
-                                                      child: Container(
-                                                        color:
-                                                            widget.poinUser >=
-                                                                    300
-                                                                ? Colors.blue
-                                                                : Colors.grey,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                            '300',
-                                                            style: GoogleFonts
-                                                                .poppins(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                    color: Colors
-                                                                        .white),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const Divider(),
-                                                    InkWell(
-                                                      onTap:
-                                                          widget.poinUser >= 400
-                                                              ? widget.total >=
-                                                                      40000
-                                                                  ? () {
-                                                                      setState(
-                                                                          () {
-                                                                        poin =
-                                                                            400;
-                                                                        potonganPoin =
-                                                                            40000;
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      });
-                                                                    }
-                                                                  : () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                      ScaffoldMessenger.of(
-                                                                              context)
-                                                                          .showSnackBar(
-                                                                              SnackBar(
-                                                                        content: Text(
-                                                                            'You do not reach a minimum spend of Rp 40.000',
-                                                                            style:
-                                                                                GoogleFonts.poppins(
-                                                                              fontWeight: FontWeight.w400,
-                                                                            )),
-                                                                        duration:
-                                                                            const Duration(seconds: 2),
-                                                                      ));
-                                                                    }
-                                                              : null,
-                                                      child: Container(
-                                                        color:
-                                                            widget.poinUser >=
-                                                                    400
-                                                                ? Colors.blue
-                                                                : Colors.grey,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                            '400',
-                                                            style: GoogleFonts
-                                                                .poppins(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                    color: Colors
-                                                                        .white),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const Divider(),
-                                                    InkWell(
-                                                      onTap:
-                                                          widget.poinUser >= 500
-                                                              ? widget.total >=
-                                                                      50000
-                                                                  ? () {
-                                                                      setState(
-                                                                          () {
-                                                                        poin =
-                                                                            500;
-                                                                        potonganPoin =
-                                                                            50000;
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      });
-                                                                    }
-                                                                  : () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                      ScaffoldMessenger.of(
-                                                                              context)
-                                                                          .showSnackBar(
-                                                                              SnackBar(
-                                                                        content: Text(
-                                                                            'You do not reach a minimum spend of Rp 50.000',
-                                                                            style:
-                                                                                GoogleFonts.poppins(
-                                                                              fontWeight: FontWeight.w400,
-                                                                            )),
-                                                                        duration:
-                                                                            const Duration(seconds: 2),
-                                                                      ));
-                                                                    }
-                                                              : null,
-                                                      child: Container(
-                                                        color:
-                                                            widget.poinUser >=
-                                                                    500
-                                                                ? Colors.blue
-                                                                : Colors.grey,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                            '500',
-                                                            style: GoogleFonts
-                                                                .poppins(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                    color: Colors
-                                                                        .white),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    //Divider(),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      }
-                                    : null
-                                : null,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: widget.poinUser > 100
-                                    ? widget.total > 10000
-                                        ? Colors.lightBlue.shade300
-                                        : Colors.grey
-                                    : Colors.grey,
-                              ),
-                              child: potonganPoin == 0
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Text(
-                                        'Reedem',
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.white),
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Text(
-                                        '$poin Points',
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                            ),
-                          )
-                        ],
-                      ),
-                      poin == 0
-                          ? Container()
-                          : Center(
-                              child: Column(
-                                children: [
-                                  const Divider(),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        poin = 0;
-                                        potonganPoin = 0;
-                                      });
-                                    },
-                                    child: Text(
-                                      'Cancel reedem',
-                                      style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w300,
-                                          color: Colors.redAccent),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Container(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
                         'Payment Details',
                         style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
                       ),
@@ -864,11 +452,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             children: [
                               Text(
                                 'SubTotal Products',
-                                style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.w300),
-                              ),
-                              Text(
-                                ' Points Discount',
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w300),
                               ),
@@ -892,26 +475,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w300),
                               ),
-                              potonganPoin == 0
-                                  ? Text(
-                                      'Rp 0',
-                                      style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w300,
-                                          color: Colors.redAccent),
-                                    )
-                                  : Text(
-                                      '- Rp $potonganPoin',
-                                      style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w300,
-                                          color: Colors.redAccent),
-                                    ),
+
                               Text(
                                 'Rp $ongkir',
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w300),
                               ),
                               Text(
-                                'Rp ${widget.total - potonganPoin}',
+                                'Rp ${widget.total}',
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w500,
                                     color: Colors.redAccent),

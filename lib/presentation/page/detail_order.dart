@@ -67,6 +67,8 @@ class _DetailOrderState extends State<DetailOrder> {
                       padding: const EdgeInsets.only(
                           left: 20, right: 20, bottom: 20, top: 10),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Row(
                             children: [
@@ -83,7 +85,17 @@ class _DetailOrderState extends State<DetailOrder> {
                             x?['shippingAddress'],
                             style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w300),
+
                           ),
+                          const SizedBox(height: 4),
+                          Text(
+                           '${x?['phone']}',
+                            style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w300),
+
+                          ),
+
+
                         ],
                       ),
                     ),
