@@ -357,7 +357,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             ? const Icon(Icons
                                                 .image_not_supported_outlined)
                                             : Image.network(
-                                                x.data()['picture']),
+                                                x.data()['picture'], errorBuilder: (context, error, stackTrace) {
+                                          return Center(
+                                            child: Text('No Internet',style: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.w300,
+                                                fontSize: 8),),
+                                          );
+                                                },),
                                       ),
                                     ),
                                     const SizedBox(

@@ -181,7 +181,13 @@ class _DetailPageState extends State<DetailPage> {
                                     )
                                   : ClipRRect(
                                       child: Image.network(x?['image'] ?? '',
-                                          fit: BoxFit.fill),
+                                          fit: BoxFit.fill, errorBuilder: (context, error, stackTrace) {
+                                            return Center(
+                                              child: Text('No Internet',style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 8),),
+                                            );
+                                          },),
                                     ),
                             ),
                           ),
