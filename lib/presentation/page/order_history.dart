@@ -103,7 +103,13 @@ class _OrderHistoryState extends State<OrderHistory> {
                                         child: first['picture'] == null
                                             ? const Icon(Icons
                                                 .image_not_supported_outlined)
-                                            : Image.network(first['picture']),
+                                            : Image.network(first['picture'],errorBuilder: (context, error, stackTrace) {
+                                          return Center(
+                                            child: Text('No Internet',style: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.w300,
+                                                fontSize: 8),),
+                                          );
+                                        },),
                                       ),
                                     ),
                                     const SizedBox(width: 8),

@@ -39,294 +39,297 @@ class _DetailOrderState extends State<DetailOrder> {
                 fontWeight: FontWeight.w500, color: Colors.black, fontSize: 16),
           ),
         ),
-        body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('orders')
-              .doc(widget.idOrder)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.connectionState == ConnectionState.active) {
-              var x = snapshot.data;
+        body: SingleChildScrollView(
+          child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('orders')
+                .doc(widget.idOrder)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.connectionState == ConnectionState.active) {
+                var x = snapshot.data;
 
-              List z = x?['productItem'];
+                List z = x?['productItem'];
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                          top: BorderSide(width: 5, color: Colors.blue),
-                        ),
-                        color: Colors.white),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 20, right: 20, bottom: 20, top: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.location_on_outlined),
-                              Text(
-                                'Shipping Address',
-                                style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                          border: Border(
+                            top: BorderSide(width: 5, color: Colors.blue),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            x?['shippingAddress'],
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w300),
-
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                           '${x?['phone']}',
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w300),
-
-                          ),
-
-
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Container(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: z.length,
-                            itemBuilder: (context, index) {
-                              var y = z[index];
-                              return Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 60,
-                                        height: 60,
-                                        decoration: BoxDecoration(
-                                            //color: Colors.grey.shade200,
-                                            border: Border.all(
-                                                width: 0.5, color: Colors.grey),
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          child: y['picture'] == null
-                                              ? const Icon(Icons
-                                                  .image_not_supported_outlined)
-                                              : Image.network(y['picture'], errorBuilder: (context, error, stackTrace) {
-                                            return Center(
-                                              child: Text('No Internet',style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w300,
-                                                  fontSize: 8),),
-                                            );
-                                          },),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                '${y['productName']}',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.clip,
-                                                style: GoogleFonts.poppins(
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                              Text(
-                                                'Rp ${y['price']} x${y['qty']}',
-                                                style: GoogleFonts.poppins(
-                                                    fontWeight:
-                                                        FontWeight.w300),
-                                              ),
-                                            ]),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          const Divider(),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 16, right: 16, bottom: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          color: Colors.white),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20, right: 20, bottom: 20, top: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
                               children: [
+                                const Icon(Icons.location_on_outlined),
                                 Text(
-                                  'Total Spend',
+                                  'Shipping Address',
                                   style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w300),
-                                ),
-                                Text(
-                                  'Rp ${x?['totalPrice'].toString()}',
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w300),
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ],
                             ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.credit_card_rounded),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                'Payment Method',
-                                style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                          Expanded(
-                              child: Text(
-                            x?['paymentMethod'],
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w300,
+                            const SizedBox(height: 8),
+                            Text(
+                              x?['shippingAddress'],
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w300),
+
                             ),
-                            textAlign: TextAlign.end,
-                          )),
-                        ],
+                            const SizedBox(height: 4),
+                            Text(
+                             '${x?['phone']}',
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w300),
+
+                            ),
+
+
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  x!['isReviewed']
-                      ? Container(
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: Theme(
-                              data: ThemeData()
-                                  .copyWith(dividerColor: Colors.transparent),
-                              child: ExpansionTile(
-                                iconColor: Colors.black,
-                                expandedAlignment: Alignment.topLeft,
-                                title: Text(
-                                  'Your Review',
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black),
-                                ),
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 16, right: 16, bottom: 16),
-                                    child: StreamBuilder(
-                                      stream: FirebaseFirestore.instance
-                                          .collection('reviews')
-                                          .where('idOrder', isEqualTo: x.id)
-                                          .snapshots(),
-                                      builder: (context, snapshot) {
-                                        var x = snapshot.data?.docs.first;
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return const Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        } else if (snapshot.connectionState ==
-                                            ConnectionState.active) {
-                                          if (snapshot.data!.docs.isNotEmpty) {
-                                            return Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                    const SizedBox(height: 8),
+                    Container(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: z.length,
+                              itemBuilder: (context, index) {
+                                var y = z[index];
+                                return Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: 60,
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                              //color: Colors.grey.shade200,
+                                              border: Border.all(
+                                                  width: 0.5, color: Colors.grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(8)),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            child: y['picture'] == null
+                                                ? const Icon(Icons
+                                                    .image_not_supported_outlined)
+                                                : Image.network(y['picture'], errorBuilder: (context, error, stackTrace) {
+                                              return Center(
+                                                child: Text('No Internet',style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.w300,
+                                                    fontSize: 8),),
+                                              );
+                                            },),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        Expanded(
+                                          child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                RatingBar.builder(
-                                                  ignoreGestures: true,
-                                                  initialRating: x!['rate'],
-                                                  direction: Axis.horizontal,
-                                                  allowHalfRating: true,
-                                                  itemCount: 5,
-                                                  itemSize: 25,
-                                                  itemBuilder: (context, _) =>
-                                                      const Icon(
-                                                    Icons.star,
-                                                    color: Colors.amber,
-                                                  ),
-                                                  onRatingUpdate:
-                                                      (double value) {
-                                                    null;
-                                                  },
-                                                ),
-                                                const SizedBox(
-                                                  height: 4,
+                                                Text(
+                                                  '${y['productName']}',
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.clip,
+                                                  style: GoogleFonts.poppins(
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                                 ),
                                                 Text(
-                                                  x.data()['review'],
+                                                  'Rp ${y['price']} x${y['qty']}',
                                                   style: GoogleFonts.poppins(
                                                       fontWeight:
                                                           FontWeight.w300),
-                                                  textAlign: TextAlign.justify,
                                                 ),
-                                              ],
-                                            );
-                                          } else {
-                                            return const Text('No reviews');
-                                          }
-                                        } else {
-                                          return const Text('eror');
-                                        }
-                                      },
+                                              ]),
+                                        ),
+                                      ],
                                     ),
+                                  ),
+                                );
+                              },
+                            ),
+                            const Divider(),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 16, right: 16, bottom: 12),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Total Spend',
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                  Text(
+                                    'Rp ${x?['totalPrice'].toString()}',
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w300),
                                   ),
                                 ],
                               ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(Icons.credit_card_rounded),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  'Payment Method',
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
                             ),
-                          ),
-                        )
-                      : Container(),
-                ],
-              );
-            } else {
-              return const Text('eror');
-            }
-          },
+                            Expanded(
+                                child: Text(
+                              x?['paymentMethod'],
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w300,
+                              ),
+                              textAlign: TextAlign.end,
+                            )),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    x!['isReviewed']
+                        ? Container(
+                            color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Theme(
+                                data: ThemeData()
+                                    .copyWith(dividerColor: Colors.transparent),
+                                child: ExpansionTile(
+                                  iconColor: Colors.black,
+                                  expandedAlignment: Alignment.topLeft,
+                                  title: Text(
+                                    'Your Review',
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black),
+                                  ),
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 16, right: 16, bottom: 16),
+                                      child: StreamBuilder(
+                                        stream: FirebaseFirestore.instance
+                                            .collection('reviews')
+                                            .where('idOrder', isEqualTo: x.id)
+                                            .snapshots(),
+                                        builder: (context, snapshot) {
+                                          var x = snapshot.data?.docs.first;
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const Center(
+                                              child: CircularProgressIndicator(),
+                                            );
+                                          } else if (snapshot.connectionState ==
+                                              ConnectionState.active) {
+                                            if (snapshot.data!.docs.isNotEmpty) {
+                                              return Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  RatingBar.builder(
+                                                    ignoreGestures: true,
+                                                    initialRating: x!['rate'],
+                                                    direction: Axis.horizontal,
+                                                    allowHalfRating: true,
+                                                    itemCount: 5,
+                                                    itemSize: 25,
+                                                    itemBuilder: (context, _) =>
+                                                        const Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                    ),
+                                                    onRatingUpdate:
+                                                        (double value) {
+                                                      null;
+                                                    },
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 4,
+                                                  ),
+                                                  Text(
+                                                    x.data()['review'],
+                                                    style: GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w300),
+                                                    textAlign: TextAlign.justify,
+                                                  ),
+                                                ],
+                                              );
+                                            } else {
+                                              return const Text('No reviews');
+                                            }
+                                          } else {
+                                            return const Text('eror');
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
+                  ],
+                );
+              } else {
+                return const Text('eror');
+              }
+            },
+          ),
         ),
         bottomNavigationBar: StreamBuilder(
           stream: FirebaseFirestore.instance
