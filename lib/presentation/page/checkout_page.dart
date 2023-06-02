@@ -103,7 +103,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('total berat : ${widget.totalWeight}');
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -532,7 +531,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   child: Text(
                     'Make an order',
                     style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w500, color: Colors.black),
+                        fontWeight: FontWeight.w700, color: Colors.black),
                   ),
                 ),
               ),

@@ -26,6 +26,7 @@ class AddToCart extends StatefulWidget {
 
 class _AddToCartState extends State<AddToCart> {
   int qty = 1;
+  bool added = false;
 
   getIdUserForCart() {
     String idUser = Auth().currentUser!.uid;
@@ -134,14 +135,18 @@ class _AddToCartState extends State<AddToCart> {
                 Expanded(
                   child: Container(
                     height: 50,
-                    decoration: const BoxDecoration(
-                      color: Colors.orangeAccent,
+                    decoration: BoxDecoration(
+                      color: added == false?Colors.orangeAccent:Colors.grey.shade300,
                       borderRadius: BorderRadius.all(
                         Radius.circular(10),
                       ),
                     ),
                     child: TextButton(
-                      onPressed: () async {
+                      onPressed:added == false? () async {
+
+                        setState(() {
+                          added = true;
+                        });
                         var id = await getIdUserForCart();
 
                         String? x = await FirebaseFirestore.instance
@@ -200,6 +205,9 @@ class _AddToCartState extends State<AddToCart> {
                                 .update(
                                     {'shoppingCart': FieldValue.increment(1)});
                           }).whenComplete(() {
+                            setState(() {
+                              added = false;
+                            });
                             Navigator.pop(context);
                             Navigator.push(
                               context,
@@ -211,7 +219,7 @@ class _AddToCartState extends State<AddToCart> {
                         } else {
                           const Center(child: Text('EROR'));
                         }
-                      },
+                      } : null,
                       child: Text(
                         'Add',
                         style: GoogleFonts.poppins(
