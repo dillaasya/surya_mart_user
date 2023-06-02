@@ -180,14 +180,21 @@ class _DetailPageState extends State<DetailPage> {
                                           0.3,
                                     )
                                   : ClipRRect(
-                                      child: Image.network(x?['image'] ?? '',
-                                          fit: BoxFit.fill, errorBuilder: (context, error, stackTrace) {
-                                            return Center(
-                                              child: Text('No Internet',style: GoogleFonts.poppins(
+                                      child: Image.network(
+                                        x?['image'] ?? '',
+                                        fit: BoxFit.fill,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Center(
+                                            child: Text(
+                                              'No Internet',
+                                              style: GoogleFonts.poppins(
                                                   fontWeight: FontWeight.w300,
-                                                  fontSize: 8),),
-                                            );
-                                          },),
+                                                  fontSize: 8),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
                             ),
                           ),

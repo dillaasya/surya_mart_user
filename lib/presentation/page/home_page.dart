@@ -123,22 +123,29 @@ class _HomePageState extends State<HomePage> {
                                       )
                                     : ClipRRect(
                                         borderRadius: BorderRadius.circular(50),
-                                        child:
-                                            x.data()['profilePicture'] == null
-                                                ? const Icon(Icons.person,
-                                                    color: Colors.black)
-                                                : Image.network(
-                                                    x.get('profilePicture'),
-                                                    fit: BoxFit.cover,
-                                                    width: 100,
-                                              errorBuilder: (context, error, stackTrace) {
-                                                return Center(
-                                                  child: Text('No Internet',style: GoogleFonts.poppins(
-                                                      fontWeight: FontWeight.w300,
-                                                      fontSize: 6),),
-                                                );
-                                              },
-                                                  ),
+                                        child: x.data()['profilePicture'] ==
+                                                null
+                                            ? const Icon(Icons.person,
+                                                color: Colors.black)
+                                            : Image.network(
+                                                x.get('profilePicture'),
+                                                fit: BoxFit.cover,
+                                                width: 100,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return Center(
+                                                    child: Text(
+                                                      'No Internet',
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              fontSize: 6),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
                                       ),
                               ),
                               const SizedBox(

@@ -183,12 +183,11 @@ class _CartPageState extends State<CartPage> {
                   num totalWeight = 0;
 
                   for (var i = 0; i < listData.length; i++) {
-
                     var tempWeight = listData[i].get('subWeight');
                     var temp =
                         listData[i].get('qty') * listData[i].get('price');
                     total = total + temp;
-                    totalWeight = totalWeight+tempWeight;
+                    totalWeight = totalWeight + tempWeight;
                   }
                   return BottomAppBar(
                     child: SizedBox(

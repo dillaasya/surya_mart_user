@@ -76,13 +76,16 @@ class _GridCatalogueCardState extends State<GridCatalogueCard> {
                                 : Image.network(
                                     image ?? '',
                                     fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Center(
-                                  child: Text('No Internet',style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 8),),
-                                );
-                              },
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Center(
+                                        child: Text(
+                                          'No Internet',
+                                          style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 8),
+                                        ),
+                                      );
+                                    },
                                   ),
                           ),
                         ),
@@ -164,9 +167,12 @@ class _GridCatalogueCardState extends State<GridCatalogueCard> {
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
                                   return Center(
-                                    child: Text('No Internet',style: GoogleFonts.poppins(
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 8),),
+                                    child: Text(
+                                      'No Internet',
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 8),
+                                    ),
                                   );
                                 },
                               ),

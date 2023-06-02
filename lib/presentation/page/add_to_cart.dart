@@ -136,90 +136,94 @@ class _AddToCartState extends State<AddToCart> {
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
-                      color: added == false?Colors.orangeAccent:Colors.grey.shade300,
-                      borderRadius: BorderRadius.all(
+                      color: added == false
+                          ? Colors.orangeAccent
+                          : Colors.grey.shade300,
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(10),
                       ),
                     ),
                     child: TextButton(
-                      onPressed:added == false? () async {
+                      onPressed: added == false
+                          ? () async {
+                              setState(() {
+                                added = true;
+                              });
+                              var id = await getIdUserForCart();
 
-                        setState(() {
-                          added = true;
-                        });
-                        var id = await getIdUserForCart();
+                              String? x = await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(id)
+                                  .collection('cart')
+                                  .where('productId', isEqualTo: widget.id)
+                                  .get()
+                                  .then((value) {
+                                if (value.size == 1) {
+                                  return value.docs.first.id;
+                                } else {
+                                  return null;
+                                }
+                              });
 
-                        String? x = await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(id)
-                            .collection('cart')
-                            .where('productId', isEqualTo: widget.id)
-                            .get()
-                            .then((value) {
-                          if (value.size == 1) {
-                            return value.docs.first.id;
-                          } else {
-                            return null;
-                          }
-                        });
-
-                        if (x != null) {
-                          FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(id)
-                              .collection('cart')
-                              .doc(x)
-                              .update({
-                            'qty': FieldValue.increment(qty),
-                            'subWeight':
-                                FieldValue.increment(widget.weight * qty),
-                            'subPrice':
-                                FieldValue.increment(widget.price * qty),
-                          }).whenComplete(() {
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return const CartPage();
-                              }),
-                            );
-                          });
-                        } else if (x == null) {
-                          FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(id)
-                              .collection('cart')
-                              .add({
-                            'productId': widget.id,
-                            'price': widget.price,
-                            'subPrice': widget.price * qty,
-                            'qty': qty,
-                            'weight': widget.weight,
-                            'subWeight': widget.weight * qty,
-                            'productName': widget.name,
-                            'picture': widget.image,
-                          }).whenComplete(() async {
-                            await FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(id)
-                                .update(
-                                    {'shoppingCart': FieldValue.increment(1)});
-                          }).whenComplete(() {
-                            setState(() {
-                              added = false;
-                            });
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return const CartPage();
-                              }),
-                            );
-                          });
-                        } else {
-                          const Center(child: Text('EROR'));
-                        }
-                      } : null,
+                              if (x != null) {
+                                FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(id)
+                                    .collection('cart')
+                                    .doc(x)
+                                    .update({
+                                  'qty': FieldValue.increment(qty),
+                                  'subWeight':
+                                      FieldValue.increment(widget.weight * qty),
+                                  'subPrice':
+                                      FieldValue.increment(widget.price * qty),
+                                }).whenComplete(() {
+                                  Navigator.pop(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return const CartPage();
+                                    }),
+                                  );
+                                });
+                              } else if (x == null) {
+                                FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(id)
+                                    .collection('cart')
+                                    .add({
+                                  'productId': widget.id,
+                                  'price': widget.price,
+                                  'subPrice': widget.price * qty,
+                                  'qty': qty,
+                                  'weight': widget.weight,
+                                  'subWeight': widget.weight * qty,
+                                  'productName': widget.name,
+                                  'picture': widget.image,
+                                }).whenComplete(() async {
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(id)
+                                      .update({
+                                    'shoppingCart': FieldValue.increment(1)
+                                  });
+                                }).whenComplete(() {
+                                  setState(() {
+                                    added = false;
+                                  });
+                                  Navigator.pop(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return const CartPage();
+                                    }),
+                                  );
+                                });
+                              } else {
+                                const Center(child: Text('EROR'));
+                              }
+                            }
+                          : null,
                       child: Text(
                         'Add',
                         style: GoogleFonts.poppins(

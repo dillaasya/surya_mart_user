@@ -338,7 +338,6 @@ class _EditProfileState extends State<EditProfile> {
         });
       }
       //String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-
     } else {
       if (_imagePath != null) {
         String fileName = DateTime.now().millisecondsSinceEpoch.toString();

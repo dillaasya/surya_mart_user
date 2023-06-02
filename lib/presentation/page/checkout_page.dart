@@ -15,7 +15,7 @@ class CheckoutPage extends StatefulWidget {
       {required this.poinUser,
       required this.idUser,
       required this.total,
-        required this.totalWeight,
+      required this.totalWeight,
       Key? key})
       : super(key: key);
 
@@ -66,11 +66,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
     });
   }
 
-
   num totalPrice = 0;
-  String phone='';
-  String recipient='';
-  String shippingAddress='';
+  String phone = '';
+  String recipient = '';
+  String shippingAddress = '';
   var listCart = [];
   int poin = 0;
   int potonganPoin = 0;
@@ -79,7 +78,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Future<void> saveOrder() async {
     await deleteAllCart().whenComplete(() {
       FirebaseFirestore.instance.collection('users').doc(widget.idUser).update({
-
         'shoppingCart': 0,
       });
     }).whenComplete(() {
@@ -88,7 +86,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         'paymentMethod': 'COD',
         'shippingAddress': shippingAddress,
         'statusOrder': 'PACKED',
-        'phone' : phone,
+        'phone': phone,
         'subTotal': widget.total,
         'totalPrice': widget.total - potonganPoin,
         'deliveryFee': ongkir,
@@ -96,7 +94,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         'productItem': listCart,
         'isReviewed': false,
         'totalWeight': widget.totalWeight,
-        'recipient' : recipient,
+        'recipient': recipient,
       });
     });
   }
@@ -179,13 +177,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                   var x =
                                                       snapshot.data!.docs.first;
 
-                                                  recipient = x.data()['recipientName'];
-                                                  phone=x.data()['phone'];
+                                                  recipient =
+                                                      x.data()['recipientName'];
+                                                  phone = x.data()['phone'];
                                                   shippingAddress = x.data()[
                                                           'fullAddress'] +
                                                       ' ' +
                                                       x.data()[
-                                                          'detailAddress'] + ' ' +
+                                                          'detailAddress'] +
+                                                      ' ' +
                                                       x.data()['city'] +
                                                       ' ' +
                                                       x.data()['province'] +
@@ -357,13 +357,22 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             ? const Icon(Icons
                                                 .image_not_supported_outlined)
                                             : Image.network(
-                                                x.data()['picture'], errorBuilder: (context, error, stackTrace) {
-                                          return Center(
-                                            child: Text('No Internet',style: GoogleFonts.poppins(
-                                                fontWeight: FontWeight.w300,
-                                                fontSize: 8),),
-                                          );
-                                                },),
+                                                x.data()['picture'],
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return Center(
+                                                    child: Text(
+                                                      'No Internet',
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              fontSize: 8),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
                                       ),
                                     ),
                                     const SizedBox(
@@ -485,7 +494,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w300),
                               ),
-
                               Text(
                                 'Rp $ongkir',
                                 style: GoogleFonts.poppins(

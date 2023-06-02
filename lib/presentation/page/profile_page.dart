@@ -157,13 +157,15 @@ class _ProfilePageState extends State<ProfilePage> {
                       user.get('profilePicture').toString(),
                       fit: BoxFit.cover,
                       width: 100,
-                errorBuilder: (context, error, stackTrace) {
-                  return Center(
-                    child: Text('No Internet',style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w300,
-                        fontSize: 8),),
-                  );
-                },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Center(
+                          child: Text(
+                            'No Internet',
+                            style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w300, fontSize: 8),
+                          ),
+                        );
+                      },
                     )
                   : const Icon(
                       Icons.person,

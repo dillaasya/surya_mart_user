@@ -86,17 +86,13 @@ class _DetailOrderState extends State<DetailOrder> {
                               x?['shippingAddress'],
                               style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w300),
-
                             ),
                             const SizedBox(height: 4),
                             Text(
-                             '${x?['phone']}',
+                              '${x?['phone']}',
                               style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w300),
-
                             ),
-
-
                           ],
                         ),
                       ),
@@ -111,7 +107,7 @@ class _DetailOrderState extends State<DetailOrder> {
                           children: [
                             ListView.builder(
                               shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               itemCount: z.length,
                               itemBuilder: (context, index) {
                                 var y = z[index];
@@ -128,7 +124,8 @@ class _DetailOrderState extends State<DetailOrder> {
                                           decoration: BoxDecoration(
                                               //color: Colors.grey.shade200,
                                               border: Border.all(
-                                                  width: 0.5, color: Colors.grey),
+                                                  width: 0.5,
+                                                  color: Colors.grey),
                                               borderRadius:
                                                   BorderRadius.circular(8)),
                                           child: ClipRRect(
@@ -137,13 +134,23 @@ class _DetailOrderState extends State<DetailOrder> {
                                             child: y['picture'] == null
                                                 ? const Icon(Icons
                                                     .image_not_supported_outlined)
-                                                : Image.network(y['picture'], errorBuilder: (context, error, stackTrace) {
-                                              return Center(
-                                                child: Text('No Internet',style: GoogleFonts.poppins(
-                                                    fontWeight: FontWeight.w300,
-                                                    fontSize: 8),),
-                                              );
-                                            },),
+                                                : Image.network(
+                                                    y['picture'],
+                                                    errorBuilder: (context,
+                                                        error, stackTrace) {
+                                                      return Center(
+                                                        child: Text(
+                                                          'No Internet',
+                                                          style: GoogleFonts
+                                                              .poppins(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w300,
+                                                                  fontSize: 8),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
                                           ),
                                         ),
                                         const SizedBox(
@@ -181,7 +188,8 @@ class _DetailOrderState extends State<DetailOrder> {
                               padding: const EdgeInsets.only(
                                   left: 16, right: 16, bottom: 12),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'Total Spend',
@@ -268,11 +276,13 @@ class _DetailOrderState extends State<DetailOrder> {
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
                                             return const Center(
-                                              child: CircularProgressIndicator(),
+                                              child:
+                                                  CircularProgressIndicator(),
                                             );
                                           } else if (snapshot.connectionState ==
                                               ConnectionState.active) {
-                                            if (snapshot.data!.docs.isNotEmpty) {
+                                            if (snapshot
+                                                .data!.docs.isNotEmpty) {
                                               return Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
@@ -304,7 +314,8 @@ class _DetailOrderState extends State<DetailOrder> {
                                                     style: GoogleFonts.poppins(
                                                         fontWeight:
                                                             FontWeight.w300),
-                                                    textAlign: TextAlign.justify,
+                                                    textAlign:
+                                                        TextAlign.justify,
                                                   ),
                                                 ],
                                               );
