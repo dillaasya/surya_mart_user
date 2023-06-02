@@ -129,7 +129,6 @@ class _SuccessOrderPageState extends State<SuccessOrderPage> {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                     Navigator.pop(context);
-                                    Navigator.pop(context);
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                           builder: (_) => const BottomNavbar(

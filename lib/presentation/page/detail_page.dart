@@ -406,7 +406,7 @@ class _DetailPageState extends State<DetailPage> {
                 return ListView.separated(
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   scrollDirection: Axis.horizontal,
-                  itemCount: 6,
+                  itemCount: snapshot.data!.docs.length,
                   separatorBuilder: (context, _) => const SizedBox(
                     width: 4,
                   ),

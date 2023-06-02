@@ -8,12 +8,14 @@ import 'package:surya_mart_v1/presentation/page/success_order_page.dart';
 class CheckoutPage extends StatefulWidget {
   final String idUser;
   final num total;
+  final num totalWeight;
   final int poinUser;
 
   const CheckoutPage(
       {required this.poinUser,
       required this.idUser,
       required this.total,
+        required this.totalWeight,
       Key? key})
       : super(key: key);
 
@@ -64,9 +66,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
     });
   }
 
-  num totalWeight = 0;
+
   num totalPrice = 0;
   String phone='';
+  String recipient='';
   String shippingAddress='';
   var listCart = [];
   int poin = 0;
@@ -90,16 +93,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
         'totalPrice': widget.total - potonganPoin,
         'deliveryFee': ongkir,
         'userId': widget.idUser,
-        'cordinatAddress': const GeoPoint(0, 0),
         'productItem': listCart,
         'isReviewed': false,
-        'totalWeight': totalWeight,
+        'totalWeight': widget.totalWeight,
+        'recipient' : recipient,
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print('total berat : ${widget.totalWeight}');
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -176,6 +180,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                   var x =
                                                       snapshot.data!.docs.first;
 
+                                                  recipient = x.data()['recipientName'];
                                                   phone=x.data()['phone'];
                                                   shippingAddress = x.data()[
                                                           'fullAddress'] +

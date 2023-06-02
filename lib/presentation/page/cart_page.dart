@@ -180,11 +180,15 @@ class _CartPageState extends State<CartPage> {
                   );
                 } else {
                   num total = 0;
+                  num totalWeight = 0;
 
                   for (var i = 0; i < listData.length; i++) {
+
+                    var tempWeight = listData[i].get('subWeight');
                     var temp =
                         listData[i].get('qty') * listData[i].get('price');
                     total = total + temp;
+                    totalWeight = totalWeight+tempWeight;
                   }
                   return BottomAppBar(
                     child: SizedBox(
@@ -232,6 +236,7 @@ class _CartPageState extends State<CartPage> {
                                             MaterialPageRoute(
                                                 builder: (context) {
                                           return CheckoutPage(
+                                            totalWeight: totalWeight,
                                             poinUser: poinUser,
                                             total: total,
                                             idUser: idDocUser.toString(),
