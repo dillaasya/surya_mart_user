@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -108,7 +108,7 @@ class _DetailPageState extends State<DetailPage> {
                           return const CartPage();
                         }));
                       },
-                      icon: Badge(
+                      icon: badge.Badge(
                         badgeContent: StreamBuilder(
                           stream: FirebaseFirestore.instance
                               .collection('users')

@@ -9,7 +9,7 @@ import 'package:surya_mart_v1/presentation/page/bottom_navbar.dart';
 import 'package:surya_mart_v1/presentation/page/cart_page.dart';
 import 'package:surya_mart_v1/presentation/widget/horizontal_list_card.dart';
 import 'package:url_launcher/link.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                               return const CartPage();
                             }));
                           },
-                          icon: Badge(
+                          icon: badge.Badge(
                             badgeContent: Text(
                               x.get('shoppingCart').toString(),
                               style: GoogleFonts.poppins(
