@@ -51,7 +51,7 @@ class _SearchPageState extends State<SearchPage> {
                         .toList();
 
                     if (y.isEmpty) {
-                      return SingleChildScrollView(
+                      return Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,

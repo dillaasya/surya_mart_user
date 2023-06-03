@@ -355,8 +355,9 @@ class _OrderHistoryState extends State<OrderHistory> {
                                 }).whenComplete(() {
                                   var jumlah = x.data()['totalPrice'] / 50000;
 
-                                  if (jumlah > 5) {
+                                  if (jumlah > 0) {
                                     var subPoin = jumlah.floor() * 10;
+
                                     FirebaseFirestore.instance
                                         .collection('users')
                                         .doc(widget.id)

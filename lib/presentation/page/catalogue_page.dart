@@ -193,7 +193,7 @@ class _CataloguePageState extends State<CataloguePage> {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.connectionState == ConnectionState.active) {
-            if (snapshot.data != null) {
+            if (snapshot.data!.docs.isNotEmpty) {
               return GridView.builder(
                 padding: const EdgeInsets.all(10),
                 scrollDirection: Axis.vertical,
@@ -213,7 +213,7 @@ class _CataloguePageState extends State<CataloguePage> {
             } else {
               return Center(
                 child: Text(
-                  'Tidak ada produk tersedia',
+                  'No Products',
                   style: GoogleFonts.poppins(fontWeight: FontWeight.w400),
                 ),
               );

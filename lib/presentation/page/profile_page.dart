@@ -288,7 +288,7 @@ class _ProfilePageState extends State<ProfilePage> {
             trailing: const Icon(Icons.navigate_next_rounded),
             onTap: () {
               launchUrl(Uri.parse(
-                  'whatsapp://send/?phone=+6285231803644&text=Hi, can you help me?'));
+                  'whatsapp://send/?phone=+6285643459350&text=Hi Admin, can you help me?'));
             },
           ),
           ListTile(
