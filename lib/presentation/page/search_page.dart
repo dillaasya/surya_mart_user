@@ -12,7 +12,6 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   TextEditingController querySearch = TextEditingController();
-  String name = '';
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class _SearchPageState extends State<SearchPage> {
           preferredSize: const Size.fromHeight(80),
           child: Center(child: search()),
         ),
-        body: name.isNotEmpty
+        body: querySearch.text.isNotEmpty
             ? StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('products')
@@ -45,7 +44,7 @@ class _SearchPageState extends State<SearchPage> {
                                   .toString()
                                   .toLowerCase()
                                   .startsWith(
-                                    name.toLowerCase(),
+                                    querySearch.text.toLowerCase(),
                                   ),
                         )
                         .toList();
@@ -73,14 +72,13 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       );
                     } else {
-                      //print('nilai nama : $name');
                       return GridView.builder(
                         padding: const EdgeInsets.all(10),
                         scrollDirection: Axis.vertical,
                         itemCount: y.length,
                         itemBuilder: (context, index) {
                           var z = y[index];
-                          return GridCatalogueCard(z?.id);
+                          return GridCatalogueCard(z.id);
                         },
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
@@ -111,7 +109,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget search() {
     return TextField(
-      //controller: querySearch,
+      controller: querySearch,
       decoration: InputDecoration(
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade600),
@@ -133,11 +131,6 @@ class _SearchPageState extends State<SearchPage> {
               )
             : null,
       ),
-      onChanged: (value) {
-        setState(() {
-          name = value;
-        });
-      },
     );
   }
 }
