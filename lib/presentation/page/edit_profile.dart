@@ -419,7 +419,7 @@ class _EditProfileState extends State<EditProfile> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Form(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      autovalidateMode: AutovalidateMode.always,
                       key: _formKeyValue,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -638,15 +638,18 @@ class _EditProfileState extends State<EditProfile> {
                                             fontWeight: FontWeight.w500),
                                       ),
                                       onPressed: () {
-                                        saveEdit().whenComplete(() {
-                                          Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                                builder: (_) =>
-                                                    const BottomNavbar(
-                                                      currentIndex: 2,
-                                                    )),
-                                          );
-                                        });
+                                        if (_formKeyValue.currentState!.validate()) {
+                                          saveEdit().whenComplete(() {
+                                            Navigator.of(context).pushReplacement(
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                  const BottomNavbar(
+                                                    currentIndex: 2,
+                                                  )),
+                                            );
+                                          });
+                                        }
+
                                       }),
                                 ),
                               ],

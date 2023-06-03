@@ -485,28 +485,6 @@ class _EditAddressState extends State<EditAddress> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20, top: 8),
-                      child: TextFormField(
-                        controller: detailAddressController,
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            borderSide: const BorderSide(
-                              color: Colors.black,
-                              width: 1.0,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            borderSide: const BorderSide(
-                              color: Colors.black,
-                              width: 1.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
                       padding: const EdgeInsets.only(top: 15),
                       child: Row(
                         children: [

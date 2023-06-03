@@ -31,6 +31,8 @@ class ArticlePage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         var x = snapshot.data!.docs[index];
                         return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),

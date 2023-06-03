@@ -21,6 +21,7 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController memberController = TextEditingController();
 
   bool visibility = true;
 
@@ -202,6 +203,75 @@ class _SignupPageState extends State<SignupPage> {
                                     LengthLimitingTextInputFormatter(25),
                                   ],
                                   controller: usernameController,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.only(
+                                        left: 24,
+                                        top: 18,
+                                        bottom: 18,
+                                        right: 24),
+                                    hintText: "Syana Mutia",
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(18),
+                                      borderSide: const BorderSide(
+                                        color: Colors.black,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(18),
+                                      borderSide: const BorderSide(
+                                        color: Colors.black,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      borderSide: const BorderSide(
+                                        color: Colors.red,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      borderSide: const BorderSide(
+                                        color: Colors.red,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                'ID member',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                const EdgeInsets.symmetric(vertical: 10),
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value!.isNotEmpty && value.length > 2) {
+                                      return null;
+                                    } else if (value.length < 5 &&
+                                        value.isNotEmpty) {
+                                      return 'Your ID member is too short!';
+                                    } else {
+                                      return 'It can\'t be empty!';
+                                    }
+                                  },
+                                  keyboardType: TextInputType.number,
+                                  style: GoogleFonts.poppins(),
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp('0-9')),
+                                    LengthLimitingTextInputFormatter(5),
+                                  ],
+                                  controller: memberController,
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.only(
                                         left: 24,
@@ -489,11 +559,12 @@ class _SignupPageState extends State<SignupPage> {
                                                   user.add({
                                                     'displayName':
                                                         usernameController.text,
+                                                    'memberId':memberController.text,
                                                     'uid':
                                                         Auth().currentUser?.uid,
                                                     'createdAt': FieldValue
                                                         .serverTimestamp(),
-                                                    'phone': '',
+                                                    'phone': phoneController.text,
                                                     'poin': 0,
                                                     'shoppingCart': 0,
                                                     'profilePicture': '',
