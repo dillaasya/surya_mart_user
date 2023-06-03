@@ -12,6 +12,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   TextEditingController querySearch = TextEditingController();
+  String name='';
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class _SearchPageState extends State<SearchPage> {
           preferredSize: const Size.fromHeight(80),
           child: Center(child: search()),
         ),
-        body: querySearch.text.isNotEmpty
+        body: name.isNotEmpty
             ? StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('products')
@@ -40,8 +41,8 @@ class _SearchPageState extends State<SearchPage> {
                     var y = snapshot.data!.docs
                         .where(
                           (QueryDocumentSnapshot<Object?> element) =>
-                              element['name'].toString().toLowerCase().contains(
-                                    querySearch.text.toLowerCase(),
+                              element['name'].toString().toLowerCase().startsWith(
+                                    name.toLowerCase(),
                                   ),
                         )
                         .toList();
@@ -69,13 +70,13 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       );
                     } else {
+                      //print('nilai nama : $name');
                       return GridView.builder(
                         padding: const EdgeInsets.all(10),
                         scrollDirection: Axis.vertical,
                         itemCount: y.length,
                         itemBuilder: (context, index) {
-                          var z = snapshot.data?.docs[index];
-
+                          var z = y[index];
                           return GridCatalogueCard(z?.id);
                         },
                         gridDelegate:
@@ -107,8 +108,9 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget search() {
     return TextField(
-      controller: querySearch,
+      //controller: querySearch,
       decoration: InputDecoration(
+
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade600),
         ),
@@ -118,6 +120,7 @@ class _SearchPageState extends State<SearchPage> {
             fontSize: 16),
         //<-- SEE HERE
         hintText: 'Search Products Here',
+
         prefixIcon: Icon(Icons.search, color: Colors.grey.shade600),
         suffixIcon: querySearch.text.isNotEmpty
             ? IconButton(
@@ -128,6 +131,11 @@ class _SearchPageState extends State<SearchPage> {
               )
             : null,
       ),
+      onChanged: (value) {
+        setState(() {
+          name = value;
+        });
+      },
     );
   }
 }

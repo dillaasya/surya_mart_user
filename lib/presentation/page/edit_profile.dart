@@ -21,7 +21,7 @@ class _EditProfileState extends State<EditProfile> {
 
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController displayNameController = TextEditingController();
-  String? email, id, newImage;
+  String? email, id, newImage, member;
   String image = '';
   int? poin = 0;
 
@@ -96,6 +96,7 @@ class _EditProfileState extends State<EditProfile> {
         phoneController.text = value.data()['phone'];
         displayNameController.text = value.data()['displayName'];
         image = value.data()['profilePicture'].toString();
+        member = value.data()['idMember'].toString();
         poin = value.data()['poin'];
       });
     });
@@ -458,6 +459,42 @@ class _EditProfileState extends State<EditProfile> {
                               ),
                               decoration: InputDecoration(
                                 hintText: email,
+                                enabled: false,
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey.shade400,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.black,
+                                    width: 1.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              'ID member',
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 20, left: 20, right: 20, top: 8),
+                            child: TextFormField(
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: member,
                                 enabled: false,
                                 disabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(18.0),

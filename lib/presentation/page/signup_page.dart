@@ -267,8 +267,7 @@ class _SignupPageState extends State<SignupPage> {
                                   keyboardType: TextInputType.number,
                                   style: GoogleFonts.poppins(),
                                   inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp('0-9')),
+                                    FilteringTextInputFormatter.digitsOnly,
                                     LengthLimitingTextInputFormatter(5),
                                   ],
                                   controller: memberController,
@@ -278,7 +277,7 @@ class _SignupPageState extends State<SignupPage> {
                                         top: 18,
                                         bottom: 18,
                                         right: 24),
-                                    hintText: "Syana Mutia",
+                                    hintText: "56389",
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(18),
                                       borderSide: const BorderSide(
@@ -559,7 +558,7 @@ class _SignupPageState extends State<SignupPage> {
                                                   user.add({
                                                     'displayName':
                                                         usernameController.text,
-                                                    'memberId':memberController.text,
+                                                    'idMember':memberController.text,
                                                     'uid':
                                                         Auth().currentUser?.uid,
                                                     'createdAt': FieldValue
