@@ -12,7 +12,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   TextEditingController querySearch = TextEditingController();
-  String name='';
+  String name = '';
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,10 @@ class _SearchPageState extends State<SearchPage> {
                     var y = snapshot.data!.docs
                         .where(
                           (QueryDocumentSnapshot<Object?> element) =>
-                              element['name'].toString().toLowerCase().startsWith(
+                              element['name']
+                                  .toString()
+                                  .toLowerCase()
+                                  .startsWith(
                                     name.toLowerCase(),
                                   ),
                         )
@@ -110,7 +113,6 @@ class _SearchPageState extends State<SearchPage> {
     return TextField(
       //controller: querySearch,
       decoration: InputDecoration(
-
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade600),
         ),

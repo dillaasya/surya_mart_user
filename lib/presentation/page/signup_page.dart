@@ -252,7 +252,7 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                               Padding(
                                 padding:
-                                const EdgeInsets.symmetric(vertical: 10),
+                                    const EdgeInsets.symmetric(vertical: 10),
                                 child: TextFormField(
                                   validator: (value) {
                                     if (value!.isNotEmpty && value.length > 2) {
@@ -558,12 +558,14 @@ class _SignupPageState extends State<SignupPage> {
                                                   user.add({
                                                     'displayName':
                                                         usernameController.text,
-                                                    'idMember':memberController.text,
+                                                    'idMember':
+                                                        memberController.text,
                                                     'uid':
                                                         Auth().currentUser?.uid,
                                                     'createdAt': FieldValue
                                                         .serverTimestamp(),
-                                                    'phone': phoneController.text,
+                                                    'phone':
+                                                        phoneController.text,
                                                     'poin': 0,
                                                     'shoppingCart': 0,
                                                     'profilePicture': '',

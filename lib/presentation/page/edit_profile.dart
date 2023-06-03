@@ -675,18 +675,19 @@ class _EditProfileState extends State<EditProfile> {
                                             fontWeight: FontWeight.w500),
                                       ),
                                       onPressed: () {
-                                        if (_formKeyValue.currentState!.validate()) {
+                                        if (_formKeyValue.currentState!
+                                            .validate()) {
                                           saveEdit().whenComplete(() {
-                                            Navigator.of(context).pushReplacement(
+                                            Navigator.of(context)
+                                                .pushReplacement(
                                               MaterialPageRoute(
                                                   builder: (_) =>
-                                                  const BottomNavbar(
-                                                    currentIndex: 2,
-                                                  )),
+                                                      const BottomNavbar(
+                                                        currentIndex: 2,
+                                                      )),
                                             );
                                           });
                                         }
-
                                       }),
                                 ),
                               ],
