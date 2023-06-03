@@ -374,7 +374,7 @@ class _DetailPageState extends State<DetailPage> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20, top:20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -384,24 +384,12 @@ class _DetailPageState extends State<DetailPage> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (_) => const BottomNavbar(
-                              currentIndex: 1,
-                            )),
-                  );
-                },
-                child: const Text(
-                  'SEE ALL',
-                ),
-              ),
+
             ],
           ),
         ),
         const SizedBox(
-          height: 4,
+          height: 10,
         ),
         SizedBox(
           height: 215,
@@ -419,7 +407,7 @@ class _DetailPageState extends State<DetailPage> {
                 return ListView.separated(
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   scrollDirection: Axis.horizontal,
-                  itemCount: snapshot.data!.docs.length,
+                  itemCount: snapshot.data!.docs.length < 10 ? snapshot.data!.docs.length : 10,
                   separatorBuilder: (context, _) => const SizedBox(
                     width: 4,
                   ),

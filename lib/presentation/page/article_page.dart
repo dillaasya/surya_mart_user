@@ -26,48 +26,52 @@ class ArticlePage extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.connectionState == ConnectionState.active) {
                   if (snapshot.data!.docs.isNotEmpty) {
-                    return ListView.builder(
+                    return ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return Divider();
+                      },
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         var x = snapshot.data!.docs[index];
-                        return Column(
+                        return Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Link(
-                                uri: Uri.parse((x.data())["link"]),
-                                builder: (context, followLink) {
-                                  return InkWell(
-                                    onTap: followLink,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '${(x.data())["title"]}',
-                                            style: GoogleFonts.poppins(
-                                                fontWeight: FontWeight.w500),
-                                            maxLines: 2,
-                                          ),
-                                          const SizedBox(
-                                            height: 4,
-                                          ),
-                                          Text('${(x.data())["overview"]}',
-                                              maxLines: 3,
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Link(
+                                  uri: Uri.parse((x.data())["link"]),
+                                  builder: (context, followLink) {
+                                    return InkWell(
+                                      onTap: followLink,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '${(x.data())["title"]}',
                                               style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w300)),
-                                        ],
+                                                  fontWeight: FontWeight.w500),
+                                              maxLines: 2,
+                                            ),
+                                            const SizedBox(
+                                              height: 4,
+                                            ),
+                                            Text('${(x.data())["overview"]}',
+                                                maxLines: 3,
+                                                style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.w300)),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
+                                    );
+                                  },
+                                ),
                               ),
                             ),
-                            const Divider()
                           ],
                         );
                       },
