@@ -271,6 +271,9 @@ class _CartPageState extends State<CartPage> {
                                                         Navigator.of(context)
                                                             .pop();
                                                         Navigator.of(context)
+                                                            .pop();
+
+                                                        Navigator.of(context)
                                                             .pushReplacement(
                                                           MaterialPageRoute(
                                                               builder: (_) =>

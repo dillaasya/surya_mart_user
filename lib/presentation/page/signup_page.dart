@@ -571,6 +571,8 @@ class _SignupPageState extends State<SignupPage> {
                                                     'profilePicture': '',
                                                   }).whenComplete(() {
                                                     Navigator.of(context)
+                                                        .pop();
+                                                    Navigator.of(context)
                                                         .pushReplacement(
                                                       MaterialPageRoute(
                                                           builder: (_) =>
